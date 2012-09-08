@@ -21,3 +21,9 @@ def build(bld):
                 lib = ['SDL'],
                 includes = ['.', '/usr/include/',], 
                 )
+    bld.program(
+                source = 'sdl_main.cxx', 
+                target = 'sdl_main_cxx', 
+                lib = ['SDL'],
+                includes = ['.', '/usr/include/',], 
+                )
