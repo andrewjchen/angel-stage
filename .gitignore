@@ -1,0 +1,23 @@
+# Compiled Object files
+*.slo
+*.lo
+*.o
+
+# Compiled Dynamic libraries
+*.so
+*.dylib
+
+# Compiled Static libraries
+*.lai
+*.la
+*.a
+
+# Python compiled bytecode
+*.pyc
+
+# Waf temp files
+.waf*
+.lock-waf*
+
+# Build directory
+wbuild
