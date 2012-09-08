@@ -8,22 +8,23 @@ def configure(conf):
     pass
 
 def build(bld):
+    sdl_libs = ['SDL', 'SDL_image']
+    allegro_libs = ['allegro', 'allegro_image']
     bld.program(
                 source = 'allegro_main.c', 
                 target = 'allegro_main', 
-                # use = 'allegro',
-                lib = ['allegro'],
+                lib = allegro_libs,
                 includes = ['.', '/usr/include/',], 
                 )
     bld.program(
                 source = 'sdl_main.c', 
                 target = 'sdl_main', 
-                lib = ['SDL'],
+                lib = sdl_libs,
                 includes = ['.', '/usr/include/',], 
                 )
     bld.program(
                 source = 'sdl_main.cxx', 
                 target = 'sdl_main_cxx', 
-                lib = ['SDL'],
+                lib = sdl_libs,
                 includes = ['.', '/usr/include/',], 
                 )

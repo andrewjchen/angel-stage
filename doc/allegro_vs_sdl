@@ -1,0 +1,26 @@
+Currently, the project contains both SDL and Allegro.
+
+Pros of SDL:
+  Lower draw time using SDL_HWSURFACE (1/3 of Allegro's).
+  More commonly used.
+  Also the source of our original networking code.
+  Some advanced features (videos).
+  More bindings?
+
+Cons of SDL:
+  Inconsistent interface, strange use of SDL_Rect.
+  Longer blit time (50 times Allegro's).
+  Doesn't respect VSync, even when ordered to.
+
+
+Pros of Allegro:
+  Does use VSync correctly, possible source of slow draw time.
+  More consistent interface.
+  Faster blit time (1/50 of SDL's).
+  More functions (ex: rotate).
+  iOS support.
+
+Cons of Allegro:
+  Also inconsistent interface.
+  Slower draw time (3 times SDL's).
+
