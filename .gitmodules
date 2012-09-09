@@ -1,0 +1,3 @@
+[submodule "deps/allegro"]
+	path = deps/allegro
+	url = git://alleg.git.sourceforge.net/gitroot/alleg/allegro
