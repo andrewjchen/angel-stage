@@ -6,7 +6,7 @@
 int main(int argc, char* args[]) {
   SDL_Init(SDL_INIT_EVERYTHING);
 
-  SDL_Surface * screen = SDL_SetVideoMode(800, 600, 32, SDL_HWSURFACE | SDL_DOUBLEBUF);
+  SDL_Surface * screen = SDL_SetVideoMode(800, 600, 32, SDL_SWSURFACE | SDL_DOUBLEBUF);
   /* SDL_Surface * screen = SDL_SetVideoMode(800, 600, 32, SDL_OPENGL); */
 
   SDL_Surface * image = IMG_Load("res/image.jpg");
