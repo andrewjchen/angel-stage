@@ -27,8 +27,13 @@ def common_configure(conf):
     if conf.find_program(conf.options.cxx):
         conf.env['CXX'] = conf.options.cxx
     conf.load('compiler_cxx')
-    conf.check(feature='cxx cxxprogram cxxstlib cxxshlib', cxxflags=['-Wall', '-std=c++11'])
-    conf.env.append_value('CXXFLAGS', ['-Wall', '-std=c++11'])
+    conf.check(feature='cxx cxxprogram cxxstlib cxxshlib',
+               cxxflags=['-Wall',
+                         # '-std=c++11',
+                         ])
+    conf.env.append_value('CXXFLAGS', ['-Wall',
+                                       # '-std=c++11',
+                                       ])
 
     # C
     if conf.find_program(conf.options.cc):
