@@ -11,11 +11,11 @@ declare_variants('debug', 'release')
 
 def options(opt):
     # CXX
-    opt.add_option('--cxx', action='store', default='clang++', help='The C++ Compiler to use.')
+    opt.add_option('--cxx', action='store', default='g++', help='The C++ Compiler to use.')
     opt.load('compiler_cxx')
 
     # C
-    opt.add_option('--cc', action='store', default='clang', help='The C Compiler to use.')
+    opt.add_option('--cc', action='store', default='gcc', help='The C Compiler to use.')
     opt.load('compiler_c')
 
     opt.recurse('deps')
