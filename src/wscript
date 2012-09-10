@@ -30,3 +30,8 @@ def build(bld):
                 lib = sdl_libs,
                 includes = common_includes, 
                 )
+    bld.program(
+                source = ['server_main.cpp','network_listen.cpp','network_manager.cpp'],
+                target = 'server_main',
+                lib = ['boost_thread','SDL_net'],
+                )
