@@ -7,17 +7,32 @@
 #include "SDL/SDL_net.h"
 #include "PacketTransporter.h"
 
+/**
+ * ClientAccepter runs a thread polling for new client sockets.
+ * When one is found, it constructs a PacketTransporter and launches
+ * the PacketTransporter read/write threads
+ * 
+ * Accessing packetTransporters requires that the packetTransport 
+ * mutex be locked. 
+ */
 class ClientAccepter
 {
 public:
 	ClientAccepter(uint16_t port);
 	~ClientAccepter();
-	void process();
+
+	void start();
+
 	boost::mutex nm_mutex;
-	std::vector<PacketTransporter*> PacketTransporters;
+
+	//TODO map int->PacketTransporter*?
+	std::vector<PacketTransporter*> packetTransporters;
 
 private:
+	void tick();
+	void listen();
 	TCPsocket listenSock;
+	boost::thread* listenThread;
 };
 
 #endif

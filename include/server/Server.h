@@ -1,8 +1,8 @@
 #ifndef SERVER_H
 #define SERVER_H
 
-// #include "NetManager.h"
-// #include "GamePhysics.h"
+#include "NetClients.h"
+#include "GamePhysics.h"
 
 class Server {
 public:
@@ -19,6 +19,7 @@ public:
 private:
 	bool running;
 	// NetManager net;
+	NetClients net;
 	GamePhysics phys;
 	
 	Server();
