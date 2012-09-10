@@ -34,14 +34,11 @@ def build(bld):
                 lib = sdl_libs,
                 includes = common_includes, 
                 )
-<<<<<<< HEAD
     bld.recurse('client')
     bld.recurse('server')
     bld.recurse('shared')
-=======
     bld.program(
                 source = ['server_main.cpp','network_listen.cpp','network_manager.cpp'],
                 target = 'server_main',
                 lib = ['boost_thread','SDL_net'],
                 )
->>>>>>> 129c239e97597e761ed0c21b9540942d9071bfa1
