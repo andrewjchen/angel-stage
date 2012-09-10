@@ -12,6 +12,7 @@ def build(bld):
     sdl_libs = ['SDL', 'SDL_image']
     allegro_libs = ['allegro', 'allegro_image']
     common_includes = ['.', '/usr/include/', join(bld.top_dir, 'include/')]
+    common_lib = ['boost_system', 'boost_thread','SDL_net']
     bld.program(
                 source = 'allegro_main.c', 
                 target = 'allegro_main', 
@@ -33,10 +34,10 @@ def build(bld):
     bld.program(
                 source = ['server_main.cxx','ClientAccepter.cxx','PacketTransporter.cxx','Packet.cxx'],
                 target = 'server_main',
-                lib = ['boost_thread','SDL_net'],
+                lib = common_lib,
                 )
     bld.program(
                 source = ['client_main.cxx','network_connector.cxx','PacketTransporter.cxx','Packet.cxx'],
                 target = 'client_main',
-                lib = ['boost_thread','SDL_net'],
+                lib = common_lib,
                 )
