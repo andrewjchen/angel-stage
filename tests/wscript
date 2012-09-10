@@ -27,16 +27,24 @@ def build(bld):
         test_cflags.remove('-DNDEBUG')
     except Exception:
         pass
-    includes = [join(bld.top_dir, 'src'), join(bld.top_dir, 'include', 'shared')]
+    includes = [join(bld.top_dir, 'src')]
     file_extensions = ['*.c', '*.cxx', '*.cpp']
+    group = bld.get_group(None)
+    all_objects = []
+    for n in group:
+        if n._type == 'objects':
+            all_objects.append(n.target)
     for root, _, files in walk(bld.path.abspath()):
         for filename in files:
             for ext in file_extensions:
                 if fnmatch(filename, ext):
                     rel_path = relpath(root, bld.path.abspath())
                     target_filename = join(rel_path, splitext(filename)[0])
-                    bld.program(source=join(rel_path, filename), target=target_filename,
-                                includes=includes)
+                    bld.program(source=join(rel_path, filename),
+                                target=target_filename,
+                                includes=includes + [join(bld.top_dir, 'include', rel_path)],
+                                use=all_objects,
+                               )
                     target_abspath = join(bld.variant_dir, 'tests', target_filename)
                     all_tests.append(target_abspath)
 
