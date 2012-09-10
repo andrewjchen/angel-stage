@@ -41,6 +41,6 @@ def build(bld):
     bld.program(
                 source = ['server_main.cpp','network_listen.cpp','network_manager.cpp'],
                 target = 'server_main',
-                lib = ['boost_thread','SDL_net'],
+                lib = ['boost_thread', 'SDL_net', 'boost_system'],
                 includes = common_includes, 
                 )
