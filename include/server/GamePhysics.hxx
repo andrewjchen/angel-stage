@@ -1,7 +1,7 @@
 #ifndef GAME_PHYSICS_H
 #define GAME_PHYSICS_H
 
-#include "GameState.h"
+#include "GameState.hxx"
 
 #include <vector>
 

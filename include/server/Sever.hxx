@@ -2,7 +2,7 @@
 #define SERVER_H
 
 #include "NetClients.hxx"
-#include "GamePhysics.h"
+#include "GamePhysics.hpp"
 
 class Server {
 public:

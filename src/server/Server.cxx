@@ -1,4 +1,4 @@
-#include "Server.h"
+#include "Server.hxx"
 #include <SDL.h>
 
 Server& Server::getInstance() {
