@@ -88,11 +88,11 @@ def configure(conf):
     conf.recurse('tests')
 
 
+from waflib.Scripting import run_command
 building_tests = False
 def build(bld):
     if not bld.variant:
         print('Building all variants.')
-        from waflib.Scripting import run_command
         run_command('build_debug')
         run_command('build_release')
     else:
@@ -102,6 +102,7 @@ def build(bld):
             bld.recurse('tests')
 
 def test(context):
+    global building_tests
     building_tests = True
     run_command('build_debug')
     run_command('build_release')
