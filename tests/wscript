@@ -7,10 +7,6 @@ from fnmatch import fnmatch
 from os.path import relpath, split, join, splitext
 from functools import reduce
 from subprocess import Popen, PIPE
-# from io import StringIO
-
-# def join(*args):
-    # return reduce(os_join, args)
 
 all_tests = []
 
