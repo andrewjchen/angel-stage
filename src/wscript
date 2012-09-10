@@ -15,7 +15,8 @@ def build(bld):
                        '/usr/include/',
                        join(bld.top_dir, 'include'),
                        join(bld.top_dir, 'include', 'shared')]
-    bld.user_vars['common_include'] = common_includes
+    bld.user_vars = dict()
+    bld.user_vars['common_includes'] = common_includes
     bld.program(
                 source = 'allegro_main.c', 
                 target = 'allegro_main', 
@@ -41,4 +42,5 @@ def build(bld):
                 source = ['server_main.cpp','network_listen.cpp','network_manager.cpp'],
                 target = 'server_main',
                 lib = ['boost_thread','SDL_net'],
+                includes = common_includes, 
                 )
