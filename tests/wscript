@@ -29,11 +29,11 @@ def build(bld):
         pass
     for root, _, files in walk(bld.path.abspath()):
         for filename in files:
-            if fnmatch(filename, '*.c'):
+            if fnmatch(filename, '*.cpp'):
                 rel_path = relpath(root, bld.path.abspath())
-                target_filename = join(rel_path, filename[:-2])
+                target_filename = join(rel_path, filename[:-4])
                 bld.program(source=join(rel_path, filename), target=target_filename,
-                            includes=[join(bld.top_dir, 'src')])
+                            includes=[join(bld.top_dir, 'src'), '../include/shared'])
                 target_abspath = join(bld.variant_dir, 'tests', target_filename)
                 all_tests.append(target_abspath)
 

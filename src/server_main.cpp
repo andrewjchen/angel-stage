@@ -33,9 +33,9 @@ int main(int argc, char **argv)
 	
 	SDLNet_Init();
 	
-	boost::thread listener(listen_thread);
+	boost::thread listener(listen_thread);//fork
 	
-	while(1)
+	while(1) 
 	{
 		boost::this_thread::sleep(boost::posix_time::milliseconds(1));
 	}

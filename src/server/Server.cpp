@@ -15,11 +15,11 @@ Server::~Server() {
 }
 
 void Server::run() {
-	// running = true;
+	running = true;
 	// srand(unsigned(time(0)));
-	// while(running) {
-	// 	phys.tick();
+	while(running) {
+		phys.tick();
 	// 	net.update();
-	// 	SDL_Delay(1);
-	// }
+		SDL_Delay(1);
+	}
 }

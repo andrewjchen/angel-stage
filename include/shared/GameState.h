@@ -33,7 +33,7 @@ struct Unit {
 };
 
 struct Player {
-	std::vector<Unit> units;
+	std::map<int, Unit> units; //id to unit
 
 	int id;
 };
@@ -42,11 +42,12 @@ struct Resource {
 	double x;
 	double y;
 
+	int id;
 };
 
 struct GameState{
-	std::map<int, Player> players;
-	std::vector<Resource> resources;
+	std::map<int, Player> players; //id to player
+	std::map<int, Resource> resources; //id to resource
 
 	
     GameState(void);
