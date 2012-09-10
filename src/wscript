@@ -31,7 +31,7 @@ def build(bld):
                 includes = common_includes, 
                 )
     bld.program(
-                source = ['server_main.cpp','network_listen.cpp','network_manager.cpp','packet.cpp'],
+                source = ['server_main.cpp','ClientAccepter.cpp','PacketTransporter.cpp','packet.cpp'],
                 target = 'server_main',
                 lib = ['boost_thread','SDL_net'],
                 )

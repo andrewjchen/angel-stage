@@ -2,16 +2,16 @@
 #include <boost/thread/thread.hpp>
 #include <stdint.h>
 
-#include "network_manager.h"
+#include "PacketTransporter.h"
 #include "packet.h"
 
-NetworkManager::NetworkManager(TCPsocket _sock)
+PacketTransporter::PacketTransporter(TCPsocket _sock)
 {
 	sock = _sock;
 	closed_read = closed_write = false;
 }
 
-void NetworkManager::peer_thread_read(NetworkManager *nm)
+void PacketTransporter::peer_thread_read(PacketTransporter *nm)
 {
 	while(1)
 	{
@@ -23,7 +23,7 @@ void NetworkManager::peer_thread_read(NetworkManager *nm)
 	}
 }
 
-void NetworkManager::processNetworkRead()
+void PacketTransporter::processNetworkRead()
 {
 	uint8_t type;
 	
@@ -39,7 +39,7 @@ void NetworkManager::processNetworkRead()
 	rx_mutex.unlock();
 }
 
-Packet *NetworkManager::getRXPacket()
+Packet *PacketTransporter::getRXPacket()
 {
 	Packet *p = 0;
 	rx_mutex.lock();
@@ -53,7 +53,7 @@ Packet *NetworkManager::getRXPacket()
 	return p;
 }
 
-void NetworkManager::peer_thread_write(NetworkManager *nm)
+void PacketTransporter::peer_thread_write(PacketTransporter *nm)
 {
 	while(1)
 	{
@@ -65,7 +65,7 @@ void NetworkManager::peer_thread_write(NetworkManager *nm)
 	}
 }
 
-void NetworkManager::processNetworkWrite()
+void PacketTransporter::processNetworkWrite()
 {
 	//std::cout << "processNetworkWrite\n";
 	
@@ -81,14 +81,14 @@ void NetworkManager::processNetworkWrite()
 	tx_mutex.unlock();
 }
 
-void NetworkManager::addTXPacket(Packet *pkt)
+void PacketTransporter::addTXPacket(Packet *pkt)
 {
 	tx_mutex.lock();
 		tx_queue.push_back(pkt);
 	tx_mutex.unlock();
 }
 
-void NetworkManager::close()
+void PacketTransporter::close()
 {
 	closed_read = true;
 	std::cout << "waiting for read\n";

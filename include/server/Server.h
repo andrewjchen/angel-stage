@@ -14,12 +14,12 @@ public:
 	void setRunning(const bool& b) { running = b; }
 	
 	// NetManager& getNetManager() { return net; }
-	// GamePhysics& getGamePhysics() { return phys; }
+	GamePhysics& getGamePhysics() { return phys; }
 	
 private:
 	bool running;
 	// NetManager net;
-	// GamePhysics phys;
+	GamePhysics phys;
 	
 	Server();
 	Server(const Server&) {}

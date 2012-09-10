@@ -10,7 +10,7 @@ GameState::GameState(void){
 
 }
 
-GameState::GameState(const GameState& other):elves(other.elves){
+GameState::GameState(const GameState& other){
 	players = other.players;
 	resources = other.resources;
 }

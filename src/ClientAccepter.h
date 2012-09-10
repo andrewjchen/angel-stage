@@ -1,20 +1,20 @@
-#ifndef NETLISTEN_H
-#define NETLISTEN_H
+#ifndef CLIENT_ACCEPTER_H
+#define CLIENT_ACCEPTER_H
 #include <vector>
 #include <memory>
 #include <stdint.h>
 #include <boost/thread/thread.hpp>
 #include "SDL/SDL_net.h"
-#include "network_manager.h"
+#include "PacketTransporter.h"
 
-class NetworkListener
+class ClientAccepter
 {
 public:
-	NetworkListener(uint16_t port);
-	~NetworkListener();
+	ClientAccepter(uint16_t port);
+	~ClientAccepter();
 	void process();
 	boost::mutex nm_mutex;
-	std::vector<NetworkManager*> network_managers;
+	std::vector<PacketTransporter*> PacketTransporters;
 
 private:
 	TCPsocket listenSock;

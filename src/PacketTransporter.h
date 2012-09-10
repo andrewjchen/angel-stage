@@ -1,21 +1,21 @@
-#ifndef NETMANAGER_H
-#define NETMANAGER_H
+#ifndef PACKET_TRANSPORTER_H
+#define PACKET_TRANSPORTER_H
 #include <deque>
 #include <boost/thread/thread.hpp>
 #include "SDL/SDL_net.h"
 #include "packet.h"
 
-class NetworkManager
+class PacketTransporter
 {
 public:
-	NetworkManager(TCPsocket _sock);
+	PacketTransporter(TCPsocket _sock);
 	void processNetworkRead();
 	void processNetworkWrite();
 	Packet *getRXPacket();
 	void addTXPacket(Packet *pkt);
 	void close();
-	static void peer_thread_read(NetworkManager *nm);
-	static void peer_thread_write(NetworkManager *nm);
+	static void peer_thread_read(PacketTransporter *nm);
+	static void peer_thread_write(PacketTransporter *nm);
 	
 	boost::thread *read_thread;
 	boost::thread *write_thread;

@@ -1,9 +1,10 @@
 #! /usr/bin/env python3
 # encoding: utf-8
+from __future__ import print_function
 import glob
 from os import walk
 from fnmatch import fnmatch
-from os.path import relpath, split, join
+from os.path import relpath, split, join, splitext
 from functools import reduce
 from subprocess import Popen, PIPE
 # from io import StringIO
@@ -22,20 +23,22 @@ def configure(conf):
 def build(bld):
     global all_tests
     test_cflags = bld.env['CFLAGS']
-    test_cflags.append('-DWICK_TEST')
     try:
         test_cflags.remove('-DNDEBUG')
     except Exception:
         pass
+    includes = [join(bld.top_dir, 'src'), join(bld.top_dir, 'include', 'shared')]
+    file_extensions = ['*.c', '*.cxx', '*.cpp']
     for root, _, files in walk(bld.path.abspath()):
         for filename in files:
-            if fnmatch(filename, '*.c'):
-                rel_path = relpath(root, bld.path.abspath())
-                target_filename = join(rel_path, filename[:-2])
-                bld.program(source=join(rel_path, filename), target=target_filename,
-                            includes=[join(bld.top_dir, 'src')])
-                target_abspath = join(bld.variant_dir, 'tests', target_filename)
-                all_tests.append(target_abspath)
+            for ext in file_extensions:
+                if fnmatch(filename, ext):
+                    rel_path = relpath(root, bld.path.abspath())
+                    target_filename = join(rel_path, splitext(filename)[0])
+                    bld.program(source=join(rel_path, filename), target=target_filename,
+                                includes=includes)
+                    target_abspath = join(bld.variant_dir, 'tests', target_filename)
+                    all_tests.append(target_abspath)
 
 def test(ctxt):
     if not all_tests:

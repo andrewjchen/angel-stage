@@ -1,7 +1,7 @@
 #include <iostream>
-#include "network_listen.h"
+#include "ClientAccepter.h"
 
-NetworkListener::NetworkListener(uint16_t port)
+ClientAccepter::ClientAccepter(uint16_t port)
 {
 	IPaddress ip;
 	
@@ -13,13 +13,13 @@ NetworkListener::NetworkListener(uint16_t port)
 		throw "SDLNet_TCP_Open error";
 }
 
-NetworkListener::~NetworkListener()
+ClientAccepter::~ClientAccepter()
 {
 	if(listenSock)
 		SDLNet_TCP_Close(listenSock);
 }
 
-void NetworkListener::process()
+void ClientAccepter::process()
 {
 	if(listenSock == NULL)
 		throw "listenSock is null!";
@@ -28,15 +28,15 @@ void NetworkListener::process()
 	{
 		//std::cout << "asdf\n";
 		//SDLNet_TCP_Close(clientSock);
-		NetworkManager *nm = new NetworkManager(clientSock);
-		boost::thread *new_peer_thread_read = new boost::thread(boost::bind(NetworkManager::peer_thread_read, nm));
-		boost::thread *new_peer_thread_write = new boost::thread(boost::bind(NetworkManager::peer_thread_write, nm));
+		PacketTransporter *nm = new PacketTransporter(clientSock);
+		boost::thread *new_peer_thread_read = new boost::thread(boost::bind(PacketTransporter::peer_thread_read, nm));
+		boost::thread *new_peer_thread_write = new boost::thread(boost::bind(PacketTransporter::peer_thread_write, nm));
 		
 		nm->read_thread = new_peer_thread_read;
 		nm->write_thread = new_peer_thread_write;
 		
 		nm_mutex.lock();
-			network_managers.push_back(nm);
+			PacketTransporters.push_back(nm);
 		nm_mutex.unlock();
 	}
 }
