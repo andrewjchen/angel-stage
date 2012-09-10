@@ -6,6 +6,7 @@
 #include <boost/thread/thread.hpp>
 
 #include "network_listen.h"
+#include "packet.h"
 
 NetworkListener *nl;
 
@@ -52,10 +53,15 @@ int main(int argc, char **argv)
 					//std::cout << "got a packet!\n";
 					switch(p->type)
 					{
-					case 0x55:
+					case PACKET_PING:
+						std::cout << "got a ping request!\n";
+						nm->addTXPacket(p);
+						break;
+					case PACKET_DISCONNECT:
 						std::cout << "got a disconnect packet!\n";
 						nm->close();
 						delete nm;
+						delete p;
 						nm = 0;
 						nl->network_managers[i] = 0;
 						break;

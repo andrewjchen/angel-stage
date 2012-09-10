@@ -18,7 +18,10 @@ Packet *Packet::readByType(TCPsocket _sock, uint8_t _type)
 	Packet *p = 0;
 	switch(_type)
 	{
-	case 0x55:
+	case PACKET_PING:
+		p = new PacketPing(_sock, _type);
+		break;
+	case PACKET_DISCONNECT:
 		p = new PacketDisconnect(_sock, _type);
 		break;
 	}
@@ -27,7 +30,24 @@ Packet *Packet::readByType(TCPsocket _sock, uint8_t _type)
 	return p;
 }
 
-/////////////////////////////////////////////// 0x55 ////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////// PACKET_PING ////////////////////////////////////////////////////////////////////////////
+
+PacketPing::PacketPing(TCPsocket _sock, uint8_t _type) : Packet(_sock, _type)
+{
+}
+
+void PacketPing::read()
+{
+	SDLNet_TCP_Recv(sock, &pingstuff, 4);
+}
+
+void PacketPing::write()
+{
+	writeHeader();
+	SDLNet_TCP_Send(sock, &pingstuff, 4);
+}
+
+/////////////////////////////////////////////// PACKET_DISCONNECT ////////////////////////////////////////////////////////////////////////////
 
 PacketDisconnect::PacketDisconnect(TCPsocket _sock, uint8_t _type) : Packet(_sock, _type)
 {

@@ -80,6 +80,13 @@ void NetworkManager::processNetworkWrite()
 	tx_mutex.unlock();
 }
 
+void NetworkManager::addTXPacket(Packet *pkt)
+{
+	tx_mutex.lock();
+		tx_queue.push_back(pkt);
+	tx_mutex.unlock();
+}
+
 void NetworkManager::close()
 {
 	closed = true;
