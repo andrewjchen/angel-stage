@@ -15,6 +15,8 @@ public:
 	static Packet *readByType(TCPsocket _sock, uint8_t _type);
 	virtual void read() = 0;
 	virtual void write() = 0;
+  Packet() {}
+  virtual ~Packet() {}
 
 	uint8_t type;
 
