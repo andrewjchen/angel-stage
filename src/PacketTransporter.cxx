@@ -74,7 +74,7 @@ void PacketTransporter::processNetworkWrite()
 		{
 			Packet *pout = tx_queue.front();
 			tx_queue.pop_front();
-			std::cout << "processNetworkRead" << pout->type << "\n";
+			std::cout << "processNetworkWrite" << pout->type << "\n";
 			pout->write();
 			delete pout;
 		}

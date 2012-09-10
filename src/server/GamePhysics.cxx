@@ -1,7 +1,7 @@
-#include "GamePhysics.h"
-#include "GameState.h"
+#include "GamePhysics.hpp"
+#include "GameState.hxx"
 #include <cmath>
-#include "Debug.h"
+#include "Debug.hxx"
 #include <stdlib.h>
 #include <time.h>
 

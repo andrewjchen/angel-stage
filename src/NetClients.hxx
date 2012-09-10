@@ -2,7 +2,7 @@
 #define NET_CLIENTS_H
 
 #include "ClientAccepter.hxx"
-#include "GameState.h"
+#include "GameState.hxx"
 
 
 /**

@@ -1,7 +1,7 @@
 #include <iostream>
-#include "Debug.h"
+#include "Debug.hxx"
 
-#include "GameState.h"
+#include "GameState.hxx"
 
 int main(int argc, char **argv)
 {
