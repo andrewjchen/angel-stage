@@ -87,6 +87,8 @@ def configure(conf):
     conf.recurse('src')
     conf.recurse('tests')
 
+
+building_tests = False
 def build(bld):
     if not bld.variant:
         print('Building all variants.')
@@ -96,7 +98,11 @@ def build(bld):
     else:
         bld.recurse('deps')
         bld.recurse('src')
-        bld.recurse('tests')
+        if building_tests:
+            bld.recurse('tests')
 
 def test(context):
+    building_tests = True
+    run_command('build_debug')
+    run_command('build_release')
     context.recurse('tests')
