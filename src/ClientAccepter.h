@@ -7,9 +7,6 @@
 #include "SDL/SDL_net.h"
 #include "PacketTransporter.h"
 
-/**
- * ClientAccepter listens for Client-made sockets made to us, the server
- */
 class ClientAccepter
 {
 public:
