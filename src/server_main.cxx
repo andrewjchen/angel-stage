@@ -51,7 +51,7 @@ int main(int argc, char **argv)
 					}
 				}
 			}
-		clientAccepter->nm_mutex.lock();
+		clientAccepter->nm_mutex.unlock();
 		boost::this_thread::sleep(boost::posix_time::milliseconds(1));
 	}
 	
