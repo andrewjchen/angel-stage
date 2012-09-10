@@ -3,20 +3,34 @@
 #include <deque>
 #include <boost/thread/thread.hpp>
 #include "SDL/SDL_net.h"
-#include "packet.h"
+#include "Packet.hxx"
 
+/**
+ * PacketTransporter sends and receives packets through a socket connection.
+ * It runs the threads to do this IO thread safe, stores packets
+ * for sending and receiving in queues
+ */
+//TODO queue overflow?
 class PacketTransporter
 {
 public:
 	PacketTransporter(TCPsocket _sock);
+
+	//called each read/write loop
 	void processNetworkRead();
 	void processNetworkWrite();
+
+	//get the latest rx packet
 	Packet *getRXPacket();
+	//adds a packet to be sent
 	void addTXPacket(Packet *pkt);
 	void close();
+
+	//Starts read/write threads.
+	//TODO make not static
 	static void peer_thread_read(PacketTransporter *nm);
 	static void peer_thread_write(PacketTransporter *nm);
-	
+
 	boost::thread *read_thread;
 	boost::thread *write_thread;
 	

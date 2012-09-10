@@ -7,8 +7,8 @@
 #include <stdlib.h>
 #include <termios.h>
 
-#include "network_connector.h"
-#include "packet.h"
+#include "network_connector.hxx"
+#include "Packet.hxx"
 
 NetworkConnector *nc;
 

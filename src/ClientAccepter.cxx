@@ -1,5 +1,5 @@
 #include <iostream>
-#include "ClientAccepter.h"
+#include "ClientAccepter.hxx"
 
 ClientAccepter::ClientAccepter(uint16_t port)
 {
@@ -19,7 +19,17 @@ ClientAccepter::~ClientAccepter()
 		SDLNet_TCP_Close(listenSock);
 }
 
-void ClientAccepter::process()
+void ClientAccepter::start(){
+//	boost::thread listener( &ClientAccepter::listen );
+//	boost::thread listener( this->listen );
+
+//boost::thread* thr = new boost::thread(boost::bind(&Foo::some_function, this));	
+		listenThread = new boost::thread(
+			boost::bind(&ClientAccepter::listen, this));
+
+}
+
+void ClientAccepter::tick()
 {
 	if(listenSock == NULL)
 		throw "listenSock is null!";
@@ -36,7 +46,22 @@ void ClientAccepter::process()
 		nm->write_thread = new_peer_thread_write;
 		
 		nm_mutex.lock();
-			PacketTransporters.push_back(nm);
+			packetTransporters.push_back(nm);
 		nm_mutex.unlock();
 	}
+}
+
+void ClientAccepter::listen(){
+	try {
+		while (1) {
+			this->tick();
+			boost::this_thread::sleep(boost::posix_time::milliseconds(1));
+		}
+		delete this;	
+	} catch (const char *e){
+		std::cout << e << std::endl;
+	}
+
+
+
 }
