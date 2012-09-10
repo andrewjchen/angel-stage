@@ -37,7 +37,7 @@ int main(int argc, char **argv)
 	while(1)
 	{
 		Packet *p;
-		NetworkManager *nm = nc->network_manager;
+		PacketTransporter *nm = nc->network_manager;
 		while(nm && ((p = nm->getRXPacket()) != NULL))
 		{
 			//std::cout << "got a packet!\n";

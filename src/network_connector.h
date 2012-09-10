@@ -5,7 +5,7 @@
 #include <stdint.h>
 #include <boost/thread/thread.hpp>
 #include "SDL/SDL_net.h"
-#include "network_manager.h"
+#include "PacketTransporter.h"
 
 class NetworkConnector
 {
@@ -13,7 +13,7 @@ public:
 	NetworkConnector(const char * server, uint16_t port);
 	~NetworkConnector();
 	void connect();
-	NetworkManager* network_manager;
+	PacketTransporter* network_manager;
 
 private:
 	TCPsocket clientSock;

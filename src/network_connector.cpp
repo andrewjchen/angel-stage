@@ -23,9 +23,9 @@ void NetworkConnector::connect()
 {
 	if(clientSock == NULL)
 		throw "clientSock is null!";
-	NetworkManager *nm = new NetworkManager(clientSock);
-	boost::thread *new_peer_thread_read = new boost::thread(boost::bind(NetworkManager::peer_thread_read, nm));
-	boost::thread *new_peer_thread_write = new boost::thread(boost::bind(NetworkManager::peer_thread_write, nm));
+	PacketTransporter *nm = new PacketTransporter(clientSock);
+	boost::thread *new_peer_thread_read = new boost::thread(boost::bind(PacketTransporter::peer_thread_read, nm));
+	boost::thread *new_peer_thread_write = new boost::thread(boost::bind(PacketTransporter::peer_thread_write, nm));
 	
 	nm->read_thread = new_peer_thread_read;
 	nm->write_thread = new_peer_thread_write;

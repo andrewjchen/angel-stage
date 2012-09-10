@@ -36,7 +36,7 @@ def build(bld):
                 lib = ['boost_thread','SDL_net'],
                 )
     bld.program(
-                source = ['client_main.cpp','network_connector.cpp','network_manager.cpp','packet.cpp'],
+                source = ['client_main.cpp','network_connector.cpp','PacketTransporter.cpp','packet.cpp'],
                 target = 'client_main',
                 lib = ['boost_thread','SDL_net'],
                 )
