@@ -7,11 +7,13 @@
 
 #include "network_listen.h"
 
+NetworkListener *nl;
+
 void listen_thread()
 {
 	try
 	{
-		NetworkListener *nl = new NetworkListener(20000);
+		nl = new NetworkListener(20000);
 		
 		while(1)
 		{
@@ -37,6 +39,30 @@ int main(int argc, char **argv)
 	
 	while(1)
 	{
+		if(!nl) continue;
+		nl->nm_mutex.lock();
+			for(int i = 0; i < nl->network_managers.size(); i++)
+			{
+				//process packets
+				Packet *p;
+				NetworkManager *nm = nl->network_managers[i];
+				if(nm == 0) continue;
+				while(nm && ((p = nm->getRXPacket()) != NULL))
+				{
+					//std::cout << "got a packet!\n";
+					switch(p->type)
+					{
+					case 0x55:
+						std::cout << "got a disconnect packet!\n";
+						nm->close();
+						delete nm;
+						nm = 0;
+						nl->network_managers[i] = 0;
+						break;
+					}
+				}
+			}
+		nl->nm_mutex.unlock();
 		boost::this_thread::sleep(boost::posix_time::milliseconds(1));
 	}
 	

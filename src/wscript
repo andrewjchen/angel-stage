@@ -39,7 +39,7 @@ def build(bld):
     bld.recurse('server')
     bld.recurse('shared')
     bld.program(
-                source = ['server_main.cpp','network_listen.cpp','network_manager.cpp'],
+                source = ['server_main.cpp','network_listen.cpp','network_manager.cpp','packet.cpp'],
                 target = 'server_main',
                 lib = ['boost_thread', 'SDL_net', 'boost_system'],
                 includes = common_includes, 
