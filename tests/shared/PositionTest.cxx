@@ -1,4 +1,4 @@
-#include "Position.hxx"
+#include "Position.cxx"
 
 int main(int argc, char *argv[]) {
   Position pos1;
