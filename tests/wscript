@@ -1,5 +1,6 @@
 #! /usr/bin/env python3
 # encoding: utf-8
+from __future__ import print_function
 import glob
 from os import walk
 from fnmatch import fnmatch
@@ -22,7 +23,6 @@ def configure(conf):
 def build(bld):
     global all_tests
     test_cflags = bld.env['CFLAGS']
-    test_cflags.append('-DWICK_TEST')
     try:
         test_cflags.remove('-DNDEBUG')
     except Exception:
