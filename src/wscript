@@ -12,11 +12,12 @@ def build(bld):
     sdl_libs = ['SDL', 'SDL_image']
     allegro_libs = ['allegro', 'allegro_image']
     common_includes = ['.',
-                       '/usr/include/',
                        join(bld.top_dir, 'include'),
+                       join(bld.top_dir, 'deps', 'usr', 'local', 'include'),
                        join(bld.top_dir, 'include', 'shared')]
-    server_includes = common_includes + [join(bld.top_dir, 'include', 'server')]
+    common_libpath = [join(bld.top_dir, 'deps', 'usr', 'local', 'lib')]
     client_includes = common_includes + [join(bld.top_dir, 'include', 'client')]
+    server_includes = common_includes + [join(bld.top_dir, 'include', 'server')]
     bld.user_vars = dict()
     bld.user_vars['common_includes'] = common_includes
     common_lib = ['boost_system', 'boost_thread','SDL_net']
@@ -28,18 +29,21 @@ def build(bld):
                 source = 'allegro_main.c', 
                 target = 'allegro_main', 
                 lib = allegro_libs, 
+                libpath = common_libpath,
                 includes = common_includes, 
                 )
     bld.program(
                 source = 'sdl_main.c', 
                 target = 'sdl_main', 
                 lib = sdl_libs,
+                lib_path = common_libpath,
                 includes = common_includes, 
                 )
     bld.program(
                 source = 'sdl_main.cxx', 
                 target = 'sdl_main_cxx', 
                 lib = sdl_libs,
+                lib_path = common_libpath,
                 includes = common_includes, 
                 )
     bld.program(
