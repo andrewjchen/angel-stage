@@ -7,11 +7,11 @@
 #include "SDL/SDL_net.h"
 #include "PacketTransporter.hxx"
 
-class NetworkConnector
+class NetworkConnecter
 {
 public:
-	NetworkConnector(const char * server, uint16_t port);
-	~NetworkConnector();
+	NetworkConnecter(const char * server, uint16_t port);
+	~NetworkConnecter();
 	void connect();
 	PacketTransporter* network_manager;
 

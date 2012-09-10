@@ -1,7 +1,7 @@
 #include <iostream>
-#include "network_connector.hxx"
+#include "NetworkConnecter.hxx"
 
-NetworkConnector::NetworkConnector(const char * server, uint16_t port)
+NetworkConnecter::NetworkConnecter(const char * server, uint16_t port)
 {
 	IPaddress ip;
 	
@@ -13,13 +13,13 @@ NetworkConnector::NetworkConnector(const char * server, uint16_t port)
 		throw "SDLNet_TCP_Open error";
 }
 
-NetworkConnector::~NetworkConnector()
+NetworkConnecter::~NetworkConnecter()
 {
 	if(clientSock)
 		SDLNet_TCP_Close(clientSock);
 }
 
-void NetworkConnector::connect()
+void NetworkConnecter::connect()
 {
 	if(clientSock == NULL)
 		throw "clientSock is null!";

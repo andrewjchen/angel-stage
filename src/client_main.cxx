@@ -7,10 +7,10 @@
 #include <stdlib.h>
 #include <termios.h>
 
-#include "network_connector.hxx"
+#include "NetworkConnecter.hxx"
 #include "Packet.hxx"
 
-NetworkConnector *nc;
+NetworkConnecter *nc;
 
 int main(int argc, char **argv)
 {
@@ -31,7 +31,7 @@ int main(int argc, char **argv)
 	
 	SDLNet_Init();
 	
-	nc = new NetworkConnector("localhost", 20000);
+	nc = new NetworkConnecter("localhost", 20000);
 	nc->connect();
 	
 	while(1)

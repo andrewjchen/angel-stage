@@ -44,7 +44,7 @@ def build(bld):
                 )
     bld.program(
                 source = ['client_main.cxx',
-                          'network_connector.cxx',
+                          'NetworkConnecter.cxx',
                           'shared/PacketTransporter.cxx',
                           'shared/Packet.cxx'],
                 target = 'client_main',
