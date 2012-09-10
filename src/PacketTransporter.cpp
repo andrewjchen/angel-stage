@@ -8,7 +8,7 @@
 PacketTransporter::PacketTransporter(TCPsocket _sock)
 {
 	sock = _sock;
-	closed = false;
+	closed_read = closed_write = false;
 }
 
 void PacketTransporter::peer_thread_read(PacketTransporter *nm)
@@ -18,7 +18,7 @@ void PacketTransporter::peer_thread_read(PacketTransporter *nm)
 		//std::cout << "peer_thread\n";
 		nm->processNetworkRead();
 		boost::this_thread::sleep(boost::posix_time::milliseconds(1));
-		if(nm->closed)
+		if(nm->closed_read)
 			break;
 	}
 }
@@ -60,7 +60,7 @@ void PacketTransporter::peer_thread_write(PacketTransporter *nm)
 		//std::cout << "peer_thread\n";
 		nm->processNetworkWrite();
 		boost::this_thread::sleep(boost::posix_time::milliseconds(1));
-		if(nm->closed)
+		if(nm->closed_write)
 			break;
 	}
 }
@@ -74,6 +74,7 @@ void PacketTransporter::processNetworkWrite()
 		{
 			Packet *pout = tx_queue.front();
 			tx_queue.pop_front();
+			std::cout << "processNetworkRead" << pout->type << "\n";
 			pout->write();
 			delete pout;
 		}
@@ -89,8 +90,14 @@ void PacketTransporter::addTXPacket(Packet *pkt)
 
 void PacketTransporter::close()
 {
-	closed = true;
+	closed_read = true;
+	std::cout << "waiting for read\n";
 	read_thread->join();
+	closed_write = true;
+	std::cout << "waiting for write\n";
 	write_thread->join();
+	//just in case to work around issue with blocking read
+	uint8_t dummy = 0;
+	SDLNet_TCP_Send(sock, &dummy, 1);
 	SDLNet_TCP_Close(sock);
 }

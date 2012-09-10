@@ -33,14 +33,16 @@ public:
 
 	boost::thread *read_thread;
 	boost::thread *write_thread;
+	
+	TCPsocket sock;
 
 private:
-	TCPsocket sock;
 	std::deque<Packet *> rx_queue;
 	std::deque<Packet *> tx_queue;
 	boost::mutex rx_mutex;
 	boost::mutex tx_mutex;
-	bool closed;
+	bool closed_read;
+	bool closed_write;
 };
 
 #endif

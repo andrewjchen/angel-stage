@@ -9,4 +9,9 @@ def configure(conf):
 
 from os.path import join
 def build(bld):
-    common_includes = bld.user_vars['common_includes']
+    common_includes = bld.user_vars['common_includes'] + [join(bld.top_dir, 'include', 'shared')]
+    bld.objects(source=['Position.cxx'],
+                target='Position',
+                includes=common_includes,
+               )
+
