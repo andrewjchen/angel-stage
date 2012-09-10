@@ -11,8 +11,19 @@ from os.path import join
 def build(bld):
     sdl_libs = ['SDL', 'SDL_image']
     allegro_libs = ['allegro', 'allegro_image']
-    common_includes = ['.', '/usr/include/', join(bld.top_dir, 'include/')]
+    common_includes = ['.',
+                       '/usr/include/',
+                       join(bld.top_dir, 'include'),
+                       join(bld.top_dir, 'include', 'shared')]
+    server_includes = common_includes + [join(bld.top_dir, 'include', 'server')]
+    client_includes = common_includes + [join(bld.top_dir, 'include', 'client')]
+    bld.user_vars = dict()
+    bld.user_vars['common_includes'] = common_includes
     common_lib = ['boost_system', 'boost_thread','SDL_net']
+    bld.user_vars['common_lib'] = common_lib
+    bld.recurse('shared')
+    bld.recurse('client')
+    bld.recurse('server')
     bld.program(
                 source = 'allegro_main.c', 
                 target = 'allegro_main', 
@@ -32,12 +43,20 @@ def build(bld):
                 includes = common_includes, 
                 )
     bld.program(
-                source = ['server_main.cxx','ClientAccepter.cxx','PacketTransporter.cxx','Packet.cxx'],
-                target = 'server_main',
+                source = ['client_main.cxx',
+                          'network_connector.cxx',
+                          'shared/PacketTransporter.cxx',
+                          'shared/Packet.cxx'],
+                target = 'client_main',
+                includes = client_includes, 
                 lib = common_lib,
                 )
     bld.program(
-                source = ['client_main.cxx','network_connector.cxx','PacketTransporter.cxx','Packet.cxx'],
-                target = 'client_main',
+                source = ['server/server_main.cxx',
+                          'server/ClientAccepter.cxx',
+                          'shared/PacketTransporter.cxx',
+                          'shared/Packet.cxx'],
+                target = 'server_main',
+                includes = server_includes, 
                 lib = common_lib,
                 )

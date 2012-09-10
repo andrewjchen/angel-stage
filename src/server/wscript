@@ -10,3 +10,4 @@ def configure(conf):
 from os.path import join
 def build(bld):
     common_includes = bld.user_vars['common_includes'] + [join(bld.top_dir, 'include', 'server')]
+    common_lib = bld.user_vars['common_lib']
