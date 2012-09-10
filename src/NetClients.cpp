@@ -1,4 +1,4 @@
-#include "NetClients.h"
+#include "NetClients.hxx"
 
 
 NetClients::NetClients(uint16_t port): clientAccepter(port){

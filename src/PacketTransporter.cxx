@@ -2,8 +2,8 @@
 #include <boost/thread/thread.hpp>
 #include <stdint.h>
 
-#include "PacketTransporter.h"
-#include "packet.h"
+#include "PacketTransporter.hxx"
+#include "Packet.hxx"
 
 PacketTransporter::PacketTransporter(TCPsocket _sock)
 {

@@ -31,12 +31,12 @@ def build(bld):
                 includes = common_includes, 
                 )
     bld.program(
-                source = ['server_main.cpp','ClientAccepter.cpp','PacketTransporter.cpp','packet.cpp'],
+                source = ['server_main.cxx','ClientAccepter.cxx','PacketTransporter.cxx','Packet.cxx'],
                 target = 'server_main',
                 lib = ['boost_thread','SDL_net'],
                 )
     bld.program(
-                source = ['client_main.cpp','network_connector.cpp','PacketTransporter.cpp','packet.cpp'],
+                source = ['client_main.cxx','network_connector.cxx','PacketTransporter.cxx','Packet.cxx'],
                 target = 'client_main',
                 lib = ['boost_thread','SDL_net'],
                 )

@@ -1,7 +1,7 @@
 #ifndef SERVER_H
 #define SERVER_H
 
-#include "NetClients.h"
+#include "NetClients.hxx"
 #include "GamePhysics.h"
 
 class Server {

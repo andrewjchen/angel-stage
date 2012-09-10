@@ -5,8 +5,8 @@
 #include <iostream>
 #include <boost/thread/thread.hpp>
 
-#include "ClientAccepter.h"
-#include "packet.h"
+#include "ClientAccepter.hxx"
+#include "Packet.hxx"
 
 ClientAccepter * clientAccepter;
 

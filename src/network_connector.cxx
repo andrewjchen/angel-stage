@@ -1,5 +1,5 @@
 #include <iostream>
-#include "network_connector.h"
+#include "network_connector.hxx"
 
 NetworkConnector::NetworkConnector(const char * server, uint16_t port)
 {

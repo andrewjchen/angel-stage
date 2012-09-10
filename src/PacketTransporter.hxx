@@ -3,7 +3,7 @@
 #include <deque>
 #include <boost/thread/thread.hpp>
 #include "SDL/SDL_net.h"
-#include "packet.h"
+#include "Packet.hxx"
 
 /**
  * PacketTransporter sends and receives packets through a socket connection.

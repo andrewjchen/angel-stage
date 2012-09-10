@@ -1,7 +1,7 @@
 #ifndef NET_CLIENTS_H
 #define NET_CLIENTS_H
 
-#include "ClientAccepter.h"
+#include "ClientAccepter.hxx"
 #include "GameState.h"
 
 

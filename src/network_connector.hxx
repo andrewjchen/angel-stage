@@ -5,7 +5,7 @@
 #include <stdint.h>
 #include <boost/thread/thread.hpp>
 #include "SDL/SDL_net.h"
-#include "PacketTransporter.h"
+#include "PacketTransporter.hxx"
 
 class NetworkConnector
 {
