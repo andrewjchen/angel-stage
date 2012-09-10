@@ -7,24 +7,26 @@ def options(opt):
 def configure(conf):
     pass
 
+from os.path import join
 def build(bld):
     sdl_libs = ['SDL', 'SDL_image']
     allegro_libs = ['allegro', 'allegro_image']
+    common_includes = ['.', '/usr/include/', join(bld.top_dir, 'include/')]
     bld.program(
                 source = 'allegro_main.c', 
                 target = 'allegro_main', 
                 lib = allegro_libs, 
-                includes = ['.', '/usr/include/', '../include/'], 
+                includes = common_includes, 
                 )
     bld.program(
                 source = 'sdl_main.c', 
                 target = 'sdl_main', 
                 lib = sdl_libs,
-                includes = ['.', '/usr/include/', '../include/'], 
+                includes = common_includes, 
                 )
     bld.program(
                 source = 'sdl_main.cxx', 
                 target = 'sdl_main_cxx', 
                 lib = sdl_libs,
-                includes = ['.', '/usr/include/', '../include/'], 
+                includes = common_includes, 
                 )
