@@ -3,8 +3,8 @@
 #include <stdint.h>
 #include "SDL/SDL_net.h"
 
-#define PACKET_PING				0x41
-#define PACKET_DISCONNECT		0x55
+const uint8_t PACKET_PING=			0x41;
+const uint8_t PACKET_DISCONNECT=	0x55;
 
 /////////////////////////////////////////////// CORE ////////////////////////////////////////////////////////////////////////////
 

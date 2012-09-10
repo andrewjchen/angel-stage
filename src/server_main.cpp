@@ -5,16 +5,16 @@
 #include <iostream>
 #include <boost/thread/thread.hpp>
 
-#include "network_listen.h"
+#include "ClientAccepter.h"
 #include "packet.h"
 
-NetworkListener *nl;
+ClientAccepter *nl;
 
 void listen_thread()
 {
 	try
 	{
-		nl = new NetworkListener(20000);
+		nl = new ClientAccepter(20000);
 		
 		while(1)
 		{
@@ -41,12 +41,12 @@ int main(int argc, char **argv)
 	while(1) 
 	{
 		if(!nl) continue;
-		nl->nm_mutex.lock();
-			for(int i = 0; i < nl->network_managers.size(); i++)
+		nl->nm_mutex.lock();// lock the network managers
+			for(int i = 0; i < nl->PacketTransporters.size(); i++)
 			{
 				//process packets
 				Packet *p;
-				NetworkManager *nm = nl->network_managers[i];
+				PacketTransporter *nm = nl->PacketTransporters[i];
 				if(nm == 0) continue;
 				while(nm && ((p = nm->getRXPacket()) != NULL))
 				{
@@ -55,15 +55,15 @@ int main(int argc, char **argv)
 					{
 					case PACKET_PING:
 						std::cout << "got a ping request!\n";
-						nm->addTXPacket(p);
+						nm->addTXPacket(p);//logic
 						break;
 					case PACKET_DISCONNECT:
 						std::cout << "got a disconnect packet!\n";
-						nm->close();
+						nm->close(); //logic
 						delete nm;
 						delete p;
 						nm = 0;
-						nl->network_managers[i] = 0;
+						nl->PacketTransporters[i] = 0; //TODO delete members
 						break;
 					}
 				}

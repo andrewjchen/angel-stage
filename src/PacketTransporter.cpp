@@ -2,28 +2,28 @@
 #include <boost/thread/thread.hpp>
 #include <stdint.h>
 
-#include "network_manager.h"
+#include "PacketTransporter.h"
 #include "packet.h"
 
-NetworkManager::NetworkManager(TCPsocket _sock)
+PacketTransporter::PacketTransporter(TCPsocket _sock)
 {
 	sock = _sock;
-	closed = false;
+	closed_read = closed_write = false;
 }
 
-void NetworkManager::peer_thread_read(NetworkManager *nm)
+void PacketTransporter::peer_thread_read(PacketTransporter *nm)
 {
 	while(1)
 	{
 		//std::cout << "peer_thread\n";
 		nm->processNetworkRead();
 		boost::this_thread::sleep(boost::posix_time::milliseconds(1));
-		if(nm->closed)
+		if(nm->closed_read)
 			break;
 	}
 }
 
-void NetworkManager::processNetworkRead()
+void PacketTransporter::processNetworkRead()
 {
 	uint8_t type;
 	
@@ -39,7 +39,7 @@ void NetworkManager::processNetworkRead()
 	rx_mutex.unlock();
 }
 
-Packet *NetworkManager::getRXPacket()
+Packet *PacketTransporter::getRXPacket()
 {
 	Packet *p = 0;
 	rx_mutex.lock();
@@ -53,19 +53,19 @@ Packet *NetworkManager::getRXPacket()
 	return p;
 }
 
-void NetworkManager::peer_thread_write(NetworkManager *nm)
+void PacketTransporter::peer_thread_write(PacketTransporter *nm)
 {
 	while(1)
 	{
 		//std::cout << "peer_thread\n";
 		nm->processNetworkWrite();
 		boost::this_thread::sleep(boost::posix_time::milliseconds(1));
-		if(nm->closed)
+		if(nm->closed_write)
 			break;
 	}
 }
 
-void NetworkManager::processNetworkWrite()
+void PacketTransporter::processNetworkWrite()
 {
 	//std::cout << "processNetworkWrite\n";
 	
@@ -74,23 +74,30 @@ void NetworkManager::processNetworkWrite()
 		{
 			Packet *pout = tx_queue.front();
 			tx_queue.pop_front();
+			std::cout << "processNetworkRead" << pout->type << "\n";
 			pout->write();
 			delete pout;
 		}
 	tx_mutex.unlock();
 }
 
-void NetworkManager::addTXPacket(Packet *pkt)
+void PacketTransporter::addTXPacket(Packet *pkt)
 {
 	tx_mutex.lock();
 		tx_queue.push_back(pkt);
 	tx_mutex.unlock();
 }
 
-void NetworkManager::close()
+void PacketTransporter::close()
 {
-	closed = true;
+	closed_read = true;
+	std::cout << "waiting for read\n";
 	read_thread->join();
+	closed_write = true;
+	std::cout << "waiting for write\n";
 	write_thread->join();
+	//just in case to work around issue with blocking read
+	uint8_t dummy = 0;
+	SDLNet_TCP_Send(sock, &dummy, 1);
 	SDLNet_TCP_Close(sock);
 }
