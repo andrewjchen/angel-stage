@@ -25,19 +25,24 @@ def build(bld):
         pass
     includes = [join(bld.top_dir, 'src')]
     file_extensions = ['*.c', '*.cxx', '*.cpp']
-    for root, _, files in walk(bld.path.abspath()):
-        for filename in files:
-            for ext in file_extensions:
-                if fnmatch(filename, ext):
-                    rel_path = relpath(root, bld.path.abspath())
-                    target_filename = join(rel_path, splitext(filename)[0])
-                    bld.program(source=join(rel_path, filename),
-                                target=target_filename,
-                                includes=includes + [join(bld.top_dir, 'include', rel_path),
-                                                     join(bld.top_dir, 'src', rel_path)],
-                               )
-                    target_abspath = join(bld.variant_dir, 'tests', target_filename)
-                    all_tests.append(target_abspath)
+    def operate_on_exts(exts, func):
+        for root, _, files in walk(bld.path.abspath()):
+            for filename in files:
+                for ext in file_extensions:
+                    if fnmatch(filename, ext):
+                        func(root, filename)
+
+    def build_operation(root, filename):
+        rel_path = relpath(root, bld.path.abspath())
+        target_filename = join(rel_path, splitext(filename)[0])
+        bld.program(source=join(rel_path, filename),
+                    target=target_filename,
+                    includes=includes + [join(bld.top_dir, 'include', rel_path),
+                                         join(bld.top_dir, 'src', rel_path)],
+                   )
+        target_abspath = join(bld.variant_dir, 'tests', target_filename)
+        all_tests.append(target_abspath)
+    operate_on_exts(file_extensions, build_operation)
 
 def test(ctxt):
     if not all_tests:
@@ -69,5 +74,6 @@ def test(ctxt):
             print(str(stdout_logs[failure][0], encoding='utf_8'), end='')
             print(' END TEST OUTPUT '.center(80, '*'))
             print()
-        print('TEST FAILED ({0}/{1} tests failed)'.format(len(failed_tests), total_tests))
+        print('TEST FAILED ({0}/{1} tests failed)'
+              .format(len(failed_tests), total_tests))
 

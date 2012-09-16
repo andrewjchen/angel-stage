@@ -6,6 +6,9 @@ VERSION = '0.1'
 top = '.'
 out = 'wbuild'
 
+import sys
+print("Using python version:", sys.version)
+
 from waf_extensions import declare_variants
 
 declare_variants('debug', 'release')
