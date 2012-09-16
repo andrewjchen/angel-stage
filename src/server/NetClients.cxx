@@ -1,7 +1,7 @@
 #include "NetClients.hxx"
 
 
-NetClients::NetClients(uint16_t port): clientAccepter(port){
+NetClients::NetClients(uint16_t port): ClientsConnection(port){
 
 }
 
@@ -10,17 +10,17 @@ NetClients::~NetClients(){
 }
 
 void NetClients::initialize(){
-	clientAccepter.start();
+	ClientsConnection.start();
 }
 
 void NetClients::tick(){
-	if(clientAccepter){
-		clientAccepter->nm_mutex.lock();// lock the network managers
-		for(int i = 0; i < clientAccepter->packetTransporters.size(); i++)
+	if(ClientsConnection){
+		ClientsConnection->nm_mutex.lock();// lock the network managers
+		for(int i = 0; i < ClientsConnection->packetTransporters.size(); i++)
 		{
 			//process packets
 			Packet *p;
-			PacketTransporter *nm = clientAccepter->packetTransporters[i];
+			PacketTransporter *nm = ClientsConnection->packetTransporters[i];
 			if(nm == 0) continue;
 			while(nm && ((p = nm->getRXPacket()) != NULL))
 			{
@@ -37,12 +37,12 @@ void NetClients::tick(){
 					delete nm;
 					delete p;
 					nm = 0;
-					clientAccepter->packetTransporters[i] = 0; //TODO delete members
+					ClientsConnection->packetTransporters[i] = 0; //TODO delete members
 					break;
 				}
 			}
 		}
-		clientAccepter->nm_mutex.lock();
+		ClientsConnection->nm_mutex.lock();
 	}
 
 }

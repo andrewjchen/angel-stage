@@ -57,7 +57,7 @@ def build(bld):
                 )
     bld.program(
                 source = ['server/server_main.cxx',
-                          'server/ClientAccepter.cxx',
+                          'server/ClientsConnection.cxx',
                           'shared/PacketTransporter.cxx',
                           'shared/Packet.cxx'],
                 target = 'server_main',

@@ -1,7 +1,7 @@
 #include <iostream>
-#include "ClientAccepter.hxx"
+#include "ClientsConnection.hxx"
 
-ClientAccepter::ClientAccepter(uint16_t port)
+ClientsConnection::ClientsConnection(uint16_t port)
 {
 	IPaddress ip;
 	
@@ -13,23 +13,23 @@ ClientAccepter::ClientAccepter(uint16_t port)
 		throw "SDLNet_TCP_Open error";
 }
 
-ClientAccepter::~ClientAccepter()
+ClientsConnection::~ClientsConnection()
 {
 	if(listenSock)
 		SDLNet_TCP_Close(listenSock);
 }
 
-void ClientAccepter::start(){
-//	boost::thread listener( &ClientAccepter::listen );
+void ClientsConnection::start(){
+//	boost::thread listener( &ClientsConnection::listen );
 //	boost::thread listener( this->listen );
 
 //boost::thread* thr = new boost::thread(boost::bind(&Foo::some_function, this));	
 		listenThread = new boost::thread(
-			boost::bind(&ClientAccepter::listen, this));
+			boost::bind(&ClientsConnection::listen, this));
 
 }
 
-void ClientAccepter::tick()
+void ClientsConnection::tick()
 {
 	if(listenSock == NULL)
 		throw "listenSock is null!";
@@ -51,7 +51,7 @@ void ClientAccepter::tick()
 	}
 }
 
-void ClientAccepter::listen(){
+void ClientsConnection::listen(){
 	try {
 		while (1) {
 			this->tick();
