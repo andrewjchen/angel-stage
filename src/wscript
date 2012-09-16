@@ -47,8 +47,8 @@ def build(bld):
                 includes = common_includes, 
                 )
     bld.program(
-                source = ['client_main.cxx',
-                          'NetworkConnecter.cxx',
+                source = ['client/client_main.cxx',
+                          'client/NetworkConnecter.cxx',
                           'shared/PacketTransporter.cxx',
                           'shared/Packet.cxx'],
                 target = 'client_main',
