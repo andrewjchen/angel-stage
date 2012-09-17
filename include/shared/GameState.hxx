@@ -1,11 +1,11 @@
-##ifndef _GAMESTATE_HXX_
+#ifndef _GAMESTATE_HXX_
 #define _GAMESTATE_HXX_
 
 #include <map>
 
 #include "Entity.hxx"
 
-class GameState{
+class GameState {
 private:
 	std::map<EntityID, Entity *> _entities;
 public:

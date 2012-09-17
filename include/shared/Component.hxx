@@ -1,4 +1,4 @@
-##ifndef _COMPONENT_HXX_
+#ifndef _COMPONENT_HXX_
 #define _COMPONENT_HXX_
 
 class Entity;

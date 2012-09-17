@@ -1,4 +1,4 @@
-##ifndef _EVENT_TYPES_HXX_
+#ifndef _EVENT_TYPES_HXX_
 #define _EVENT_TYPES_HXX_
 
 #include "Event.hxx"

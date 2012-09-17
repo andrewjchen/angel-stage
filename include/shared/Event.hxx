@@ -1,4 +1,4 @@
-##ifndef _EVENT_HXX_
+#ifndef _EVENT_HXX_
 #define _EVENT_HXX_
 
 #include <stdint.h>
