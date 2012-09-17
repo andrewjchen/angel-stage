@@ -29,7 +29,16 @@ void PacketTransporter::processNetworkRead()
 	
 	std::cout << "processNetworkRead\n";
 	
-	SDLNet_TCP_Recv(sock, &type, 1);
+	if(SDLNet_TCP_Recv(sock, &type, 1) <= 0)
+	{
+		//error
+		//hack
+		Packet *p = new PacketDisconnect(PACKET_DISCONNECT);
+		rx_mutex.lock();
+			rx_queue.push_back(p);
+		rx_mutex.unlock();
+		return;
+	}
 	
 	//std::cout << type << len;
 	Packet *p = Packet::readByType(sock, type);
