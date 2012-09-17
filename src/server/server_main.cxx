@@ -9,12 +9,15 @@
 
 #include "ClientsConnection.hxx"
 #include "Packet.hxx"
+#include "GameState.hxx"
 
 ClientsConnection * clientsConnection;
 
 int main(int argc, char **argv)
 {
 	std::cout << "Starting server!\n";
+	
+	GameState *gs = new GameState();
 	
 	SDLNet_Init();
 
@@ -52,6 +55,11 @@ int main(int argc, char **argv)
 						nm = 0;
 						clientsConnection->packetTransporters[i] = 0; //TODO delete members
 						break;
+					case PACKET_EVENT:
+						std::cout << "got an event!\n";
+						gs->react(((PacketEvent*)p)->event);
+						delete p;
+						break;
 					}
 				}
 			}
@@ -60,4 +68,6 @@ int main(int argc, char **argv)
 	}
 	
 	SDLNet_Quit();
+	
+	delete gs;
 }

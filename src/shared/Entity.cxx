@@ -1,3 +1,4 @@
+#include <cstdio>
 #include "Entity.hxx"
 
 EntityID Entity::get_id() const {
