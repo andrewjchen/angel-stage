@@ -1,7 +1,9 @@
+#include <cstdio>
 #include "GameState.hxx"
 #include "Event.hxx"
+#include "EventTypes.hxx"
 
-virtual Entity * GameState::get_entity(EntityID id) {
+Entity * GameState::get_entity(EntityID id) {
 	if (_entities.count(id)) {
 		return _entities[id];
 	} else {
@@ -9,12 +11,12 @@ virtual Entity * GameState::get_entity(EntityID id) {
 	}
 }
 
-virtual void GameState::react(Event * event) {
+void GameState::react(Event * event) {
 	if (is_entity_event(event)) {
 		EntityID id = ((EntityEvent *) event)->entity_id;
 		Entity * e = get_entity(id);
 		if (e) {
-			e.react(event);
+			e->react(event);
 		}
 	} else if (is_global_event(event)) {
 		/* TODO: Do things. */

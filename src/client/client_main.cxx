@@ -10,6 +10,7 @@
 #include "NetworkConnecter.hxx"
 #include "Packet.hxx"
 #include "MapRenderer.hxx"
+#include "GameState.hxx"
 
 NetworkConnecter *nc;
 
@@ -40,6 +41,7 @@ int main(int argc, char **argv)
 		for(int y=0;y<32;y++)
 			mapcrap[y*32+x] = (x+y) & 1;
 	MapRenderer *render = new MapRenderer(mapcrap);
+	GameState *gs = new GameState();
 	
 	int xoff = 0, yoff = 0;
 
@@ -61,6 +63,11 @@ int main(int argc, char **argv)
 			case PACKET_PING:
 				std::cout << "got a ping reply!\n";
 				std::cout << ((PacketPing*)p)->pingstuff << "\n";
+				delete p;
+				break;
+			case PACKET_EVENT:
+				std::cout << "got an event!\n";
+				gs->react(((PacketEvent*)p)->event);
 				delete p;
 				break;
 			}
@@ -106,6 +113,7 @@ int main(int argc, char **argv)
 	
 	al_destroy_display(display);
 	delete render;
+	delete gs;
 	
 	tcsetattr(0, TCSANOW, &initial_settings);
 }

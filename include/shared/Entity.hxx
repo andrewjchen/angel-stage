@@ -4,10 +4,11 @@
 #include <map>
 #include <stdint.h>
 
-#include "Event.hxx"
 #include "Component.hxx"
 
 typedef uint32_t EntityID;
+
+#include "Event.hxx"
 
 class Entity {
 private:

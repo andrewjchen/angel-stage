@@ -24,6 +24,9 @@ Packet *Packet::readByType(TCPsocket _sock, uint8_t _type)
 	case PACKET_DISCONNECT:
 		p = new PacketDisconnect(_type);
 		break;
+	case PACKET_EVENT:
+		p = new PacketEvent(_type);
+		break;
 	}
 	if(!p) return 0;
 	p->read(_sock);
