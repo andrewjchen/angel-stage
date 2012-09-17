@@ -13,7 +13,8 @@
 
 NetworkConnecter *nc;
 
-int main(int argc, char **argv){
+int main(int argc, char **argv)
+{
 	struct termios initial_settings, new_settings;
 	
 	tcgetattr(0,&initial_settings);
@@ -37,7 +38,7 @@ int main(int argc, char **argv){
 	char mapcrap[32*32];
 	for(int x=0;x<32;x++)
 		for(int y=0;y<32;y++)
-			mapcrap[y*32+x] = (x + y) & 1;
+			mapcrap[y*32+x] = 1;
 	MapRenderer *render = new MapRenderer(mapcrap);
 
 	std::cout << "Starting client!\n";
@@ -47,32 +48,34 @@ int main(int argc, char **argv){
 	nc = new NetworkConnecter("localhost", 20000);
 	nc->connect();
 	
-	while(1){
+	while(1)
+	{
 		Packet *p;
-		while(nc->isConnected() && ((p = nc->getPacket()) != NULL)){
+		while((p = nc->getPacket()) != NULL)
+		{
 			//std::cout << "got a packet!\n";
-			switch(p->type){
-				case PACKET_PING:
-					std::cout << "got a ping reply!\n";
-					std::cout << ((PacketPing*)p)->pingstuff << "\n";
-					delete p;
-					break;
+			switch(p->type)
+			{
+			case PACKET_PING:
+				std::cout << "got a ping reply!\n";
+				std::cout << ((PacketPing*)p)->pingstuff << "\n";
+				delete p;
+				break;
 			}
 		}
 		
 		int c = getchar();
-		if(c == 'A'){
+		if(c == 'A')
+		{
 			p = new PacketPing(PACKET_PING);
 			((PacketPing*)p)->pingstuff = 0x12345678;
-			//nm->addTXPacket(p);
 			nc->sendPacket(p);
 		}
-		if(c == 'U'){
+		if(c == 'U')
+		{
 			p = new PacketDisconnect(PACKET_DISCONNECT);
-			//nm->addTXPacket(p);
 			nc->sendPacket(p);
 			std::cout << "trying to disconnect\n";
-			//nm->close();
 			nc->disconnect();
 			break;
 		}
@@ -85,8 +88,7 @@ int main(int argc, char **argv){
 	//nc->network_manager->read_thread->join();
 	//nc->network_manager->write_thread->join();
 	
-
-	nc->disconnect();
+	//delete nc->packetTransport;
 	//somehow this doesn't work
 	//delete nc;
 	SDLNet_Quit();
