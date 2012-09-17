@@ -8,17 +8,11 @@ class UnitStateComponent: public Component {
 public:
 	UnitStateComponent(Entity* Entity) : Component(entity) {};
 	~UnitStateComponent() {};
-
-	update(); //TODO
-
-
+	virtual feedback(UnitFeedbackEvent * event);
 private:
-	double x;
-	double y; 
-	double theta;
-
-
-
+	double _x;
+	double _y;
+	double _theta;
 };
 
 #endif

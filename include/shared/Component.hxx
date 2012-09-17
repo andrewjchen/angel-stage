@@ -9,7 +9,7 @@ class Component {
 public:
 	Component(Entity * entity) : _entity(entity) {};
 	virtual ~Component() {};
-	
+
 protected:
 	Entity * _entity;
 };
