@@ -14,7 +14,7 @@ private:
 	EntityID _id;
 	std::map<ComponentType, Component *> _components;
 public:
-	EntityID Entity(EntityID id) : _id(id) {};
+	Entity(EntityID id) : _id(id) {};
 	virtual ~Entity() {};
 	virtual EntityID get_id() const;
 	virtual void load_component(ComponentType component_type,

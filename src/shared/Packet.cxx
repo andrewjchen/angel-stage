@@ -1,3 +1,4 @@
+#include "string.h"
 #include "Packet.hxx"
 
 /////////////////////////////////////////////// CORE ////////////////////////////////////////////////////////////////////////////
@@ -64,3 +65,35 @@ void PacketDisconnect::write(TCPsocket sock)
 	uint8_t dummy = 0;
 	SDLNet_TCP_Send(sock, &dummy, 1);
 }
+
+/////////////////////////////////////////////// PACKET_EVENT ////////////////////////////////////////////////////////////////////////////
+
+PacketEvent::PacketEvent(uint8_t _type) : Packet(_type)
+{
+	event = NULL;
+}
+
+PacketEvent::~PacketEvent()
+{
+	if(event) delete event;
+}
+
+void PacketEvent::read(TCPsocket sock)
+{
+	Event evthead;
+	SDLNet_TCP_Recv(sock, &evthead, sizeof(evthead));
+	int morebytes = evthead.total_byte_count - sizeof(evthead);
+	uint8_t *buf = new uint8_t[evthead.total_byte_count];
+	memcpy(buf, &evthead, sizeof(evthead));
+	if(morebytes)
+		SDLNet_TCP_Recv(sock, &(buf[sizeof(evthead)]), morebytes);
+	event = (Event*)buf;
+}
+
+void PacketEvent::write(TCPsocket sock)
+{
+	if(!event) return;
+	writeHeader(sock);
+	SDLNet_TCP_Send(sock, event, event->total_byte_count);
+}
+

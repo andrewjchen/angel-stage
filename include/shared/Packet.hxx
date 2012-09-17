@@ -2,9 +2,11 @@
 #define PACKET_H
 #include <stdint.h>
 #include "SDL/SDL_net.h"
+#include "Event.hxx"
 
 const uint8_t PACKET_PING			= 0x41;
 const uint8_t PACKET_DISCONNECT		= 0x55;
+const uint8_t PACKET_EVENT			= 0x45;
 
 /////////////////////////////////////////////// CORE ////////////////////////////////////////////////////////////////////////////
 
@@ -43,6 +45,21 @@ class PacketDisconnect: public Packet
 public:
 	PacketDisconnect(uint8_t _type);
 	void write(TCPsocket sock);
+
+protected:
+	void read(TCPsocket sock);
+};
+
+/////////////////////////////////////////////// PACKET_EVENT ////////////////////////////////////////////////////////////////////////////
+
+class PacketEvent: public Packet
+{
+public:
+	PacketEvent(uint8_t _type);
+	~PacketEvent();
+	void write(TCPsocket sock);
+	
+	Event *event;
 
 protected:
 	void read(TCPsocket sock);

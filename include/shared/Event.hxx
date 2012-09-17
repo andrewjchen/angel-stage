@@ -13,6 +13,8 @@ struct Event {
 
 typedef struct Event Event;
 
+#include "Entity.hxx"
+
 struct EntityEvent {
     Event header;
 	EntityID entity_id;
