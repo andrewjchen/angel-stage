@@ -24,7 +24,8 @@ public:
 	//starts listening for 
 	void start(); 
 
-	void sendPacket()
+	void sendPacket();
+	void getPackets();
 
 	boost::mutex nm_mutex;
 
