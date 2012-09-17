@@ -38,8 +38,10 @@ int main(int argc, char **argv)
 	char mapcrap[32*32];
 	for(int x=0;x<32;x++)
 		for(int y=0;y<32;y++)
-			mapcrap[y*32+x] = 1;
+			mapcrap[y*32+x] = (x+y) & 1;
 	MapRenderer *render = new MapRenderer(mapcrap);
+	
+	int xoff = 0, yoff = 0;
 
 	std::cout << "Starting client!\n";
 	
@@ -79,8 +81,17 @@ int main(int argc, char **argv)
 			nc->disconnect();
 			break;
 		}
+		if(c == 'i')
+			if(yoff > 0) yoff--;
+		if(c == 'k')
+			if(yoff < 32) yoff++;
+		if(c == 'j')
+			if(xoff > 0) xoff--;
+		if(c == 'l')
+			if(xoff < 32) xoff++;
 		
-		render->render();
+		al_clear_to_color(al_map_rgb(0,0,0));
+		render->render(xoff, yoff);
 		al_flip_display();
 		//boost::this_thread::sleep(boost::posix_time::milliseconds(1));
 	}
