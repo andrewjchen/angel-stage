@@ -75,7 +75,7 @@ void PacketTransporter::processNetworkWrite()
 			Packet *pout = tx_queue.front();
 			tx_queue.pop_front();
 			std::cout << "processNetworkWrite" << pout->type << "\n";
-			pout->write();
+			pout->write(sock);
 			delete pout;
 		}
 	tx_mutex.unlock();

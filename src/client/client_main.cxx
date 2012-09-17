@@ -54,13 +54,13 @@ int main(int argc, char **argv)
 		int c = getchar();
 		if(c == 'A')
 		{
-			p = new PacketPing(nm->sock, PACKET_PING);
+			p = new PacketPing(PACKET_PING);
 			((PacketPing*)p)->pingstuff = 0x12345678;
 			nm->addTXPacket(p);
 		}
 		if(c == 'U')
 		{
-			p = new PacketDisconnect(nm->sock, PACKET_DISCONNECT);
+			p = new PacketDisconnect(PACKET_DISCONNECT);
 			nm->addTXPacket(p);
 			std::cout << "trying to disconnect\n";
 			nm->close();
