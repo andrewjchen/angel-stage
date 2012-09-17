@@ -19,7 +19,9 @@ class GameState;
 
 typedef uint32_t EntityID;
 
-#include "Event.hxx"
+// #include "Event.hxx"
+
+struct EntityEvent;
 
 class Entity {
 private:
@@ -29,7 +31,7 @@ public:
 	Entity(EntityID id) : _id(id) {};
 	virtual ~Entity() {};
 	virtual EntityID get_id() const;
-	virtual void react(Event * event);
+	virtual void react(EntityEvent * event);
 	// DECLARE_COMPONENT(StateComponent, state_component);
 #ifdef CLIENT_SIDE
 	DECLARE_COMPONENT(VisualComponent, visual_component);
