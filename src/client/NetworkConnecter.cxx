@@ -24,6 +24,8 @@ void NetworkConnecter::connect()
 	if(clientSock == NULL)
 		throw "clientSock is null!";
 	PacketTransporter *nm = new PacketTransporter(clientSock);
+	IPaddress *ip = SDLNet_TCP_GetPeerAddress(clientSock);
+	nm->peer_ip = ((uint64_t)(ip->host) << 16) | (ip->port);
 	boost::thread *new_peer_thread_read = new boost::thread(boost::bind(PacketTransporter::peer_thread_read, nm));
 	boost::thread *new_peer_thread_write = new boost::thread(boost::bind(PacketTransporter::peer_thread_write, nm));
 	

@@ -1,4 +1,6 @@
 #include <iostream>
+#include <iomanip>
+#include <cstdio>
 #include "ClientsConnection.hxx"
 
 ClientsConnection::ClientsConnection(uint16_t port)
@@ -39,6 +41,10 @@ void ClientsConnection::tick()
 		//std::cout << "asdf\n";
 		//SDLNet_TCP_Close(clientSock);
 		PacketTransporter *nm = new PacketTransporter(clientSock);
+		IPaddress *ip = SDLNet_TCP_GetPeerAddress(clientSock);
+		nm->peer_ip = ((uint64_t)(ip->host) << 16) | (ip->port);
+		//std::cout << "Connected to client " << std::hex << nm->peer_ip << "\n";
+		printf("Connected to client %012lX\n", nm->peer_ip);
 		boost::thread *new_peer_thread_read = new boost::thread(boost::bind(PacketTransporter::peer_thread_read, nm));
 		boost::thread *new_peer_thread_write = new boost::thread(boost::bind(PacketTransporter::peer_thread_write, nm));
 		
@@ -64,4 +70,20 @@ void ClientsConnection::listen(){
 
 
 
+}
+
+void ClientsConnection::sendPacket(Packet *p, uint32_t client)
+{
+	nm_mutex.lock();
+		for(int i = 0; i < packetTransporters.size(); i++)
+		{
+			PacketTransporter *pt = packetTransporters[i];
+			if(pt == NULL) continue;
+			if(pt->peer_ip == client)
+			{
+				pt->addTXPacket(p);
+				break;
+			}
+		}
+	nm_mutex.unlock();
 }

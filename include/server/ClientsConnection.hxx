@@ -6,6 +6,7 @@
 #include <boost/thread/thread.hpp>
 #include "SDL/SDL_net.h"
 #include "PacketTransporter.hxx"
+#include "Packet.hxx"
 
 /**
  * ClientsConnection runs a thread polling for new client sockets.
@@ -24,7 +25,7 @@ public:
 	//starts listening for 
 	void start(); 
 
-	void sendPacket();
+	void sendPacket(Packet *p, uint32_t client);
 	void getPackets();
 
 	boost::mutex nm_mutex;

@@ -3,6 +3,8 @@
 */
 
 #include <iostream>
+#include <iomanip>
+#include <cstdio>
 #include <boost/thread/thread.hpp>
 
 #include "ClientsConnection.hxx"
@@ -42,6 +44,8 @@ int main(int argc, char **argv)
 						break;
 					case PACKET_DISCONNECT:
 						std::cout << "got a disconnect packet!\n";
+						//std::cout << "Disconnected to client " << std::hex << nm->peer_ip << "\n";
+						printf("Disconnected to client %012lX\n", nm->peer_ip);
 						nm->close(); //logic
 						delete nm;
 						delete p;

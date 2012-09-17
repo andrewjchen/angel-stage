@@ -35,6 +35,8 @@ public:
 	boost::thread *write_thread;
 	
 	TCPsocket sock;
+	
+	uint64_t peer_ip;
 
 private:
 	std::deque<Packet *> rx_queue;
