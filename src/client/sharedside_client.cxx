@@ -1,4 +1,4 @@
 #include "sharedside.hxx"
 
-bool is_client = true;
-bool is_server = false;
+const bool is_client = true;
+const bool is_server = false;

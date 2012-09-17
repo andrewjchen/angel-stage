@@ -11,6 +11,8 @@
 #include "Packet.hxx"
 #include "MapRenderer.hxx"
 #include "GameState.hxx"
+#include "Event.hxx"
+#include "EventTypes.hxx"
 
 NetworkConnecter *nc;
 
@@ -78,6 +80,15 @@ int main(int argc, char **argv)
 		{
 			p = new PacketPing(PACKET_PING);
 			((PacketPing*)p)->pingstuff = 0x12345678;
+			nc->sendPacket(p);
+		}
+		if(c == 'B')
+		{
+			Event *e = new Event();
+			e->event_type = EVENT_TEST;
+			e->total_byte_count = sizeof(Event);
+			p = new PacketEvent(PACKET_EVENT);
+			((PacketEvent*)p)->event = e;
 			nc->sendPacket(p);
 		}
 		if(c == 'U')
