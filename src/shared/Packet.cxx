@@ -27,6 +27,9 @@ Packet *Packet::readByType(TCPsocket _sock, uint8_t _type)
 	case PACKET_EVENT:
 		p = new PacketEvent(_type);
 		break;
+	case PACKET_MAP:
+		p = new PacketMap(_type);
+		break;
 	}
 	if(!p) return 0;
 	p->read(_sock);
@@ -100,3 +103,19 @@ void PacketEvent::write(TCPsocket sock)
 	SDLNet_TCP_Send(sock, event, event->total_byte_count);
 }
 
+/////////////////////////////////////////////// PACKET_MAP ////////////////////////////////////////////////////////////////////////////
+
+PacketMap::PacketMap(uint8_t _type) : Packet(_type)
+{
+}
+
+void PacketMap::read(TCPsocket sock)
+{
+	SDLNet_TCP_Recv(sock, &size, 4);
+}
+
+void PacketMap::write(TCPsocket sock)
+{
+	writeHeader(sock);
+	SDLNet_TCP_Send(sock, &size, 4);
+}
