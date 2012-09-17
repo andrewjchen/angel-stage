@@ -12,6 +12,7 @@ public:
 	GameState(void) {};
 	virtual ~GameState(void) {};
 	virtual Entity * get_entity(EntityID id);
+	virtual void set_entity(EntityID id, Entity * entity);
 	virtual void react(Event * event);
 };
 
