@@ -8,6 +8,8 @@
 #include "PacketTransporter.hxx"
 #include "Packet.hxx"
 
+#define CLIENT_ID_EVERYBODY 0
+
 /**
  * ClientsConnection runs a thread polling for new client sockets.
  * When one is found, it constructs a PacketTransporter and launches
@@ -25,7 +27,7 @@ public:
 	//starts listening for 
 	void start(); 
 
-	void sendPacket(Packet *p, uint32_t client);
+	void sendPacket(Packet *p, uint64_t client);
 	void getPackets();
 
 	boost::mutex nm_mutex;
