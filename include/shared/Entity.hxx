@@ -1,4 +1,4 @@
-##ifndef _ENTITY_HXX_
+#ifndef _ENTITY_HXX_
 #define _ENTITY_HXX_
 
 #include <map>

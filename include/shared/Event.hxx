@@ -1,4 +1,4 @@
-##ifndef _EVENT_HXX_
+#ifndef _EVENT_HXX_
 #define _EVENT_HXX_
 
 #include <stdint.h>
@@ -20,6 +20,7 @@ struct EntityEvent {
 
 typedef struct EntityEvent EntityEvent;
 
-
+bool is_global_event(Event * event);
+bool is_entity_event(Event * event);
 
 #endif /* _EVENT_HXX_ */

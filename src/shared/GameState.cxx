@@ -1,4 +1,5 @@
 #include "GameState.hxx"
+#include "Event.hxx"
 
 virtual Entity * GameState::get_entity(EntityID id) {
 	if (_entities.count(id)) {
