@@ -12,7 +12,7 @@ class NetworkConnecter
 {
 public:
 	NetworkConnecter(const char * server, uint16_t port);
-	~NetworkConnecter();
+	virtual ~NetworkConnecter();
 	void connect();
 	void disconnect();
 	bool isConnected();

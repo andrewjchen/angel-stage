@@ -1,6 +1,5 @@
 #include <cstdio>
 #include "GameState.hxx"
-#include "Event.hxx"
 #include "EventTypes.hxx"
 
 Entity * GameState::get_entity(EntityID id) {
@@ -20,11 +19,11 @@ void GameState::react(Event * event) {
 		EntityID id = ((EntityEvent *) event)->entity_id;
 		Entity * e = get_entity(id);
 		if (e) {
-			e->react(event);
+			e->react((EntityEvent *) event);
 		}
 	} else if (is_global_event(event)) {
 		/* TODO: Do things. */
-		printf("Received global event!");
+		printf("Received global event!\n");
 		switch (event->event_type) {
 		case EVENT_TEST:
 			printf("Received a test event!\n");

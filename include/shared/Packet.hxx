@@ -19,6 +19,7 @@ public:
 	virtual void write(TCPsocket sock) = 0;
 
 	uint8_t type;
+	virtual ~Packet() {};
 
 protected:
 	virtual void read(TCPsocket sock) = 0;

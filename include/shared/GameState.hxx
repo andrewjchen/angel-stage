@@ -5,6 +5,8 @@
 
 #include "Entity.hxx"
 
+struct Event;
+
 class GameState {
 private:
 	std::map<EntityID, Entity *> _entities;
