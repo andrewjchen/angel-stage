@@ -13,6 +13,7 @@
 #include "GameState.hxx"
 #include "Event.hxx"
 #include "EventTypes.hxx"
+#include "Map.hxx"
 
 NetworkConnecter *nc;
 
@@ -38,11 +39,8 @@ int main(int argc, char **argv)
 	}
 	ALLEGRO_DISPLAY * display = al_create_display(800, 600);
 	al_set_target_backbuffer(display);
-	char mapcrap[32*32];
-	for(int x=0;x<32;x++)
-		for(int y=0;y<32;y++)
-			mapcrap[y*32+x] = (x+y) & 1;
-	MapRenderer *render = new MapRenderer(mapcrap);
+	Map *map = NULL;
+	MapRenderer *render = NULL;
 	GameState *gs = new GameState();
 	
 	int xoff = 0, yoff = 0;
@@ -72,6 +70,10 @@ int main(int argc, char **argv)
 				gs->react(((PacketEvent*)p)->event);
 				delete p;
 				break;
+			case PACKET_MAP:
+				std::cout << "got map data!\n";
+				map = new Map(((PacketMap*)p)->size);
+				render = new MapRenderer(map);
 			}
 		}
 		
@@ -99,17 +101,28 @@ int main(int argc, char **argv)
 			nc->disconnect();
 			break;
 		}
-		if(c == 'i')
-			if(yoff > 0) yoff--;
-		if(c == 'k')
-			if(yoff < 32) yoff++;
-		if(c == 'j')
-			if(xoff > 0) xoff--;
-		if(c == 'l')
-			if(xoff < 32) xoff++;
+		if(map)
+		{
+			if(c == 'i')
+				if(yoff > 0) yoff--;
+			if(c == 'k')
+				if(yoff < map->height()) yoff++;
+			if(c == 'j')
+				if(xoff > 0) xoff--;
+			if(c == 'l')
+				if(xoff < map->width()) xoff++;
+			if(c == ';')
+			{
+				xoff = map->width() - 10;
+				yoff = map->height() - 10;
+			}
+			if(c == '\'')
+				xoff = yoff = 0;
+		}
 		
 		al_clear_to_color(al_map_rgb(0,0,0));
-		render->render(xoff, yoff);
+		if(render)
+			render->render(xoff, yoff);
 		al_flip_display();
 		//boost::this_thread::sleep(boost::posix_time::milliseconds(1));
 	}
@@ -123,7 +136,10 @@ int main(int argc, char **argv)
 	SDLNet_Quit();
 	
 	al_destroy_display(display);
-	delete render;
+	if(map)
+		delete map;
+	if(render)
+		delete render;
 	delete gs;
 	
 	tcsetattr(0, TCSANOW, &initial_settings);

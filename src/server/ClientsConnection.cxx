@@ -2,6 +2,7 @@
 #include <iomanip>
 #include <cstdio>
 #include "ClientsConnection.hxx"
+#include "Packet.hxx"
 
 ClientsConnection::ClientsConnection(uint16_t port)
 {
@@ -50,6 +51,11 @@ void ClientsConnection::tick()
 		
 		nm->read_thread = new_peer_thread_read;
 		nm->write_thread = new_peer_thread_write;
+		
+		//stuff to send to client on login
+		PacketMap *pm = new PacketMap(PACKET_MAP);
+		pm->size = 48;
+		nm->addTXPacket(pm);
 		
 		nm_mutex.lock();
 			packetTransporters.push_back(nm);

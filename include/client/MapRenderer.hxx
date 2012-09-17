@@ -2,23 +2,22 @@
 #define MAPRENDER_H
 #include "allegro5/allegro.h"
 #include "allegro5/allegro_image.h"
+#include "Map.hxx"
 
 #define TILE_WIDTH		16
 #define TILE_HEIGHT		16
-
-#define TILE_TYPE_NOTHING	0
-#define TILE_TYPE_GRASS		1
-#define TILE_TYPE_MAX		2
+#define SCREEN_WIDTH	(800/16)
+#define SCREEN_HEIGHT	(600/16)
 
 class MapRenderer
 {
 public:
-	MapRenderer(void *_map);
+	MapRenderer(Map *_map);
 	~MapRenderer();
 	void render(int xoff = 0, int yoff = 0);
 
 private:
-	void *map;
+	Map *map;
 	ALLEGRO_BITMAP *tiles[TILE_TYPE_MAX];
 	void load_tiles();
 };
