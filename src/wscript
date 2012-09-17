@@ -54,6 +54,7 @@ def build(bld):
                           'shared/GameState.cxx',
                           'shared/Event.cxx',
                           'shared/Entity.cxx',
+                          'client/sharedside_client.cxx',
                           'shared/Packet.cxx'],
                 target = 'client_main',
                 includes = client_includes, 
@@ -61,6 +62,7 @@ def build(bld):
                 )
     bld.program(
                 source = ['server/server_main.cxx',
+                          'server/sharedside_server.cxx',
                           'shared/GameState.cxx',
                           'server/ClientsConnection.cxx',
                           'shared/PacketTransporter.cxx',
