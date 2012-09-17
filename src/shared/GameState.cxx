@@ -11,6 +11,10 @@ Entity * GameState::get_entity(EntityID id) {
 	}
 }
 
+void GameState::set_entity(EntityID id, Entity * entity) {
+	_entities[id] = entity;
+}
+
 void GameState::react(Event * event) {
 	if (is_entity_event(event)) {
 		EntityID id = ((EntityEvent *) event)->entity_id;
