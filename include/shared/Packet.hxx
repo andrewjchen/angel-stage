@@ -11,18 +11,15 @@ const uint8_t PACKET_DISCONNECT		= 0x55;
 class Packet
 {
 public:
-	Packet(TCPsocket _sock, uint8_t _type);
+	Packet(uint8_t _type);
 	static Packet *readByType(TCPsocket _sock, uint8_t _type);
-	virtual void read() = 0;
-	virtual void write() = 0;
-  Packet() {}
-  virtual ~Packet() {}
+	virtual void write(TCPsocket sock) = 0;
 
 	uint8_t type;
 
 protected:
-	TCPsocket sock;
-	void writeHeader();
+	virtual void read(TCPsocket sock) = 0;
+	void writeHeader(TCPsocket sock);
 };
 
 /////////////////////////////////////////////// PACKET_PING ////////////////////////////////////////////////////////////////////////////
@@ -30,12 +27,13 @@ protected:
 class PacketPing: public Packet
 {
 public:
-	PacketPing(TCPsocket _sock, uint8_t _type);
-	void read();
-	void write();
+	PacketPing(uint8_t _type);
+	void write(TCPsocket sock);
 
-public:
 	uint32_t pingstuff;
+
+protected:
+	void read(TCPsocket sock);
 };
 
 /////////////////////////////////////////////// PACKET_DISCONNECT ////////////////////////////////////////////////////////////////////////////
@@ -43,9 +41,11 @@ public:
 class PacketDisconnect: public Packet
 {
 public:
-	PacketDisconnect(TCPsocket _sock, uint8_t _type);
-	void read();
-	void write();
+	PacketDisconnect(uint8_t _type);
+	void write(TCPsocket sock);
+
+protected:
+	void read(TCPsocket sock);
 };
 
 #endif

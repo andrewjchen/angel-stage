@@ -6,22 +6,29 @@
 #include <boost/thread/thread.hpp>
 #include "SDL/SDL_net.h"
 #include "PacketTransporter.hxx"
+#include "Packet.hxx"
+
+#define CLIENT_ID_EVERYBODY 0
 
 /**
- * ClientAccepter runs a thread polling for new client sockets.
+ * ClientsConnection runs a thread polling for new client sockets.
  * When one is found, it constructs a PacketTransporter and launches
  * the PacketTransporter read/write threads
  * 
  * Accessing packetTransporters requires that the packetTransport 
  * mutex be locked. 
  */
-class ClientAccepter
+class ClientsConnection
 {
 public:
-	ClientAccepter(uint16_t port);
-	~ClientAccepter();
+	ClientsConnection(uint16_t port);
+	~ClientsConnection();
 
-	void start();
+	//starts listening for 
+	void start(); 
+
+	void sendPacket(Packet *p, uint64_t client);
+	void getPackets();
 
 	boost::mutex nm_mutex;
 
@@ -29,8 +36,8 @@ public:
 	std::vector<PacketTransporter*> packetTransporters;
 
 private:
-	void tick();
-	void listen();
+	void tick(); //called by listen thread
+	void listen(); //called by start()
 	TCPsocket listenSock;
 	boost::thread* listenThread;
 };

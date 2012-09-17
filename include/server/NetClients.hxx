@@ -1,7 +1,7 @@
 #ifndef NET_CLIENTS_H
 #define NET_CLIENTS_H
 
-#include "ClientAccepter.hxx"
+#include "ClientsConnection.hxx"
 #include "GameState.hxx"
 
 
@@ -28,7 +28,7 @@ public:
 
 private:
 	
-	ClientAccepter clientAccepter;
+	ClientsConnection ClientsConnection;
 
 
 };

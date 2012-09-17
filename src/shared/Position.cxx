@@ -33,7 +33,7 @@ bool Position::within(const coordinate_t & w, const coordinate_t & h) const {
 }
 
 coordinate_t Position::distance(const Position & other) const {
-	coordinate_t x_diff = abs(other.x - _x);
-	coordinate_t y_diff = abs(other.y - _y);
+	coordinate_t x_diff = fabs(other.getX() - _x);
+	coordinate_t y_diff = fabs(other.getY() - _y);
 	return sqrt(x_diff * x_diff + y_diff * y_diff);
 }

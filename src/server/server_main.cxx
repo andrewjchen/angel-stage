@@ -3,12 +3,14 @@
 */
 
 #include <iostream>
+#include <iomanip>
+#include <cstdio>
 #include <boost/thread/thread.hpp>
 
-#include "ClientAccepter.hxx"
+#include "ClientsConnection.hxx"
 #include "Packet.hxx"
 
-ClientAccepter * clientAccepter;
+ClientsConnection * clientsConnection;
 
 int main(int argc, char **argv)
 {
@@ -16,20 +18,20 @@ int main(int argc, char **argv)
 	
 	SDLNet_Init();
 
-	clientAccepter = new ClientAccepter(20000);
-	clientAccepter->start();
+	clientsConnection = new ClientsConnection(20000);
+	clientsConnection->start();
 	
 	
 	while(1) 
 	{
-		if(!clientAccepter) continue;//if null, don't act
+		if(!clientsConnection) continue;//if null, don't act
 
-		clientAccepter->nm_mutex.lock();// lock the network managers
-			for(int i = 0; i < clientAccepter->packetTransporters.size(); i++)
+		clientsConnection->nm_mutex.lock();// lock the network managers
+			for(int i = 0; i < clientsConnection->packetTransporters.size(); i++)
 			{
 				//process packets
 				Packet *p;
-				PacketTransporter *nm = clientAccepter->packetTransporters[i];
+				PacketTransporter *nm = clientsConnection->packetTransporters[i];
 				if(nm == 0) continue;
 				while(nm && ((p = nm->getRXPacket()) != NULL))
 				{
@@ -42,16 +44,18 @@ int main(int argc, char **argv)
 						break;
 					case PACKET_DISCONNECT:
 						std::cout << "got a disconnect packet!\n";
+						//std::cout << "Disconnected to client " << std::hex << nm->peer_ip << "\n";
+						printf("Disconnected to client %012lX\n", nm->peer_ip);
 						nm->close(); //logic
 						delete nm;
 						delete p;
 						nm = 0;
-						clientAccepter->packetTransporters[i] = 0; //TODO delete members
+						clientsConnection->packetTransporters[i] = 0; //TODO delete members
 						break;
 					}
 				}
 			}
-		clientAccepter->nm_mutex.unlock();
+		clientsConnection->nm_mutex.unlock();
 		boost::this_thread::sleep(boost::posix_time::milliseconds(1));
 	}
 	

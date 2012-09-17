@@ -2,13 +2,12 @@
 
 /////////////////////////////////////////////// CORE ////////////////////////////////////////////////////////////////////////////
 
-Packet::Packet(TCPsocket _sock, uint8_t _type)
+Packet::Packet(uint8_t _type)
 {
-	sock = _sock;
 	type = _type;
 }
 
-void Packet::writeHeader()
+void Packet::writeHeader(TCPsocket sock)
 {
 	SDLNet_TCP_Send(sock, &type, 1);
 }
@@ -19,48 +18,48 @@ Packet *Packet::readByType(TCPsocket _sock, uint8_t _type)
 	switch(_type)
 	{
 	case PACKET_PING:
-		p = new PacketPing(_sock, _type);
+		p = new PacketPing(_type);
 		break;
 	case PACKET_DISCONNECT:
-		p = new PacketDisconnect(_sock, _type);
+		p = new PacketDisconnect(_type);
 		break;
 	}
 	if(!p) return 0;
-	p->read();
+	p->read(_sock);
 	return p;
 }
 
 /////////////////////////////////////////////// PACKET_PING ////////////////////////////////////////////////////////////////////////////
 
-PacketPing::PacketPing(TCPsocket _sock, uint8_t _type) : Packet(_sock, _type)
+PacketPing::PacketPing(uint8_t _type) : Packet(_type)
 {
 }
 
-void PacketPing::read()
+void PacketPing::read(TCPsocket sock)
 {
 	SDLNet_TCP_Recv(sock, &pingstuff, 4);
 }
 
-void PacketPing::write()
+void PacketPing::write(TCPsocket sock)
 {
-	writeHeader();
+	writeHeader(sock);
 	SDLNet_TCP_Send(sock, &pingstuff, 4);
 }
 
 /////////////////////////////////////////////// PACKET_DISCONNECT ////////////////////////////////////////////////////////////////////////////
 
-PacketDisconnect::PacketDisconnect(TCPsocket _sock, uint8_t _type) : Packet(_sock, _type)
+PacketDisconnect::PacketDisconnect(uint8_t _type) : Packet(_type)
 {
 }
 
-void PacketDisconnect::read()
+void PacketDisconnect::read(TCPsocket sock)
 {
 	//no extra bytes
 }
 
-void PacketDisconnect::write()
+void PacketDisconnect::write(TCPsocket sock)
 {
-	writeHeader();
+	writeHeader(sock);
 	//just in case to work around issue with blocking read
 	uint8_t dummy = 0;
 	SDLNet_TCP_Send(sock, &dummy, 1);
