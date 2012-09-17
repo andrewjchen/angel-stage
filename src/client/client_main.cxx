@@ -9,6 +9,7 @@
 
 #include "NetworkConnecter.hxx"
 #include "Packet.hxx"
+#include "MapRenderer.hxx"
 
 NetworkConnecter *nc;
 
@@ -25,6 +26,19 @@ int main(int argc, char **argv){
 	new_settings.c_cc[VTIME] = 0;
 
 	tcsetattr(0, TCSANOW, &new_settings);
+
+	if (!al_init() || !al_init_image_addon())
+	{
+		printf("Cannot initalize Allegro.\n");
+		return 1;
+	}
+	ALLEGRO_DISPLAY * display = al_create_display(800, 600);
+	al_set_target_backbuffer(display);
+	char mapcrap[32*32];
+	for(int x=0;x<32;x++)
+		for(int y=0;y<32;y++)
+			mapcrap[y*32+x] = (x + y) & 1;
+	MapRenderer *render = new MapRenderer(mapcrap);
 
 	std::cout << "Starting client!\n";
 	
@@ -63,7 +77,9 @@ int main(int argc, char **argv){
 			break;
 		}
 		
-		boost::this_thread::sleep(boost::posix_time::milliseconds(1));
+		render->render();
+		al_flip_display();
+		//boost::this_thread::sleep(boost::posix_time::milliseconds(1));
 	}
 	
 	//nc->network_manager->read_thread->join();
@@ -74,6 +90,9 @@ int main(int argc, char **argv){
 	//somehow this doesn't work
 	//delete nc;
 	SDLNet_Quit();
+	
+	al_destroy_display(display);
+	delete render;
 	
 	tcsetattr(0, TCSANOW, &initial_settings);
 }

@@ -50,10 +50,11 @@ def build(bld):
                 source = ['client/client_main.cxx',
                           'client/NetworkConnecter.cxx',
                           'shared/PacketTransporter.cxx',
+                          'client/MapRenderer.cxx',
                           'shared/Packet.cxx'],
                 target = 'client_main',
                 includes = client_includes, 
-                lib = common_lib,
+                lib = common_lib + allegro_libs,
                 )
     bld.program(
                 source = ['server/server_main.cxx',
