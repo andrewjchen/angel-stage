@@ -79,7 +79,7 @@ void ClientsConnection::sendPacket(Packet *p, uint32_t client)
 		{
 			PacketTransporter *pt = packetTransporters[i];
 			if(pt == NULL) continue;
-			if(pt->peer_ip == client)
+			if(pt->peer_ip == client || client == 0)
 			{
 				pt->addTXPacket(p);
 				break;
