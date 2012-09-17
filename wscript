@@ -53,12 +53,12 @@ def configure_debug(conf):
     common_configure(conf)
 
     # CXX
-    conf.check(cxxflags=['-g'])
-    conf.env.append_value('CXXFLAGS', ['-g'])
+    conf.check(cxxflags=['-g', '-O0'])
+    conf.env.append_value('CXXFLAGS', ['-g', '-O0'])
     
     # C
-    conf.check(cflags=['-g'])
-    conf.env.append_value('CFLAGS', ['-g'])
+    conf.check(cflags=['-g', '-O0'])
+    conf.env.append_value('CFLAGS', ['-g', '-O0'])
 
 def configure_release(conf):
     conf.setenv('release')
