@@ -2,13 +2,14 @@
 #define UNIT_STATE_COMPONENT_H
 
 #include "Component.hxx"
+#include "EventTypes.hxx"
 
 class UnitStateComponent: public Component {
 
 public:
-	UnitStateComponent(Entity* Entity) : Component(entity) {};
+	UnitStateComponent(Entity* entity) : Component(entity) {};
 	~UnitStateComponent() {};
-	virtual feedback(UnitFeedbackEvent * event);
+	virtual void feedback(UnitFeedbackEvent * event);
 private:
 	double _x;
 	double _y;

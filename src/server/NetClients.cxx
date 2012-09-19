@@ -1,7 +1,8 @@
 #include "NetClients.hxx"
 
 
-NetClients::NetClients(uint16_t port): ClientsConnection(port){
+NetClients::NetClients(uint16_t port) {
+	ClientsConnection = new class ClientsConnection(port);
 
 }
 
@@ -10,11 +11,12 @@ NetClients::~NetClients(){
 }
 
 void NetClients::initialize(){
-	ClientsConnection.start();
+	ClientsConnection->start();
 }
 
 void NetClients::tick(){
 	if(ClientsConnection){
+	// if(ClientsConnection){
 		ClientsConnection->nm_mutex.lock();// lock the network managers
 		for(int i = 0; i < ClientsConnection->packetTransporters.size(); i++)
 		{

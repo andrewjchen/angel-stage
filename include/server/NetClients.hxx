@@ -4,6 +4,7 @@
 #include "ClientsConnection.hxx"
 #include "GameState.hxx"
 
+typedef uint16_t port_t;
 
 /**
  * NetClients is the server-side client abstraction.
@@ -15,7 +16,7 @@
 class NetClients
 {
 public: 
-	NetClients(uint16_t port);
+	NetClients(port_t port);
 	~NetClients();
 
 	void initialize();
@@ -28,7 +29,7 @@ public:
 
 private:
 	
-	ClientsConnection ClientsConnection;
+	ClientsConnection * ClientsConnection;
 
 
 };

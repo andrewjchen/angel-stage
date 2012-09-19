@@ -18,13 +18,24 @@ def build(bld):
     common_libpath = [join(bld.top_dir, 'deps', 'usr', 'local', 'lib')]
     client_includes = common_includes + [join(bld.top_dir, 'include', 'client')]
     server_includes = common_includes + [join(bld.top_dir, 'include', 'server')]
-    bld.user_vars = dict()
-    bld.user_vars['common_includes'] = common_includes
     common_lib = ['boost_system', 'boost_thread','SDL_net']
-    bld.user_vars['common_lib'] = common_lib
-    bld.recurse('shared')
-    bld.recurse('client')
-    bld.recurse('server')
+    bld.stlib(
+        source = bld.path.ant_glob('shared/*.cxx'),
+        includes = common_includes,
+        target = 'angel-stage-shared-lib',
+        )
+    bld.stlib(
+        source = bld.path.ant_glob('server/*.cxx'),
+        includes = server_includes,
+        use = 'angel-stage-shared-lib',
+        target = 'angel-stage-server-lib',
+        )
+    bld.stlib(
+        source = bld.path.ant_glob('client/*.cxx'),
+        includes = client_includes,
+        use = 'angel-stage-shared-lib',
+        target = 'angel-stage-client-lib',
+        )
     bld.program(
                 source = 'allegro_main.c', 
                 target = 'allegro_main', 
@@ -47,31 +58,16 @@ def build(bld):
                 includes = common_includes, 
                 )
     bld.program(
-                source = ['client/client_main.cxx',
-                          'client/NetworkConnecter.cxx',
-                          'shared/PacketTransporter.cxx',
-                          'client/MapRenderer.cxx',
-                          'shared/GameState.cxx',
-                          'shared/Event.cxx',
-                          'shared/Entity.cxx',
-                          'client/sharedside_client.cxx',
-						  'shared/Map.cxx',
-                          'shared/Packet.cxx'],
-                target = 'client_main',
-                includes = client_includes, 
-                lib = common_lib + allegro_libs,
-                )
+        source = 'client_main.cxx',
+        target = 'client_main',
+        includes = client_includes,
+        lib = common_lib + allegro_libs,
+        use = ['angel-stage-shared-lib', 'angel-stage-client-lib'],
+        )
     bld.program(
-                source = ['server/server_main.cxx',
-                          'server/sharedside_server.cxx',
-                          'shared/GameState.cxx',
-						  'shared/Map.cxx',
-                          'server/ClientsConnection.cxx',
-                          'shared/PacketTransporter.cxx',
-                          'shared/Event.cxx',
-                          'shared/Entity.cxx',
-                          'shared/Packet.cxx'],
-                target = 'server_main',
-                includes = server_includes, 
-                lib = common_lib,
-                )
+        source = 'server_main.cxx',
+        target = 'server_main',
+        includes = server_includes,
+        lib = common_lib + sdl_libs,
+        use = ['angel-stage-shared-lib', 'angel-stage-server-lib'],
+        )

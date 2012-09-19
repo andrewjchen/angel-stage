@@ -2,12 +2,11 @@
 #define SERVER_H
 
 #include "NetClients.hxx"
-#include "GamePhysics.hpp"
+#include "GamePhysics.hxx"
 
 class Server {
 public:
-	static Server& getInstance();
-	~Server();
+	// static Server& getInstance();
 	
 	void run();
 	
@@ -22,8 +21,8 @@ private:
 	NetClients net;
 	GamePhysics phys;
 	
-	Server();
-	Server(const Server&) {}
+	virtual ~Server() {};
+	Server(const Server & server, port_t port) : net(port) {}
 	const Server& operator=(const Server&) { return *this; }
 };
 #endif

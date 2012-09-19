@@ -1,4 +1,4 @@
-#include "GamePhysics.hpp"
+#include "GamePhysics.hxx"
 #include "GameState.hxx"
 #include <cmath>
 #include "Debug.hxx"
@@ -36,9 +36,9 @@ GamePhysics::~GamePhysics() {
 	
 }
 
-GameState GamePhysics::getGameState(){
-	return state;
-}
+// GameState GamePhysics::getGameState() {
+// 	return state;
+// }
 
 void GamePhysics::addPlayer(int id){
 
@@ -56,7 +56,7 @@ void GamePhysics::unitFeed(int playerID, int unitID, int resourceID){
 
 }
 
-void GamePhysics::unitFight(int player1ID, int unit2ID, int player2ID, int unit2ID){
+void GamePhysics::unitFight(int player1ID, int unit1ID, int player2ID, int unit2ID){
 
 }
 
