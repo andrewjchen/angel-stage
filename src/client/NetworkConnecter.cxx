@@ -34,7 +34,8 @@ void NetworkConnecter::connect(){
 
 void NetworkConnecter::disconnect(){
 	packetTransport->close();
-	delete packetTransport;
+	clientSock = NULL;
+	packetTransport = NULL;
 }
 
 bool NetworkConnecter::isConnected(){

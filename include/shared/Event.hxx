@@ -3,6 +3,7 @@
 
 #include <stdint.h>
 
+
 typedef uint32_t EventTypeID;
 
 struct Event {
@@ -11,16 +12,13 @@ struct Event {
 	/* Followed by a dynamically sized package. */
 };
 
-typedef struct Event Event;
 
 #include "Entity.hxx"
 
 struct EntityEvent {
     Event header;
-	EntityID entity_id;
+	//EntityID entity_id;
 };
-
-typedef struct EntityEvent EntityEvent;
 
 bool is_global_event(Event * event);
 bool is_entity_event(Event * event);

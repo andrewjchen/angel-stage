@@ -20,7 +20,9 @@ class GameState;
 
 typedef uint32_t EntityID;
 
-#include "Event.hxx"
+// #include "Event.hxx"
+
+struct EntityEvent;
 
 class Entity {
 private:

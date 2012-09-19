@@ -7,6 +7,8 @@
 #include "Entity.hxx"
 #include "Component.hxx"
 
+struct Event;
+
 class GameState {
 public:
 	GameState(void) {};

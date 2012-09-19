@@ -12,6 +12,7 @@ UnitStateComponent::UnitStateComponent(Entity* entity) : Component(entity) {
 
 /*
 
+<<<<<<< HEAD
 void UnitStateComponent::update(){
 
 }
@@ -25,3 +26,10 @@ void UnitStateComponent::tick(double wallTime, double deltaT){
 	y = 500* cos(wallTime) + 500;
 
 }	
+=======
+void UnitStateComponent::update(UnitFeedbackEvent * event) {
+	_x = event->x;
+	_y = event->y;
+	_theta = event->theta;
+}
+>>>>>>> 9faf59d8985e7dd192bc490b6fb8c11953209d5b

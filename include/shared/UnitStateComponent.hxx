@@ -2,6 +2,8 @@
 #define UNIT_STATE_COMPONENT_H
 
 #include "Component.hxx"
+//#include "Event.hxx"
+#include "EventTypes.hxx"
 
 class UnitStateComponent: public Component {
 
@@ -9,16 +11,14 @@ public:
 	UnitStateComponent(Entity* entity);//: Component(entity) {} ;
 	~UnitStateComponent() {};
 
-//	void update(); //TODO
-
 	virtual void tick(double wallTime, double deltaT);
 
 
+	virtual void feedback(UnitFeedbackEvent* event);
 private:
-	double x;
-	double y; 
-	double theta;
-
+	double _x;
+	double _y;
+	double _theta;
 };
 
 #endif

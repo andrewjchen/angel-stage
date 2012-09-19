@@ -81,7 +81,7 @@ PacketEvent::PacketEvent(uint8_t _type) : Packet(_type)
 
 PacketEvent::~PacketEvent()
 {
-	if(event) delete event;
+	if(event) delete[] event;
 }
 
 void PacketEvent::read(TCPsocket sock)
