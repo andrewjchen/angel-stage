@@ -6,6 +6,7 @@
 #include <iomanip>
 #include <cstdio>
 #include <boost/thread/thread.hpp>
+#include <signal.h>
 
 #include "ClientsConnection.hxx"
 #include "Packet.hxx"
@@ -13,8 +14,18 @@
 
 ClientsConnection * clientsConnection;
 
+int run;
+
+void sigint_handler(int sig)
+{
+	run = 0;
+}
+
 int main(int argc, char **argv)
 {
+	run = 1;
+	signal(SIGINT, sigint_handler);
+	
 	std::cout << "Starting server!\n";
 	
 	GameState *gs = new GameState();
@@ -25,7 +36,7 @@ int main(int argc, char **argv)
 	clientsConnection->start();
 	
 	
-	while(1) 
+	while(run) 
 	{
 		if(!clientsConnection) continue;//if null, don't act
 
@@ -66,7 +77,12 @@ int main(int argc, char **argv)
 		boost::this_thread::sleep(boost::posix_time::milliseconds(1));
 	}
 	
+	std::cout << "Cleaning up server!\n";
+	
+	clientsConnection->stop();
+	
 	SDLNet_Quit();
 	
+	delete clientsConnection;
 	delete gs;
 }

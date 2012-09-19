@@ -14,14 +14,13 @@ ClientsConnection::ClientsConnection(uint16_t port)
 	listenSock = SDLNet_TCP_Open(&ip);
 	if(listenSock == NULL)
 		throw "SDLNet_TCP_Open error";
+	
+	running = false;
 }
 
 ClientsConnection::~ClientsConnection()
 {
-	if(listenSock)
-		SDLNet_TCP_Close(listenSock);
-	if(listenThread)
-		delete listenThread;
+	if(running) stop();
 }
 
 void ClientsConnection::start(){
@@ -29,9 +28,25 @@ void ClientsConnection::start(){
 //	boost::thread listener( this->listen );
 
 //boost::thread* thr = new boost::thread(boost::bind(&Foo::some_function, this));	
+
+	running = true;
+	
 		listenThread = new boost::thread(
 			boost::bind(&ClientsConnection::listen, this));
 
+}
+
+void ClientsConnection::stop()
+{
+	running = false;
+	listenThread->join();
+	delete listenThread;
+	listenThread = NULL;
+	if(listenSock)
+	{
+		SDLNet_TCP_Close(listenSock);
+		listenSock = NULL;
+	}
 }
 
 void ClientsConnection::tick()
@@ -67,11 +82,10 @@ void ClientsConnection::tick()
 
 void ClientsConnection::listen(){
 	try {
-		while (1) {
+		while (running) {
 			this->tick();
 			boost::this_thread::sleep(boost::posix_time::milliseconds(1));
 		}
-		delete this;	
 	} catch (const char *e){
 		std::cout << e << std::endl;
 	}

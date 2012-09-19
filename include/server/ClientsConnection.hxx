@@ -26,6 +26,7 @@ public:
 
 	//starts listening for 
 	void start(); 
+	void stop();
 
 	void sendPacket(Packet *p, uint64_t client);
 	void getPackets();
@@ -36,6 +37,7 @@ public:
 	std::vector<PacketTransporter*> packetTransporters;
 
 private:
+	bool running;
 	void tick(); //called by listen thread
 	void listen(); //called by start()
 	TCPsocket listenSock;
