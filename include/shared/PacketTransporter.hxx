@@ -17,6 +17,7 @@ class PacketTransporter
 {
 public:
 	PacketTransporter(TCPsocket _sock);
+	virtual ~PacketTransporter() {}; // Have this or use a struct instead.
 
 	//called each read/write loop
 	void processNetworkRead();
@@ -41,7 +42,6 @@ public:
 	uint64_t peer_ip;
 
 private:
-	~PacketTransporter() {};
 	std::deque<Packet *> rx_queue;
 	std::deque<Packet *> tx_queue;
 	boost::mutex rx_mutex;

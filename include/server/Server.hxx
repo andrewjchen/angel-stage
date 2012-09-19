@@ -14,6 +14,9 @@ public:
 	
 	// NetManager& getNetManager() { return net; }
 	GamePhysics& getGamePhysics() { return phys; }
+	virtual ~Server() {};
+	Server(const Server & server, port_t port) : net(port) {}
+	const Server& operator=(const Server&) { return *this; }
 	
 private:
 	bool running;
@@ -21,8 +24,5 @@ private:
 	NetClients net;
 	GamePhysics phys;
 	
-	virtual ~Server() {};
-	Server(const Server & server, port_t port) : net(port) {}
-	const Server& operator=(const Server&) { return *this; }
 };
 #endif
