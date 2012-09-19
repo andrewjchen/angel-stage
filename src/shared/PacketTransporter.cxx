@@ -109,4 +109,8 @@ void PacketTransporter::close()
 	uint8_t dummy = 0;
 	SDLNet_TCP_Send(sock, &dummy, 1);
 	SDLNet_TCP_Close(sock);
+	
+	delete read_thread;
+	delete write_thread;
+	delete this;
 }

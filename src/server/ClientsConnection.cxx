@@ -20,6 +20,8 @@ ClientsConnection::~ClientsConnection()
 {
 	if(listenSock)
 		SDLNet_TCP_Close(listenSock);
+	if(listenThread)
+		delete listenThread;
 }
 
 void ClientsConnection::start(){

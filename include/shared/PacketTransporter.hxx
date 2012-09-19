@@ -9,6 +9,8 @@
  * PacketTransporter sends and receives packets through a socket connection.
  * It runs the threads to do this IO thread safe, stores packets
  * for sending and receiving in queues
+ * 
+ * MUST BE ALLOCATED WITH new
  */
 //TODO queue overflow?
 class PacketTransporter
@@ -39,6 +41,7 @@ public:
 	uint64_t peer_ip;
 
 private:
+	~PacketTransporter() {};
 	std::deque<Packet *> rx_queue;
 	std::deque<Packet *> tx_queue;
 	boost::mutex rx_mutex;

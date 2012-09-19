@@ -50,7 +50,6 @@ int main(int argc, char **argv)
 						//std::cout << "Disconnected to client " << std::hex << nm->peer_ip << "\n";
 						printf("Disconnected to client %012lX\n", nm->peer_ip);
 						nm->close(); //logic
-						delete nm;
 						delete p;
 						nm = 0;
 						clientsConnection->packetTransporters[i] = 0; //TODO delete members
