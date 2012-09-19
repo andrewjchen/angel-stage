@@ -67,7 +67,7 @@ int main(int argc, char **argv)
 						break;
 					case PACKET_EVENT:
 						std::cout << "got an event!\n";
-						gs->react(((PacketEvent*)p)->event);
+						gs->react(((PacketEvent*)p)->getEvent());
 						delete p;
 						break;
 					}

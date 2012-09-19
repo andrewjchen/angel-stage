@@ -93,14 +93,26 @@ void PacketEvent::read(TCPsocket sock)
 	memcpy(buf, &evthead, sizeof(evthead));
 	if(morebytes)
 		SDLNet_TCP_Recv(sock, &(buf[sizeof(evthead)]), morebytes);
-	event = (Event*)buf;
+	event = buf;
+}
+
+void PacketEvent::setEvent(Event *_event)
+{
+	uint8_t *buf = new uint8_t[_event->total_byte_count];
+	memcpy(buf, _event, _event->total_byte_count);
+	event = buf;
+}
+
+Event* PacketEvent::getEvent(void)
+{
+	return (Event*)event;
 }
 
 void PacketEvent::write(TCPsocket sock)
 {
 	if(!event) return;
 	writeHeader(sock);
-	SDLNet_TCP_Send(sock, event, event->total_byte_count);
+	SDLNet_TCP_Send(sock, event, ((Event*)event)->total_byte_count);
 }
 
 /////////////////////////////////////////////// PACKET_MAP ////////////////////////////////////////////////////////////////////////////
