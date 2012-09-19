@@ -74,6 +74,8 @@ int main(int argc, char **argv)
 				std::cout << "got map data!\n";
 				map = new Map(((PacketMap*)p)->size);
 				render = new MapRenderer(map);
+				delete p;
+				break;
 			}
 		}
 		
