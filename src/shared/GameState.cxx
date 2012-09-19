@@ -3,6 +3,7 @@
 #include "Event.hxx"
 #include "EventTypes.hxx"
 
+#include "Debug.hxx"
 Entity * GameState::get_entity(EntityID id) {
 	if (_entities.count(id)) {
 		return _entities[id];
@@ -32,3 +33,30 @@ void GameState::react(Event * event) {
 		}
 	}
 }
+
+void GameState::tick(double wallTime, double deltaTime){
+	std::vector<Component*>::iterator it;
+	for(it = clockReceivers.begin(); it<clockReceivers.end(); it++){
+		(*it)->tick(wallTime, deltaTime);
+	}
+}
+
+void GameState::addClockListener(Component* toListen){
+	clockReceivers.push_back(toListen);
+	DEBUG("Added clock listener");
+}
+
+void GameState::removeClockListener(Component* toListen){
+	//TODO test
+//	clockReceivers.erase(
+//		s td::remove(clockReceivers.begin(), clockReceivers.end(), toListen), clockReceivers.end() );
+	std::vector<Component*>::iterator it;
+
+	for(it = clockReceivers.begin(); it<clockReceivers.end(); it++){
+		if( (*it) == toListen){
+			clockReceivers.erase(it);
+		}
+	}
+
+
+}	

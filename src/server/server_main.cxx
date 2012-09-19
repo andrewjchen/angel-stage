@@ -10,20 +10,30 @@
 #include "ClientsConnection.hxx"
 #include "Packet.hxx"
 #include "GameState.hxx"
+#include "UnitStateComponent.hxx"
+
+#include "Debug.hxx"
 
 ClientsConnection * clientsConnection;
 
-int main(int argc, char **argv)
-{
+int main(int argc, char **argv){
 	std::cout << "Starting server!\n";
 	
 	GameState *gs = new GameState();
+	Entity* ent = new Entity(0);
+	gs->set_entity(0, ent);
+	ent->set_gamestate(gs);
+	ent->set_unit_state_component(new UnitStateComponent(ent));
+
+	
+
 	
 	SDLNet_Init();
 
 	clientsConnection = new ClientsConnection(20000);
 	clientsConnection->start();
 	
+	double wallTime= 0;
 	
 	while(1) 
 	{
@@ -64,6 +74,9 @@ int main(int argc, char **argv)
 				}
 			}
 		clientsConnection->nm_mutex.unlock();
+		wallTime+= .001;
+		//DEBUG(wallTime);
+		gs->tick(wallTime, .001); // TODO
 		boost::this_thread::sleep(boost::posix_time::milliseconds(1));
 	}
 	

@@ -5,6 +5,7 @@
 #include <stdint.h>
 
 #include "Component.hxx"
+#include "UnitStateComponent.hxx"
 
 #define DECLARE_COMPONENT(_comp_type_, _comp_name_)					\
 	private: _comp_type_ * _##_comp_name_;								\
@@ -27,10 +28,12 @@ private:
 	GameState * gamestate;
 public:
 	Entity(EntityID id) : _id(id) {};
-	virtual ~Entity() {};
-	virtual EntityID get_id() const;
-	virtual void react(Event * event);
-	// DECLARE_COMPONENT(StateComponent, state_component);
+	~Entity() {};
+	EntityID get_id() const;
+	void react(Event * event);
+	GameState* get_gamestate();
+	void set_gamestate(GameState* gs) { gamestate = gs;};
+	DECLARE_COMPONENT(UnitStateComponent, unit_state_component);
 #ifdef CLIENT_SIDE
 	DECLARE_COMPONENT(VisualComponent, visual_component);
 #endif

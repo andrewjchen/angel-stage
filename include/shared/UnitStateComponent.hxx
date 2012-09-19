@@ -6,18 +6,18 @@
 class UnitStateComponent: public Component {
 
 public:
-	UnitStateComponent(Entity* Entity) : Component(entity) {};
+	UnitStateComponent(Entity* entity);//: Component(entity) {} ;
 	~UnitStateComponent() {};
 
-	update(); //TODO
+//	void update(); //TODO
+
+	virtual void tick(double wallTime, double deltaT);
 
 
 private:
 	double x;
 	double y; 
 	double theta;
-
-
 
 };
 
