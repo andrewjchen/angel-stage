@@ -37,20 +37,6 @@ def build(bld):
         target = 'angel-stage-client-lib',
         )
     bld.program(
-                source = 'allegro_main.c', 
-                target = 'allegro_main', 
-                lib = allegro_libs, 
-                libpath = common_libpath,
-                includes = common_includes, 
-                )
-    bld.program(
-                source = 'sdl_main.c', 
-                target = 'sdl_main', 
-                lib = sdl_libs,
-                lib_path = common_libpath,
-                includes = common_includes, 
-                )
-    bld.program(
                 source = 'sdl_main.cxx', 
                 target = 'sdl_main_cxx', 
                 lib = sdl_libs,

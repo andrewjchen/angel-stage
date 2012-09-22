@@ -2,6 +2,7 @@
 #define _EVENT_TYPES_HXX_
 
 #include "Event.hxx"
+#include "Ids.hxx"
 
 const EventTypeID EVENT_GLOBAL_MINIMUM    = 0x81000001;
 const EventTypeID EVENT_TEST              = 0x81000001;
@@ -27,5 +28,6 @@ struct UnitFeedbackEvent {
 	double y;
 	double theta;
 };
+
 
 #endif /* _EVENT_TYPES_HXX_ */

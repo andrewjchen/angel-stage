@@ -1,5 +1,5 @@
-#ifndef UNIT_STATE_COMPONENT_H
-#define UNIT_STATE_COMPONENT_H
+#ifndef _UNIT_STATE_COMPONENT_HXX_
+#define _UNIT_STATE_COMPONENT_HXX_
 
 #include "Component.hxx"
 #include "EventTypes.hxx"

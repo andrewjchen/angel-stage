@@ -1,8 +1,8 @@
 #include <cstdio>
 #include "GameState.hxx"
-#include "EventTypes.hxx"
-
+#include "Event.hxx"
 #include "Debug.hxx"
+
 Entity * GameState::get_entity(EntityID id) {
 	if (_entities.count(id)) {
 		return _entities[id];

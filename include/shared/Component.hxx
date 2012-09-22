@@ -6,8 +6,6 @@
 
 class Entity;
 
-typedef uint32_t ComponentType;
-
 class Component {
 public:
 	Component(Entity* entity) : _entity(entity) {};

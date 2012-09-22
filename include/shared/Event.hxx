@@ -1,10 +1,9 @@
 #ifndef _EVENT_HXX_
 #define _EVENT_HXX_
 
+#include "Ids.hxx"
 #include <stdint.h>
 
-
-typedef uint32_t EventTypeID;
 
 struct Event {
 	EventTypeID event_type;
@@ -12,12 +11,9 @@ struct Event {
 	/* Followed by a dynamically sized package. */
 };
 
-
-#include "Entity.hxx"
-
 struct EntityEvent {
     Event header;
-	//EntityID entity_id;
+	EntityID entity_id;
 };
 
 bool is_global_event(Event * event);

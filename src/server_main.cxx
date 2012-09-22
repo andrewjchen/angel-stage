@@ -12,7 +12,6 @@
 #include "Packet.hxx"
 #include "GameState.hxx"
 #include "UnitStateComponent.hxx"
-
 #include "Debug.hxx"
 
 ClientsConnection * clientsConnection;

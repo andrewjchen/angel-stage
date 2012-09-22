@@ -1,9 +1,10 @@
 #ifndef _ENTITY_HXX_
 #define _ENTITY_HXX_
 
-#include <map>
 #include <stdint.h>
+#include <map>
 
+#include "Ids.hxx"
 #include "Component.hxx"
 #include "UnitStateComponent.hxx"
 
@@ -18,11 +19,8 @@
 
 class GameState;
 
-typedef uint32_t EntityID;
-
-// #include "Event.hxx"
-
-struct EntityEvent;
+#include "Event.hxx"
+#include "EventTypes.hxx"
 
 class Entity {
 private:
@@ -32,7 +30,7 @@ public:
 	Entity(EntityID id) : _id(id) {};
 	~Entity() {};
 	EntityID get_id() const;
-	void react(Event * event);
+	void react(EntityEvent * event);
 	GameState* get_gamestate();
 	void set_gamestate(GameState* gs) { gamestate = gs;};
 	DECLARE_COMPONENT(UnitStateComponent, unit_state_component);
