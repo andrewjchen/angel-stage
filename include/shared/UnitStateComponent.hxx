@@ -4,13 +4,14 @@
 #include "Component.hxx"
 #include "EventTypes.hxx"
 
-class UnitStateComponent: public Component {
+class UnitStateComponent : public Component {
 
 public:
-	UnitStateComponent(Entity* entity);//: Component(entity) {} ;
-	~UnitStateComponent() {};
+	UnitStateComponent(Entity* entity);
+	virtual ~UnitStateComponent() {};
 	virtual void tick(double wallTime, double deltaT);
 	virtual void feedback(UnitFeedbackEvent* event);
+
 private:
 	double _x;
 	double _y;

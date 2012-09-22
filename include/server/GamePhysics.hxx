@@ -10,7 +10,7 @@ class GamePhysics {
 public:
 	GamePhysics();
 	~GamePhysics();
-	
+
 	const GameState& getState() { return state; }
 
 	void addPlayer(int id);
@@ -19,13 +19,11 @@ public:
 	void unitFeed(int playerID, int unitID, int resourceID);
 	void unitFight(int player1ID, int unit1ID, int player2ID, int unit2ID);
 	void unitMerge(int playerID, int unit1ID, int unit2ID);
-	
+
 private:
 	GamePhysics(const GamePhysics&) {}
 	const GamePhysics& operator=(const GamePhysics& other) { return *this; }
 	GameState state;
-
-
 };
 
 

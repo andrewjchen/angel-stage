@@ -1,5 +1,5 @@
-#ifndef PACKET_TRANSPORTER_H
-#define PACKET_TRANSPORTER_H
+#ifndef _PACKET_TRANSPORTER_HXX_
+#define _PACKET_TRANSPORTER_HXX_
 #include <deque>
 #include <boost/thread/thread.hpp>
 #include "SDL/SDL_net.h"
@@ -9,7 +9,7 @@
  * PacketTransporter sends and receives packets through a socket connection.
  * It runs the threads to do this IO thread safe, stores packets
  * for sending and receiving in queues
- * 
+ *
  * MUST BE ALLOCATED WITH new
  */
 //TODO queue overflow?
@@ -53,4 +53,4 @@ private:
 	bool closed_write;
 };
 
-#endif
+#endif /* _PACKET_TRANSPORTER_HXX_ */

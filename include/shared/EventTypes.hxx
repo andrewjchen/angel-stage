@@ -29,5 +29,4 @@ struct UnitFeedbackEvent {
 	double theta;
 };
 
-
 #endif /* _EVENT_TYPES_HXX_ */

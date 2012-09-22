@@ -1,5 +1,5 @@
 #ifndef NETWORK_CONTROLLER_H
-#define NETWORK_CONTROLLER_H 
+#define NETWORK_CONTROLLER_H
 
 #include "GameState.hxx"
 
@@ -11,8 +11,6 @@
 class NetworkController {
 
 public:
-	NetworkController(GameState );
+	NetworkController(GameState);
 	~NetworkController();
-
-
 }

@@ -7,5 +7,4 @@ typedef uint32_t EntityID;
 typedef uint32_t EventTypeID;
 typedef uint32_t ComponentType;
 
-
 #endif

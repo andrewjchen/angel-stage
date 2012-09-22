@@ -3,10 +3,10 @@
 
 NetworkConnecter::NetworkConnecter(const char * server, uint16_t port){
 	IPaddress ip;
-	
+
 	if(SDLNet_ResolveHost(&ip, server, port) != 0)
 		throw "SDLNet_ResolveHost error";
-	
+
 	clientSock = SDLNet_TCP_Open(&ip);
 	if(clientSock == NULL)
 		throw "SDLNet_TCP_Open error";
@@ -25,10 +25,10 @@ void NetworkConnecter::connect(){
 	nm->peer_ip = ((uint64_t)(ip->host) << 16) | (ip->port);
 	boost::thread *new_peer_thread_read = new boost::thread(boost::bind(PacketTransporter::peer_thread_read, nm));
 	boost::thread *new_peer_thread_write = new boost::thread(boost::bind(PacketTransporter::peer_thread_write, nm));
-	
+
 	nm->read_thread = new_peer_thread_read;
 	nm->write_thread = new_peer_thread_write;
-	
+
 	packetTransport = nm;
 }
 
@@ -49,5 +49,3 @@ void NetworkConnecter::sendPacket(Packet* p){
 Packet* NetworkConnecter::getPacket(){
 	return packetTransport->getRXPacket();
 }
-
-

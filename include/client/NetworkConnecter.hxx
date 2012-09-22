@@ -20,8 +20,6 @@ public:
 	void sendPacket(Packet* p);
 	Packet* getPacket();
 
-
-
 private:
 	PacketTransporter* packetTransport;
 	TCPsocket clientSock;
