@@ -67,7 +67,7 @@ int main(int argc, char **argv)
 				break;
 			case PACKET_EVENT:
 				std::cout << "got an event!\n";
-				gs->react(((PacketEvent*)p)->event);
+				gs->react(((PacketEvent*)p)->getEvent());
 				delete p;
 				break;
 			case PACKET_MAP:
@@ -92,7 +92,8 @@ int main(int argc, char **argv)
 			e->event_type = EVENT_TEST;
 			e->total_byte_count = sizeof(Event);
 			p = new PacketEvent(PACKET_EVENT);
-			((PacketEvent*)p)->event = e;
+			((PacketEvent*)p)->setEvent(e);
+			delete e;
 			nc->sendPacket(p);
 		}
 		if(c == 'U')

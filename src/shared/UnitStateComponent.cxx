@@ -4,6 +4,7 @@
 #include <math.h>
 #include "Debug.hxx"
 
+<<<<<<< HEAD
 
 UnitStateComponent::UnitStateComponent(Entity* entity) : Component(entity) {
 	entity->get_gamestate()->addClockListener(this);
@@ -28,6 +29,9 @@ void UnitStateComponent::tick(double wallTime, double deltaT){
 }	
 =======
 void UnitStateComponent::update(UnitFeedbackEvent * event) {
+=======
+void UnitStateComponent::feedback(UnitFeedbackEvent * event) {
+>>>>>>> e75c0b9669e87c404746eed6b703d77e4d299cc7
 	_x = event->x;
 	_y = event->y;
 	_theta = event->theta;

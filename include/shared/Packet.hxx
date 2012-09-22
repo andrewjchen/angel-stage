@@ -60,10 +60,11 @@ public:
 	PacketEvent(uint8_t _type);
 	~PacketEvent();
 	void write(TCPsocket sock);
-	
-	Event *event;
+	void setEvent(Event *_event);
+	Event *getEvent();
 
 protected:
+	uint8_t *event;
 	void read(TCPsocket sock);
 };
 

@@ -1,5 +1,6 @@
 #ifndef _COMPONENT_HXX_
 #define _COMPONENT_HXX_
+#include <stdint.h>
 
 #include <stdint.h>
 
