@@ -16,7 +16,7 @@ void UnitStateComponent::feedback(UnitFeedbackEvent* event) {
 	_theta = event->theta;
 }
 
-void UnitStateComponent::tick(double wallTime, double deltaT) {
-	_x = 500 * sin(wallTime) + 500;
-	_y = 500 * cos(wallTime) + 500;
+void UnitStateComponent::tick(double wallTime, double deltaT){
+	_x = 500* sin(wallTime) + 500;
+	_y = 500* cos(wallTime) + 500;
 }
