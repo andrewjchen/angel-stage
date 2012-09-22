@@ -37,13 +37,6 @@ def build(bld):
         target = 'angel-stage-client-lib',
         )
     bld.program(
-                source = 'sdl_main.cxx', 
-                target = 'sdl_main_cxx', 
-                lib = sdl_libs,
-                lib_path = common_libpath,
-                includes = common_includes, 
-                )
-    bld.program(
         source = 'client_main.cxx',
         target = 'client_main',
         includes = client_includes,
