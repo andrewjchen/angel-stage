@@ -11,6 +11,7 @@ void Renderer::render() {
 	for (iter = _unit_layer.begin(); iter < _unit_layer.end(); iter++) {
 		(*iter)->render(_viewpoint);
 	}
+	al_flip_display();
 }
 
 void Renderer::setViewpoint(coordinate_t x, coordinate_t y) {

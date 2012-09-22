@@ -1,6 +1,7 @@
 #ifndef _UNIT_VISUAL_COMPONENT_HXX_
 #define _UNIT_VISUAL_COMPONENT_HXX_
 #include "VisualComponent.hxx"
+#include "ClientGlobals.hxx"
 #include "allegro5/allegro.h"
 #include "allegro5/allegro_image.h"
 

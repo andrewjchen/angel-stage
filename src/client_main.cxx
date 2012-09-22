@@ -14,6 +14,9 @@
 #include "Event.hxx"
 #include "EventTypes.hxx"
 #include "Map.hxx"
+#include "RenderSetup.hxx"
+#include "ClientGlobalsImport.hxx"
+#include "Renderer.hxx"
 
 NetworkConnecter *nc;
 
@@ -32,15 +35,12 @@ int main(int argc, char **argv)
 
 	tcsetattr(0, TCSANOW, &new_settings);
 
-	if (!al_init() || !al_init_image_addon())
-	{
-		printf("Cannot initalize Allegro.\n");
+	if (!setup_rendering()) {
 		return 1;
 	}
-	ALLEGRO_DISPLAY * display = al_create_display(800, 600);
-	al_set_target_backbuffer(display);
+
 	Map *map = NULL;
-	MapRenderer *render = NULL;
+	Renderer *renderer = NULL;
 	GameState *gs = new GameState();
 
 	int xoff = 0, yoff = 0;
@@ -73,7 +73,8 @@ int main(int argc, char **argv)
 			case PACKET_MAP:
 				std::cout << "got map data!\n";
 				map = new Map(((PacketMap*)p)->size);
-				render = new MapRenderer(map);
+				// render = new MapRenderer(map);
+				renderer = new Renderer(map);
 				delete p;
 				break;
 			}
@@ -124,9 +125,10 @@ int main(int argc, char **argv)
 		}
 
 		al_clear_to_color(al_map_rgb(0,0,0));
-		if(render)
-			render->render(xoff, yoff);
-		al_flip_display();
+		if(renderer) {
+			renderer->setViewpoint(xoff, yoff);
+			renderer->render();
+		}
 		//boost::this_thread::sleep(boost::posix_time::milliseconds(1));
 	}
 
@@ -139,8 +141,8 @@ int main(int argc, char **argv)
 	al_destroy_display(display);
 	if(map)
 		delete map;
-	if(render)
-		delete render;
+	if(renderer)
+		delete renderer;
 	delete gs;
 
 	tcsetattr(0, TCSANOW, &initial_settings);
