@@ -17,7 +17,6 @@ void UnitStateComponent::feedback(UnitFeedbackEvent* event) {
 }
 
 void UnitStateComponent::tick(double wallTime, double deltaT) {
-	DEBUG(wallTime);
 	_x = 500 * sin(wallTime) + 500;
 	_y = 500 * cos(wallTime) + 500;
 }
