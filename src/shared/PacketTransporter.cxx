@@ -26,9 +26,9 @@ void PacketTransporter::peer_thread_read(PacketTransporter *nm)
 void PacketTransporter::processNetworkRead()
 {
 	uint8_t type;
-	
+
 	std::cout << "processNetworkRead\n";
-	
+
 	if(SDLNet_TCP_Recv(sock, &type, 1) <= 0)
 	{
 		//error
@@ -39,10 +39,10 @@ void PacketTransporter::processNetworkRead()
 		rx_mutex.unlock();
 		return;
 	}
-	
+
 	//std::cout << type << len;
 	Packet *p = Packet::readByType(sock, type);
-	
+
 	rx_mutex.lock();
 		rx_queue.push_back(p);
 	rx_mutex.unlock();
@@ -58,7 +58,7 @@ Packet *PacketTransporter::getRXPacket()
 			rx_queue.pop_front();
 		}
 	rx_mutex.unlock();
-	
+
 	return p;
 }
 
@@ -77,7 +77,7 @@ void PacketTransporter::peer_thread_write(PacketTransporter *nm)
 void PacketTransporter::processNetworkWrite()
 {
 	//std::cout << "processNetworkWrite\n";
-	
+
 	tx_mutex.lock();
 		while(tx_queue.size() > 0)
 		{
@@ -109,7 +109,7 @@ void PacketTransporter::close()
 	uint8_t dummy = 0;
 	SDLNet_TCP_Send(sock, &dummy, 1);
 	SDLNet_TCP_Close(sock);
-	
+
 	delete read_thread;
 	delete write_thread;
 	delete this;

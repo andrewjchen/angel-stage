@@ -21,7 +21,7 @@ public:
 	Packet* getPacket();
 
 private:
-	PacketTransporter* packetTransport;
+	PacketTransporter* packetTransport; /* deleted in disconnect() */
 	TCPsocket clientSock;
 };
 

@@ -13,8 +13,9 @@ NetworkConnecter::NetworkConnecter(const char * server, uint16_t port){
 }
 
 NetworkConnecter::~NetworkConnecter(){
-	if(clientSock)
+	if (clientSock) {
 		SDLNet_TCP_Close(clientSock);
+	}
 }
 
 void NetworkConnecter::connect(){
@@ -34,6 +35,7 @@ void NetworkConnecter::connect(){
 
 void NetworkConnecter::disconnect(){
 	packetTransport->close();
+	/* ClientSock is closed in PacketTransporter::close() */
 	clientSock = NULL;
 	packetTransport = NULL;
 }

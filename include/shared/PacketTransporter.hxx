@@ -43,7 +43,8 @@ public:
 private:
 
 	virtual ~PacketTransporter() {};
-// Intentionally private to avoid explicit deletion.
+	// Intentionally private to avoid explicit deletion.
+	//Use close() instead.
 
 	std::deque<Packet *> rx_queue;
 	std::deque<Packet *> tx_queue;
