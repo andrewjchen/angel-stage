@@ -3,6 +3,7 @@
 
 #include "Component.hxx"
 #include "EventTypes.hxx"
+#include "Position.hxx"
 
 class UnitStateComponent : public Component {
 
@@ -11,10 +12,10 @@ public:
 	virtual ~UnitStateComponent() {};
 	virtual void tick(double wallTime, double deltaT);
 	virtual void feedback(UnitFeedbackEvent* event);
+	virtual const Position & getPosition();
 
-private:
-	double _x;
-	double _y;
+protected:
+	Position _pos;
 	double _theta;
 };
 

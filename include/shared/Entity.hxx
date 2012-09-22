@@ -23,7 +23,7 @@ class GameState;
 #include "EventTypes.hxx"
 
 class Entity {
-private:
+protected:
 	EntityID _id;
 	GameState * gamestate;
 public:
