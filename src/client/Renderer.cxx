@@ -9,7 +9,6 @@ void Renderer::render() {
 	if (_map_renderer) {
 		_map_renderer->render(_viewpoint.getX(), _viewpoint.getY());
 	}
-	al_flip_display();
 	std::vector<VisualComponent *>::iterator iter;
 	for (iter = _unit_layer.begin(); iter < _unit_layer.end(); iter++) {
 		(*iter)->render(_viewpoint);
