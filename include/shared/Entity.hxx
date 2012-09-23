@@ -7,6 +7,9 @@
 #include "Ids.hxx"
 #include "Component.hxx"
 #include "UnitStateComponent.hxx"
+#ifdef CLIENT_SIDE
+#include "VisualComponent.hxx"
+#endif
 
 #define DECLARE_COMPONENT(_comp_type_, _comp_name_)					\
 	private: _comp_type_ * _##_comp_name_;								\
@@ -38,7 +41,6 @@ public:
 	DECLARE_COMPONENT(VisualComponent, visual_component);
 #endif
 #ifdef SERVER_SIDE
-	DECLARE_COMPONENT(VisualComponent, visual_component);
 #endif
 };
 

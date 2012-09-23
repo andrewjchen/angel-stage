@@ -19,34 +19,47 @@ def build(bld):
     client_includes = common_includes + [join(bld.top_dir, 'include', 'client')]
     server_includes = common_includes + [join(bld.top_dir, 'include', 'server')]
     common_lib = ['boost_system', 'boost_thread','SDL_net']
+    server_defines = ['SERVER_SIDE']
+    client_defines = ['CLIENT_SIDE']
     bld.stlib(
         source = bld.path.ant_glob('shared/*.cxx'),
-        includes = common_includes,
-        target = 'angel-stage-shared-lib',
-        )
-    bld.stlib(
-        source = bld.path.ant_glob('server/*.cxx'),
-        includes = server_includes,
-        use = 'angel-stage-shared-lib',
-        target = 'angel-stage-server-lib',
+        includes = client_includes,
+        defines = client_defines,
+        target = 'angel-stage-shared-client-lib',
         )
     bld.stlib(
         source = bld.path.ant_glob('client/*.cxx'),
         includes = client_includes,
-        use = 'angel-stage-shared-lib',
+        defines = client_defines,
+        use = 'angel-stage-shared-client-lib',
         target = 'angel-stage-client-lib',
         )
     bld.program(
         source = 'client_main.cxx',
         target = 'client_main',
         includes = client_includes,
+        defines = client_defines,
         lib = common_lib + allegro_libs,
-        use = ['angel-stage-shared-lib', 'angel-stage-client-lib'],
+        use = ['angel-stage-shared-client-lib', 'angel-stage-client-lib'],
+        )
+    bld.stlib(
+        source = bld.path.ant_glob('shared/*.cxx'),
+        includes = server_includes,
+        defines = server_defines,
+        target = 'angel-stage-shared-server-lib',
+        )
+    bld.stlib(
+        source = bld.path.ant_glob('server/*.cxx'),
+        includes = server_includes,
+        use = 'angel-stage-shared-server-lib',
+        target = 'angel-stage-server-lib',
+        defines = server_defines,
         )
     bld.program(
         source = 'server_main.cxx',
         target = 'server_main',
         includes = server_includes,
         lib = common_lib + sdl_libs,
-        use = ['angel-stage-shared-lib', 'angel-stage-server-lib'],
+        use = ['angel-stage-shared-server-lib', 'angel-stage-server-lib'],
+        defines = server_defines,
         )
