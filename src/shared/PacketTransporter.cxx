@@ -125,6 +125,22 @@ void PacketTransporter::close()
 	SDLNet_TCP_Close(sock);
 	
 	valid = false;
+	
+	//clean packets in queue
+	while(tx_queue.size() > 0)
+	{
+		Packet *p = tx_queue.front();
+		tx_queue.pop_front();
+		std::cout << "discardWrite" << p->type << "\n";
+		delete p;
+	}
+	while(rx_queue.size() > 0)
+	{
+		Packet *p = rx_queue.front();
+		rx_queue.pop_front();
+		std::cout << "discardRead" << p->type << "\n";
+		delete p;
+	}
 
 	delete read_thread;
 	delete write_thread;
