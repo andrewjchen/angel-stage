@@ -38,7 +38,8 @@ int main(int argc, char **argv)
 	if (!setup_rendering()) {
 		return 1;
 	}
-
+	ALLEGRO_BITMAP * unit = al_load_bitmap("res/unit.png");
+	al_set_target_backbuffer(display);
 	Map *map = NULL;
 	Renderer *renderer = NULL;
 	GameState *gs = new GameState();
@@ -129,15 +130,24 @@ int main(int argc, char **argv)
 			renderer->setViewpoint(xoff, yoff);
 			renderer->render();
 		}
+			
+		//hack
+		al_flip_display();
+		al_draw_scaled_rotated_bitmap(unit, 256, 256, 24, 24, 16.0 / 512.0, 16.0 / 512.0, 45.0, 0);
+			
+		al_flip_display();
 		//boost::this_thread::sleep(boost::posix_time::milliseconds(1));
 	}
 
 	//nc->network_manager->read_thread->join();
 	//nc->network_manager->write_thread->join();
-
+	
+	//delete nc->packetTransport;
+	//somehow this doesn't work
 	delete nc;
 	SDLNet_Quit();
-
+	
+	al_destroy_bitmap(unit);
 	al_destroy_display(display);
 	if(map)
 		delete map;
