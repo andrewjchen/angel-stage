@@ -129,17 +129,9 @@ int main(int argc, char **argv)
 				xoff = yoff = 0;
 		}
 
-		al_clear_to_color(al_map_rgb(0,0,0));
 		renderer->render();
-
-		//boost::this_thread::sleep(boost::posix_time::milliseconds(1));
 	}
 
-	//nc->network_manager->read_thread->join();
-	//nc->network_manager->write_thread->join();
-
-	//delete nc->packetTransport;
-	//somehow this doesn't work
 	delete nc;
 	SDLNet_Quit();
 	al_destroy_display(display);

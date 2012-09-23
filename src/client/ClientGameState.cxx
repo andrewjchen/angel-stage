@@ -7,7 +7,7 @@
 #include "Debug.hxx"
 
 ClientGameState::~ClientGameState() {
-	std::map<EntityID, ClientEntity *>::iterator iter;
+	std::map<EntityID, ClientEntity *>::iterator iter = _entities.begin();
 	while (iter != _entities.end()) {
 		delete iter->second;
 		++iter;

@@ -19,7 +19,7 @@ InputManager::InputManager(Renderer * renderer) {
 
 void InputManager::tick() {
 	while (al_get_next_event(_event_queue, &_current_event)) {
-			react();
+		react();
 	}
 }
 
