@@ -2,6 +2,7 @@
 #include "Entity.hxx"
 #include "RenderSetup.hxx"
 #include "Debug.hxx"
+#include <math.h>
 
 
 UnitVisualComponent::UnitVisualComponent(Entity * entity) : VisualComponent(entity) {
@@ -9,8 +10,8 @@ UnitVisualComponent::UnitVisualComponent(Entity * entity) : VisualComponent(enti
 	if (!_bitmap) {
 		DEBUG("Bitmap res/unit.png could not be loaded!\n");
 	}
-	_bitmap_width = al_get_bitmap_width(_bitmap);
-	_bitmap_height = al_get_bitmap_height(_bitmap);
+	_half_bitmap_width  = ceil((double) al_get_bitmap_width(_bitmap) / 2);
+	_half_bitmap_height = ceil((double) al_get_bitmap_height(_bitmap) / 2);
 }
 
 void UnitVisualComponent::tick(double wallTime, double deltaT) {
@@ -18,10 +19,14 @@ void UnitVisualComponent::tick(double wallTime, double deltaT) {
 
 void UnitVisualComponent::render(const Position & viewpoint) {
 	Position relative = this->_entity->get_unit_state_component()->getPosition().relative( viewpoint);
-	if (relative.getX() < display_width - _bitmap_width &&
-		relative.getY() < display_height - _bitmap_height &&
-		relative.getX() > 0 && relative.getY() > 0 &&
+	if (relative.getX() - _half_bitmap_width  < display_width  &&
+		relative.getY() - _half_bitmap_height < display_height &&
+		relative.getX() + _half_bitmap_width  > 0 &&
+		relative.getY() + _half_bitmap_height > 0 &&
 		_bitmap) {
-		al_draw_bitmap(_bitmap, relative.getX(), relative.getY(), 0);
+		al_draw_bitmap(_bitmap,
+					   relative.getX() - _half_bitmap_width,
+					   relative.getY() - _half_bitmap_height,
+					   0);
 	}
 }

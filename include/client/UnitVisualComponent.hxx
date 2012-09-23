@@ -12,8 +12,8 @@ public:
 	virtual void tick(double wallTime, double deltaT);
 	virtual void render(const Position & viewpoint);
 protected:
-	uint32_t _bitmap_width;
-	uint32_t _bitmap_height;
+	int32_t _half_bitmap_width;
+	int32_t _half_bitmap_height;
 	ALLEGRO_BITMAP * _bitmap;
 };
 
