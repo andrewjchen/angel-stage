@@ -15,14 +15,12 @@ UnitVisualComponent::UnitVisualComponent(ClientEntity * entity) : VisualComponen
 }
 
 void UnitVisualComponent::tick(double wallTime, double deltaT) {
-	
 }
 
 void UnitVisualComponent::render(const Position & viewpoint) {
 	Position relative = this->_entity->get_unit_state_component()->getPosition().relative( viewpoint);
 	double x = relative.getX() * 16.0;
 	double y = relative.getY() * 16.0;
-	printf("Rendering at %f, %f\t%d\n", x, y, _half_bitmap_width);
 	if (x - (_half_bitmap_width * 16.0 / 512.0)  < display_width  &&
 		y - (_half_bitmap_height * 16.0 / 512.0) < display_height &&
 		x + (_half_bitmap_width * 16.0 / 512.0)  > 0 &&

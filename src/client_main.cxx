@@ -45,8 +45,6 @@ int main(int argc, char **argv)
 	InputManager * input = new InputManager(renderer);
 	ClientGameState *gs = new ClientGameState(renderer);
 
-	int xoff = 0, yoff = 0;
-
 	std::cout << "Starting client!\n";
 
 	SDLNet_Init();
@@ -102,35 +100,13 @@ int main(int argc, char **argv)
 			delete e;
 			nc->sendPacket(p);
 		}
-		if(c == 'U')
-		{
-			p = new PacketDisconnect(PACKET_DISCONNECT);
-			nc->sendPacket(p);
-			std::cout << "trying to disconnect\n";
-			nc->disconnect();
-			break;
-		}
-		if(map)
-		{
-			if(c == 'i')
-				if(yoff > 0) yoff--;
-			if(c == 'k')
-				if(yoff < map->height()) yoff++;
-			if(c == 'j')
-				if(xoff > 0) xoff--;
-			if(c == 'l')
-				if(xoff < map->width()) xoff++;
-			if(c == ';')
-			{
-				xoff = map->width() - 10;
-				yoff = map->height() - 10;
-			}
-			if(c == '\'')
-				xoff = yoff = 0;
-		}
 
 		renderer->render();
 	}
+	Packet * p = new PacketDisconnect(PACKET_DISCONNECT);
+	nc->sendPacket(p);
+	std::cout << "trying to disconnect\n";
+	nc->disconnect();
 
 	delete nc;
 	SDLNet_Quit();
