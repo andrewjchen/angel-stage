@@ -13,6 +13,7 @@ public:
 	virtual void feedback(UnitFeedbackEvent* event);
 	virtual const Position & getPosition();
 	virtual void tick(double wallTime, double deltaT);
+	double getTheta();
 
 protected:
 	Position _pos;
