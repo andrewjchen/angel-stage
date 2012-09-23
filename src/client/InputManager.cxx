@@ -1,9 +1,13 @@
 #include "InputManager.hxx"
 #include "Debug.hxx"
 #include "ClientGlobalsImport.hxx"
+#include "Event.hxx"
+#include "EventTypes.hxx"
+#include "NetworkConnecter.hxx"
+#include "Packet.hxx"
 #include <stdio.h>
 
-InputManager::InputManager(Renderer * renderer) {
+InputManager::InputManager(Renderer * renderer, NetworkConnecter * net_connecter) {
 	if(!al_install_keyboard()) {
 		DEBUG("!al_install_keyboard");
 	}
@@ -15,6 +19,7 @@ InputManager::InputManager(Renderer * renderer) {
 	al_register_event_source(_event_queue, keyboard_source);
 	_renderer = renderer;
 	_keep_running = true;
+	_net_connecter = net_connecter;
 }
 
 void InputManager::tick() {
@@ -45,6 +50,20 @@ void InputManager::react() {
 		case (ALLEGRO_KEY_U):
 			_keep_running = false;
 			break;
+		case (ALLEGRO_KEY_B): {
+			Event *e = new Event();
+			e->event_type = EVENT_TEST;
+			e->total_byte_count = sizeof(Event);
+			Packet * p = new PacketEvent(PACKET_EVENT);
+			((PacketEvent*)p)->setEvent(e);
+			delete e;
+			_net_connecter->sendPacket(p);
+		}
+		case (ALLEGRO_KEY_A): {
+			Packet * p = new PacketPing(PACKET_PING);
+			((PacketPing*)p)->pingstuff = 0x12345678;
+			_net_connecter->sendPacket(p);
+		}
 		}
 	}
 }

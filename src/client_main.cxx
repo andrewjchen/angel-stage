@@ -5,7 +5,6 @@
 #include <iostream>
 #include <boost/thread/thread.hpp>
 #include <stdlib.h>
-#include <termios.h>
 
 #include "NetworkConnecter.hxx"
 #include "Packet.hxx"
@@ -19,41 +18,25 @@
 #include "Renderer.hxx"
 #include "InputManager.hxx"
 
-NetworkConnecter *nc;
 
 int main(int argc, char **argv)
 {
-	struct termios initial_settings, new_settings;
-
-	tcgetattr(0,&initial_settings);
-
-	new_settings = initial_settings;
-	new_settings.c_lflag &= ~ICANON;
-	new_settings.c_lflag &= ~ECHO;
-	new_settings.c_lflag &= ~ISIG;
-	new_settings.c_cc[VMIN] = 0;
-	new_settings.c_cc[VTIME] = 0;
-
-	tcsetattr(0, TCSANOW, &new_settings);
-
 	if (!setup_rendering()) {
 		return 1;
 	}
 
 	Map *map = NULL;
 	Renderer *renderer = new Renderer();
-	InputManager * input = new InputManager(renderer);
 	ClientGameState *gs = new ClientGameState(renderer);
 
 	std::cout << "Starting client!\n";
 
 	SDLNet_Init();
 
-	nc = new NetworkConnecter("localhost", 20000);
+	NetworkConnecter * nc = new NetworkConnecter("localhost", 20000);
 	nc->connect();
 
-
-
+	InputManager * input = new InputManager(renderer, nc);
 	while(input->keep_running())
 	{
 		input->tick();
@@ -83,24 +66,6 @@ int main(int argc, char **argv)
 			}
 		}
 
-		int c = getchar();
-		if(c == 'A')
-		{
-			p = new PacketPing(PACKET_PING);
-			((PacketPing*)p)->pingstuff = 0x12345678;
-			nc->sendPacket(p);
-		}
-		if(c == 'B')
-		{
-			Event *e = new Event();
-			e->event_type = EVENT_TEST;
-			e->total_byte_count = sizeof(Event);
-			p = new PacketEvent(PACKET_EVENT);
-			((PacketEvent*)p)->setEvent(e);
-			delete e;
-			nc->sendPacket(p);
-		}
-
 		renderer->render();
 	}
 	Packet * p = new PacketDisconnect(PACKET_DISCONNECT);
@@ -116,5 +81,4 @@ int main(int argc, char **argv)
 	delete renderer;
 	delete gs;
 
-	tcsetattr(0, TCSANOW, &initial_settings);
 }
