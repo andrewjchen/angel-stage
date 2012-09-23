@@ -16,6 +16,7 @@ void ServerUnitStateComponent::tick(double wallTime, double deltaT){
 	_pos.setY(500* sin(wallTime) + 500);
 
 
+	//constructing packet to send
 	Event header;
 	header.event_type = EVENT_UNIT_MOVE;
 	header.total_byte_count = 10;
@@ -29,7 +30,10 @@ void ServerUnitStateComponent::tick(double wallTime, double deltaT){
 	event.x = _pos.getX();
 	event.y = _pos.getY();
 	event.theta = _theta;
-	
+
+	//send
+
+
 }
 
 const Position & ServerUnitStateComponent::getPosition() {
