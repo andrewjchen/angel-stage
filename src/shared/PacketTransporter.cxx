@@ -20,11 +20,27 @@ PacketTransporter::~PacketTransporter()
 
 void PacketTransporter::peer_thread_read(PacketTransporter *nm)
 {
+	SDLNet_SocketSet set;
+	set = SDLNet_AllocSocketSet(1);
+	SDLNet_TCP_AddSocket(set, nm->sock);
+
 	while(!nm->closed_read)
 	{
-		nm->processNetworkRead();
+		int activity = SDLNet_CheckSockets(set, 0);
+		if(activity == -1)
+		{
+			//error
+			nm->queue_fake_disconnect();
+			break;
+		}
+		
+		if(activity > 0)
+			nm->processNetworkRead();
 		boost::this_thread::sleep(boost::posix_time::milliseconds(1));
 	}
+	
+	SDLNet_TCP_DelSocket(set, nm->sock);
+	SDLNet_FreeSocketSet(set);
 }
 
 void PacketTransporter::peer_thread_write(PacketTransporter *nm)
@@ -48,11 +64,7 @@ void PacketTransporter::processNetworkRead()
 	if(SDLNet_TCP_Recv(sock, &type, 1) <= 0)
 	{
 		//error
-		//hack
-		Packet *p = new PacketDisconnect(PACKET_DISCONNECT);
-		rx_mutex.lock();
-			rx_queue.push_back(p);
-		rx_mutex.unlock();
+		queue_fake_disconnect();
 		return;
 	}
 
@@ -109,13 +121,20 @@ void PacketTransporter::close()
 	closed_write = true;
 	std::cout << "waiting for write\n";
 	write_thread->join();
-	//just in case to work around issue with blocking read
-	uint8_t dummy = 0;
-	SDLNet_TCP_Send(sock, &dummy, 1);
+	
 	SDLNet_TCP_Close(sock);
 	
 	valid = false;
 
 	delete read_thread;
 	delete write_thread;
+}
+
+void PacketTransporter::queue_fake_disconnect()
+{
+	//hack
+	Packet *p = new PacketDisconnect(PACKET_DISCONNECT);
+	rx_mutex.lock();
+		rx_queue.push_back(p);
+	rx_mutex.unlock();
 }

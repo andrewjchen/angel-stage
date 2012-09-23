@@ -67,9 +67,6 @@ void PacketDisconnect::read(TCPsocket sock)
 void PacketDisconnect::write(TCPsocket sock)
 {
 	writeHeader(sock);
-	//just in case to work around issue with blocking read
-	uint8_t dummy = 0;
-	SDLNet_TCP_Send(sock, &dummy, 1);
 }
 
 /////////////////////////////////////////////// PACKET_EVENT ////////////////////////////////////////////////////////////////////////////

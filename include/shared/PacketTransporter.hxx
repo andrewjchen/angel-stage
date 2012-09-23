@@ -50,6 +50,8 @@ private:
 	boost::mutex tx_mutex;
 	bool closed_read;
 	bool closed_write;
+	
+	void queue_fake_disconnect();
 };
 
 #endif /* PACKET_TRANSPORTER_HXX */
