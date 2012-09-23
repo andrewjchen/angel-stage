@@ -42,7 +42,7 @@ int main(int argc, char **argv)
 	ALLEGRO_BITMAP * unit = al_load_bitmap("res/unit.png");
 	al_set_target_backbuffer(display);
 	Map *map = NULL;
-	Renderer *renderer = NULL;
+	Renderer *renderer = new Renderer();
 	GameState *gs = new GameState();
 	InputManager * input = new InputManager();
 
@@ -78,7 +78,7 @@ int main(int argc, char **argv)
 				std::cout << "got map data!\n";
 				map = new Map(((PacketMap*)p)->size);
 				// render = new MapRenderer(map);
-				renderer = new Renderer(map);
+				renderer->addMap(map);
 				delete p;
 				break;
 			}

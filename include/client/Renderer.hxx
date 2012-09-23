@@ -9,16 +9,17 @@
 
 class Renderer {
 public:
-	Renderer(Map * map) : _map_renderer(map) {};
+	Renderer() : _map_renderer(NULL) {};
 	virtual ~Renderer() {};
 	virtual void render();
 	virtual void setViewpoint(coordinate_t x, coordinate_t y);
 	virtual const Position & getViewpoint();
 	virtual void addToUnitLayer(VisualComponent * visual_comp);
+	virtual void addMap(Map * map);
 private:
 	Position _viewpoint;
 	std::vector<VisualComponent *> _unit_layer;
-	MapRenderer _map_renderer;
+	MapRenderer * _map_renderer;
 };
 
 #endif /* _RENDERER_HXX_ */

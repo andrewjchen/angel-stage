@@ -1,11 +1,14 @@
 #include "Renderer.hxx"
+#include "Debug.hxx"
 #include <vector>
 #include <allegro5/allegro.h>
 #include <allegro5/allegro_image.h>
 
 void Renderer::render() {
 	al_clear_to_color(al_map_rgb(0,0,0));
-	_map_renderer.render(_viewpoint.getX(), _viewpoint.getY());
+	if (_map_renderer) {
+		_map_renderer->render(_viewpoint.getX(), _viewpoint.getY());
+	}
 	al_flip_display();
 	std::vector<VisualComponent *>::iterator iter;
 	for (iter = _unit_layer.begin(); iter < _unit_layer.end(); iter++) {
@@ -25,4 +28,12 @@ const Position & Renderer::getViewpoint() {
 
 void Renderer::addToUnitLayer(VisualComponent * visual_comp) {
 	_unit_layer.push_back(visual_comp);
+}
+
+void Renderer::addMap(Map * map) {
+	if (_map_renderer) {
+		DEBUG("Trying to add multiple maps to one renderer!");
+	} else {
+		_map_renderer = new MapRenderer(map);
+	}
 }
