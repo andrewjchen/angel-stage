@@ -40,7 +40,7 @@ int main(int argc, char **argv)
 	//timekeeping
 	boost::timer *time0 = new boost::timer();
 	boost::timer *prevTime = new boost::timer();
-	
+
 	SDLNet_Init();
 
 	clientsConnection = new ClientsConnection(20000);
