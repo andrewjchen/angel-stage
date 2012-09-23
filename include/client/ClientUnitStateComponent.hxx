@@ -12,6 +12,7 @@ public:
 	virtual ~ClientUnitStateComponent() {};
 	virtual void feedback(UnitFeedbackEvent* event);
 	virtual const Position & getPosition();
+	virtual void tick(double wallTime, double deltaT);
 
 protected:
 	Position _pos;

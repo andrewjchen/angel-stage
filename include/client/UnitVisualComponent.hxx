@@ -5,7 +5,7 @@
 #include "allegro5/allegro.h"
 #include "allegro5/allegro_image.h"
 
-class UnitVisualComponent : VisualComponent {
+class UnitVisualComponent : public VisualComponent {
 public:
 	UnitVisualComponent(ClientEntity * entity);
 	virtual ~UnitVisualComponent() {};

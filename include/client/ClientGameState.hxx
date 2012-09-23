@@ -6,12 +6,16 @@
 
 #include "ClientEntity.hxx"
 #include "ClientComponent.hxx"
+#include "Renderer.hxx"
 
 struct ClientEvent;
 
 class ClientGameState {
 public:
-	ClientGameState(void) {};
+	ClientGameState(Renderer *render)
+	{
+		globalRenderer = render;
+	};
 	virtual ~ClientGameState(void) {};
 	virtual ClientEntity * get_entity(EntityID id);
 	virtual void set_entity(EntityID id, ClientEntity * entity);
@@ -20,6 +24,8 @@ public:
 
 	virtual void addClockListener(ClientComponent* toListen);
 	virtual void removeClockListener(ClientComponent* toListen);
+	
+	Renderer *globalRenderer;
 
 private:
 	std::map<EntityID, ClientEntity *> _entities;

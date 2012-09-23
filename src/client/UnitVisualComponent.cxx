@@ -20,14 +20,18 @@ void UnitVisualComponent::tick(double wallTime, double deltaT) {
 
 void UnitVisualComponent::render(const Position & viewpoint) {
 	Position relative = this->_entity->get_unit_state_component()->getPosition().relative( viewpoint);
-	if (relative.getX() - _half_bitmap_width  < display_width  &&
-		relative.getY() - _half_bitmap_height < display_height &&
-		relative.getX() + _half_bitmap_width  > 0 &&
-		relative.getY() + _half_bitmap_height > 0 &&
+	double x = relative.getX() * 16.0;
+	double y = relative.getY() * 16.0;
+	printf("Rendering at %f, %f\t%d\n", x, y, _half_bitmap_width);
+	if (x - (_half_bitmap_width * 16.0 / 512.0)  < display_width  &&
+		y - (_half_bitmap_height * 16.0 / 512.0) < display_height &&
+		x + (_half_bitmap_width * 16.0 / 512.0)  > 0 &&
+		y + (_half_bitmap_height * 16.0 / 512.0) > 0 &&
 		_bitmap) {
-		al_draw_bitmap(_bitmap,
-					   relative.getX() - _half_bitmap_width,
-					   relative.getY() - _half_bitmap_height,
-					   0);
+		/*al_draw_bitmap(_bitmap,
+					   x - _half_bitmap_width,
+					   y - _half_bitmap_height,
+					   0);*/
+		al_draw_tinted_scaled_rotated_bitmap(_bitmap, al_map_rgb(255,0,0), 256, 256, x - (_half_bitmap_width * 16.0 / 512.0), y - (_half_bitmap_height * 16.0 / 512.0), 16.0 / 512.0, 16.0 / 512.0, 45.0, 0);
 	}
 }

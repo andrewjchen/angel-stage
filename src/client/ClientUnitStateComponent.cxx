@@ -19,3 +19,7 @@ void ClientUnitStateComponent::feedback(UnitFeedbackEvent* event) {
 const Position & ClientUnitStateComponent::getPosition() {
 	return _pos;
 }
+
+void ClientUnitStateComponent::tick(double wallTime, double deltaT) {
+	
+}

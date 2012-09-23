@@ -43,7 +43,7 @@ int main(int argc, char **argv)
 	Map *map = NULL;
 	Renderer *renderer = new Renderer();
 	InputManager * input = new InputManager(renderer);
-	ClientGameState *gs = new ClientGameState();
+	ClientGameState *gs = new ClientGameState(renderer);
 
 	int xoff = 0, yoff = 0;
 
@@ -130,11 +130,7 @@ int main(int argc, char **argv)
 		}
 
 		al_clear_to_color(al_map_rgb(0,0,0));
-		if(renderer) {
-			// renderer->setViewpoint(xoff, yoff);
-			renderer->render();
-
-		}
+		renderer->render();
 
 		//boost::this_thread::sleep(boost::posix_time::milliseconds(1));
 	}
@@ -149,8 +145,7 @@ int main(int argc, char **argv)
 	al_destroy_display(display);
 	if(map)
 		delete map;
-	if(renderer)
-		delete renderer;
+	delete renderer;
 	delete gs;
 
 	tcsetattr(0, TCSANOW, &initial_settings);

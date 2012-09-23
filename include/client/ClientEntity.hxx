@@ -25,7 +25,7 @@ public:
 	EntityID get_id() const;
 	virtual void react(EntityEvent * event);
 	
-	ClientGameState* get_gamestate();
+	ClientGameState* get_gamestate() { return gamestate;};
 	void set_gamestate(ClientGameState* gs) { gamestate = gs;};
 
 	DECLARE_COMPONENT(VisualComponent, visual_component);

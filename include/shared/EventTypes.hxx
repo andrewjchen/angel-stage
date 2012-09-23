@@ -8,7 +8,8 @@ const EventTypeID EVENT_GLOBAL_MINIMUM    = 0x81000001;
 const EventTypeID EVENT_TEST              = 0x81000001;
 const EventTypeID EVENT_DEBUG_MSG         = 0x81000002;
 const EventTypeID EVENT_JOIN              = 0x81000003;
-const EventTypeID EVENT_UNJOIN            = 0x81000003;
+const EventTypeID EVENT_UNJOIN            = 0x81000004;
+const EventTypeID EVENT_ENTITY_SPAWN      = 0x81000005;
 const EventTypeID EVENT_GLOBAL_MAXIMUM    = 0x81010000;
 
 const EventTypeID EVENT_ENTITY_MINIMUM    = 0x81010001;

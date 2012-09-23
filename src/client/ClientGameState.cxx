@@ -1,5 +1,8 @@
+#include <iostream>
 #include <cstdio>
 #include "ClientGameState.hxx"
+#include "UnitVisualComponent.hxx"
+#include "ClientUnitStateComponent.hxx"
 #include "Event.hxx"
 #include "Debug.hxx"
 
@@ -26,6 +29,21 @@ void ClientGameState::react(Event * event) {
 		/* TODO: Do things. */
 		printf("Received global event!\n");
 		switch (event->event_type) {
+		case EVENT_ENTITY_SPAWN:
+			{
+				UnitFeedbackEvent *ufe = (UnitFeedbackEvent*)(event);
+				std::cout << "Spawn an entity with id " << ufe->header.entity_id << "\n";
+				ClientEntity *ce = new ClientEntity(ufe->header.entity_id);
+				ce->set_gamestate(this);
+				set_entity(ufe->header.entity_id, ce);
+				UnitVisualComponent *uvc = new UnitVisualComponent(ce);
+				ClientUnitStateComponent *usc = new ClientUnitStateComponent(ce);
+				ce->set_visual_component(uvc);
+				ce->set_unit_state_component(usc);
+				ce->react((EntityEvent*)ufe);
+				globalRenderer->addToUnitLayer(ce->get_visual_component());
+			}
+			break;
 		case EVENT_TEST:
 			printf("Received a test event!\n");
 			break;

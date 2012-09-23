@@ -3,6 +3,8 @@
 #include <cstdio>
 #include "ClientsConnection.hxx"
 #include "Packet.hxx"
+#include "Event.hxx"
+#include "EventTypes.hxx"
 
 ClientsConnection::ClientsConnection(uint16_t port)
 {
@@ -77,6 +79,18 @@ void ClientsConnection::tick()
 		PacketMap *pm = new PacketMap(PACKET_MAP);
 		pm->size = 48;
 		pt->addTXPacket(pm);
+		
+		UnitFeedbackEvent *ufe = new UnitFeedbackEvent();
+		ufe->header.header.event_type = EVENT_ENTITY_SPAWN;
+		ufe->header.header.total_byte_count = sizeof(UnitFeedbackEvent);
+		ufe->header.entity_id = 12345;
+		ufe->x = 2.0;
+		ufe->y = 2.0;
+		ufe->theta = 45.0;
+		PacketEvent *pe = new PacketEvent(PACKET_EVENT);
+		pe->setEvent((Event*)ufe);
+		delete ufe;
+		pt->addTXPacket(pe);
 		
 		nm_mutex.lock();
 			packetTransporters.push_back(pt);
