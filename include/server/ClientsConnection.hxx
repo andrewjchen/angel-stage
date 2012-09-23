@@ -37,6 +37,7 @@ public:
 	std::vector<PacketTransporter*> packetTransporters;
 
 private:
+	bool stopped;
 	bool running;
 	void tick(); //called by listen thread
 	void listen(); //called by start()
