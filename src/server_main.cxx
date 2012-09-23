@@ -6,8 +6,8 @@
 #include <iomanip>
 #include <cstdio>
 #include <boost/thread/thread.hpp>
+#include <boost/timer.hpp>
 #include <signal.h>
-#include <SDL/SDL.h>
 
 #include "ClientsConnection.hxx"
 #include "Packet.hxx"
@@ -38,9 +38,9 @@ int main(int argc, char **argv)
 	ent->set_unit_state_component(new ServerUnitStateComponent(ent));
 
 	//timekeeping
-	uint32_t time0 = SDL_GetTicks();
-	uint32_t prevTime = time0;
-
+	boost::timer *time0 = new boost::timer();
+	boost::timer *prevTime = new boost::timer();
+	
 	SDLNet_Init();
 
 	clientsConnection = new ClientsConnection(20000);
@@ -88,9 +88,8 @@ int main(int argc, char **argv)
 		clientsConnection->nm_mutex.unlock();
 
 		//timekeeping
-		uint32_t currentTime = SDL_GetTicks();
-		gs->tick(currentTime - time0, currentTime - prevTime);
-		prevTime = currentTime;
+		gs->tick(time0->elapsed() * 1000, prevTime->elapsed() * 1000);
+		prevTime->restart();
 
 		boost::this_thread::sleep(boost::posix_time::milliseconds(1));
 	}
@@ -104,4 +103,6 @@ int main(int argc, char **argv)
 	delete clientsConnection;
 	delete gs;
 	delete ent;
+	delete time0;
+	delete prevTime;
 }
