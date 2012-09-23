@@ -98,9 +98,9 @@ void ClientsConnection::listen(){
 void ClientsConnection::sendPacket(Packet *p, uint64_t client)
 {
 	nm_mutex.lock();
-		for(unsigned int i = 0; i < packetTransporters.size(); i++)
+		for(std::list<PacketTransporter*>::iterator i = packetTransporters.begin(); i != packetTransporters.end(); i++)
 		{
-			PacketTransporter *pt = packetTransporters[i];
+			PacketTransporter *pt = *i;
 			if(pt == NULL) continue;
 			if(pt->peer_ip == client || client == 0)
 			{

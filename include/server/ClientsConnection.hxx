@@ -1,6 +1,6 @@
 #ifndef CLIENT_ACCEPTER_H
 #define CLIENT_ACCEPTER_H
-#include <vector>
+#include <list>
 #include <memory>
 #include <stdint.h>
 #include <boost/thread/thread.hpp>
@@ -34,7 +34,7 @@ public:
 	boost::mutex nm_mutex;
 
 	//TODO map int->PacketTransporter*?
-	std::vector<PacketTransporter*> packetTransporters;
+	std::list<PacketTransporter*> packetTransporters;
 
 private:
 	bool stopped;

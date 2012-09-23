@@ -50,11 +50,12 @@ int main(int argc, char **argv)
 	while(run) 
 	{
 		clientsConnection->nm_mutex.lock();// lock the network managers
-			for(unsigned int i = 0; i < clientsConnection->packetTransporters.size(); i++)
+			std::list<PacketTransporter*>::iterator i = clientsConnection->packetTransporters.begin();
+			while(i != clientsConnection->packetTransporters.end())
 			{
 				//process packets
 				Packet *p;
-				PacketTransporter *pt = clientsConnection->packetTransporters[i];
+				PacketTransporter *pt = *i;
 				if(pt == 0) continue;
 				while(pt && ((p = pt->getRXPacket()) != NULL))
 				{
@@ -73,7 +74,7 @@ int main(int argc, char **argv)
 						delete p;
 						delete pt;
 						pt = 0;
-						clientsConnection->packetTransporters[i] = 0; //TODO delete members
+						i = clientsConnection->packetTransporters.erase(i);
 						break;
 					case PACKET_EVENT:
 						std::cout << "got an event!\n";
@@ -82,6 +83,8 @@ int main(int argc, char **argv)
 						break;
 					}
 				}
+				
+				i++;
 			}
 		clientsConnection->nm_mutex.unlock();
 
