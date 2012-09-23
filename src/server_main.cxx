@@ -102,4 +102,5 @@ int main(int argc, char **argv)
 	
 	delete clientsConnection;
 	delete gs;
+	delete ent;
 }
