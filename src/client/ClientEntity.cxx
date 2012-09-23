@@ -13,3 +13,8 @@ void ClientEntity::react(EntityEvent * event) {
 			break;
 	}
 }
+
+ClientEntity::~ClientEntity() {
+	delete _visual_component;
+	delete _unit_state_component;
+}

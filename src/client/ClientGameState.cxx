@@ -6,6 +6,14 @@
 #include "Event.hxx"
 #include "Debug.hxx"
 
+ClientGameState::~ClientGameState() {
+	std::map<EntityID, ClientEntity *>::iterator iter;
+	while (iter != _entities.end()) {
+		delete iter->second;
+		++iter;
+	}
+}
+
 ClientEntity * ClientGameState::get_entity(EntityID id) {
 	if (_entities.count(id)) {
 		return _entities[id];
@@ -76,4 +84,4 @@ void ClientGameState::removeClockListener(ClientComponent* toListen){
 	}
 
 
-}	
+}

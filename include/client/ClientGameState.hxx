@@ -16,7 +16,7 @@ public:
 	{
 		globalRenderer = render;
 	};
-	virtual ~ClientGameState(void) {};
+	virtual ~ClientGameState(void);
 	virtual ClientEntity * get_entity(EntityID id);
 	virtual void set_entity(EntityID id, ClientEntity * entity);
 	virtual void react(Event * event);
@@ -24,7 +24,7 @@ public:
 
 	virtual void addClockListener(ClientComponent* toListen);
 	virtual void removeClockListener(ClientComponent* toListen);
-	
+
 	Renderer *globalRenderer;
 
 private:

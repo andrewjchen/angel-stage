@@ -21,10 +21,9 @@ protected:
 	ClientGameState* gamestate;
 public:
 	ClientEntity(EntityID id) : Entity(id) {};
-	~ClientEntity() {};
+	~ClientEntity();
 	EntityID get_id() const;
 	virtual void react(EntityEvent * event);
-	
 	ClientGameState* get_gamestate() { return gamestate;};
 	void set_gamestate(ClientGameState* gs) { gamestate = gs;};
 
