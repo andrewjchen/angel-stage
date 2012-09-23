@@ -71,6 +71,7 @@ int main(int argc, char **argv)
 						printf("Disconnected to client %012lX\n", pt->peer_ip);
 						pt->close(); //logic
 						delete p;
+						delete pt;
 						pt = 0;
 						clientsConnection->packetTransporters[i] = 0; //TODO delete members
 						break;

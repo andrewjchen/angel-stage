@@ -98,7 +98,7 @@ void ClientsConnection::listen(){
 void ClientsConnection::sendPacket(Packet *p, uint64_t client)
 {
 	nm_mutex.lock();
-		for(int i = 0; i < packetTransporters.size(); i++)
+		for(unsigned int i = 0; i < packetTransporters.size(); i++)
 		{
 			PacketTransporter *pt = packetTransporters[i];
 			if(pt == NULL) continue;

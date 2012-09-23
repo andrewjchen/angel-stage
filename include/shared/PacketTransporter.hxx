@@ -1,5 +1,5 @@
-#ifndef _PACKET_TRANSPORTER_HXX_
-#define _PACKET_TRANSPORTER_HXX_
+#ifndef PACKET_TRANSPORTER_HXX
+#define PACKET_TRANSPORTER_HXX
 #include <deque>
 #include <boost/thread/thread.hpp>
 #include "SDL/SDL_net.h"
@@ -17,6 +17,7 @@ class PacketTransporter
 {
 public:
 	PacketTransporter(TCPsocket _sock);
+	~PacketTransporter();
 
 	//called each read/write loop
 	void processNetworkRead();
@@ -41,10 +42,7 @@ public:
 	uint64_t peer_ip;
 
 private:
-
-	virtual ~PacketTransporter() {};
-	// Intentionally private to avoid explicit deletion.
-	//Use close() instead.
+	bool valid;
 
 	std::deque<Packet *> rx_queue;
 	std::deque<Packet *> tx_queue;
@@ -54,4 +52,4 @@ private:
 	bool closed_write;
 };
 
-#endif /* _PACKET_TRANSPORTER_HXX_ */
+#endif /* PACKET_TRANSPORTER_HXX */

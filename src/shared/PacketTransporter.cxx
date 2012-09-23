@@ -9,23 +9,39 @@ PacketTransporter::PacketTransporter(TCPsocket _sock)
 {
 	sock = _sock;
 	closed_read = closed_write = false;
+	valid = true;
+}
+
+PacketTransporter::~PacketTransporter()
+{
+	if(valid)
+		close();
 }
 
 void PacketTransporter::peer_thread_read(PacketTransporter *nm)
 {
-	while(1)
+	while(!nm->closed_read)
 	{
-		//std::cout << "peer_thread\n";
 		nm->processNetworkRead();
 		boost::this_thread::sleep(boost::posix_time::milliseconds(1));
-		if(nm->closed_read)
-			break;
+	}
+}
+
+void PacketTransporter::peer_thread_write(PacketTransporter *nm)
+{
+	while(!nm->closed_write)
+	{
+		nm->processNetworkWrite();
+		boost::this_thread::sleep(boost::posix_time::milliseconds(1));
 	}
 }
 
 void PacketTransporter::processNetworkRead()
 {
 	uint8_t type;
+	
+	if(!valid)
+		throw "PT is invalid!";
 
 	std::cout << "processNetworkRead\n";
 
@@ -40,7 +56,6 @@ void PacketTransporter::processNetworkRead()
 		return;
 	}
 
-	//std::cout << type << len;
 	Packet *p = Packet::readByType(sock, type);
 
 	rx_mutex.lock();
@@ -62,21 +77,10 @@ Packet *PacketTransporter::getRXPacket()
 	return p;
 }
 
-void PacketTransporter::peer_thread_write(PacketTransporter *nm)
-{
-	while(1)
-	{
-		//std::cout << "peer_thread\n";
-		nm->processNetworkWrite();
-		boost::this_thread::sleep(boost::posix_time::milliseconds(1));
-		if(nm->closed_write)
-			break;
-	}
-}
-
 void PacketTransporter::processNetworkWrite()
 {
-	//std::cout << "processNetworkWrite\n";
+	if(!valid)
+		throw "PT is invalid!";
 
 	tx_mutex.lock();
 		while(tx_queue.size() > 0)
@@ -109,8 +113,9 @@ void PacketTransporter::close()
 	uint8_t dummy = 0;
 	SDLNet_TCP_Send(sock, &dummy, 1);
 	SDLNet_TCP_Close(sock);
+	
+	valid = false;
 
 	delete read_thread;
 	delete write_thread;
-	delete this;
 }
