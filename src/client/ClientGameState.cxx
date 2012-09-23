@@ -43,12 +43,12 @@ void ClientGameState::react(Event * event) {
 				std::cout << "Spawn an entity with id " << ufe->header.entity_id << "\n";
 				ClientEntity *ce = new ClientEntity(ufe->header.entity_id);
 				ce->set_gamestate(this);
-				set_entity(ufe->header.entity_id, ce);
 				UnitVisualComponent *uvc = new UnitVisualComponent(ce);
 				ClientUnitStateComponent *usc = new ClientUnitStateComponent(ce);
 				ce->set_visual_component(uvc);
 				ce->set_unit_state_component(usc);
 				ce->react((EntityEvent*)ufe);
+				set_entity(ufe->header.entity_id, ce);
 				globalRenderer->addToUnitLayer(ce->get_visual_component());
 			}
 			break;
