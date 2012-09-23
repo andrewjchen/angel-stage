@@ -34,7 +34,7 @@ int main(int argc, char **argv)
 	Entity* ent = new Entity(0);
 	gs->set_entity(0, ent);
 	ent->set_gamestate(gs);
-	ent->set_unit_state_component(new UnitStateComponent(ent));
+	ent->set_unit_state_component(new ServerUnitStateComponent(ent));
 
 	//timekeeping
 	uint32_t time0 = SDL_GetTicks();
@@ -44,8 +44,6 @@ int main(int argc, char **argv)
 
 	clientsConnection = new ClientsConnection(20000);
 	clientsConnection->start();
-	
-	double wallTime= 0;
 	
 	while(run) 
 	{

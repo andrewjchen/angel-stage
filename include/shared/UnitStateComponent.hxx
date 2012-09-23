@@ -10,8 +10,6 @@ class UnitStateComponent : public Component {
 public:
 	UnitStateComponent(Entity* entity);
 	virtual ~UnitStateComponent() {};
-	virtual void tick(double wallTime, double deltaT);
-	virtual void feedback(UnitFeedbackEvent* event);
 	virtual const Position & getPosition();
 
 protected:

@@ -7,8 +7,14 @@
 #include "Ids.hxx"
 #include "Component.hxx"
 #include "UnitStateComponent.hxx"
+
 #ifdef CLIENT_SIDE
 #include "VisualComponent.hxx"
+#include "ClientUnitStateComponent.hxx"
+#endif
+
+#ifdef SERVER_SIDE
+#include "ServerUnitStateComponent.hxx"
 #endif
 
 #define DECLARE_COMPONENT(_comp_type_, _comp_name_)					\
@@ -36,11 +42,13 @@ public:
 	void react(EntityEvent * event);
 	GameState* get_gamestate();
 	void set_gamestate(GameState* gs) { gamestate = gs;};
-	DECLARE_COMPONENT(UnitStateComponent, unit_state_component);
 #ifdef CLIENT_SIDE
 	DECLARE_COMPONENT(VisualComponent, visual_component);
+	DECLARE_COMPONENT(ClientUnitStateComponent, unit_state_component);
 #endif
 #ifdef SERVER_SIDE
+	DECLARE_COMPONENT(ServerUnitStateComponent, unit_state_component);
+
 #endif
 };
 

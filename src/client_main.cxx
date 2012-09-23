@@ -55,6 +55,8 @@ int main(int argc, char **argv)
 	nc = new NetworkConnecter("localhost", 20000);
 	nc->connect();
 
+
+
 	while(1)
 	{
 		input->tick();
@@ -132,6 +134,7 @@ int main(int argc, char **argv)
 		if(renderer) {
 			renderer->setViewpoint(xoff, yoff);
 			renderer->render();
+
 		}
 
 		//hack
