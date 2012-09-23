@@ -23,7 +23,7 @@ protected:
 public:
 	Entity(EntityID id) : _id(id) {};
 	virtual ~Entity() {};
-	EntityID get_id() const;
+	EntityID get_id() const { return _id; };
 	virtual void react(EntityEvent * event);
 };
 
