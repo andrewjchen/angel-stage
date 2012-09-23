@@ -27,11 +27,12 @@ int main(int argc, char **argv)
 {
 	run = 1;
 	signal(SIGINT, sigint_handler);
-	
+
 	std::cout << "Starting server!\n";
-	
+
 	ServerGameState *gs = new ServerGameState();
 	ServerEntity* ent = new ServerEntity(0);
+
 	gs->set_entity(0, ent);
 	ent->set_gamestate(gs);
 	ent->set_unit_state_component(new ServerUnitStateComponent(ent));
@@ -39,13 +40,13 @@ int main(int argc, char **argv)
 	//timekeeping
 	uint32_t time0 = SDL_GetTicks();
 	uint32_t prevTime = time0;
-	
+
 	SDLNet_Init();
 
 	clientsConnection = new ClientsConnection(20000);
 	clientsConnection->start();
-	
-	while(run) 
+
+	while(run)
 	{
 		clientsConnection->nm_mutex.lock();// lock the network managers
 			std::list<PacketTransporter*>::iterator i = clientsConnection->packetTransporters.begin();
@@ -81,7 +82,7 @@ int main(int argc, char **argv)
 						break;
 					}
 				}
-				
+
 				i++;
 			}
 		clientsConnection->nm_mutex.unlock();
@@ -93,13 +94,13 @@ int main(int argc, char **argv)
 
 		boost::this_thread::sleep(boost::posix_time::milliseconds(1));
 	}
-	
+
 	std::cout << "Cleaning up server!\n";
-	
+
 	clientsConnection->stop();
-	
+
 	SDLNet_Quit();
-	
+
 	delete clientsConnection;
 	delete gs;
 	delete ent;
