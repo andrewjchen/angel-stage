@@ -1,8 +1,9 @@
 #include "InputManager.hxx"
 #include "Debug.hxx"
+#include "ClientGlobalsImport.hxx"
 #include <stdio.h>
 
-InputManager::InputManager() {
+InputManager::InputManager(Renderer * renderer) {
 	if(!al_install_keyboard()) {
 		DEBUG("!al_install_keyboard");
 	}
@@ -12,21 +13,34 @@ InputManager::InputManager() {
 		DEBUG("!keyboard_source || !_event_queue");
 	}
 	al_register_event_source(_event_queue, keyboard_source);
+	_renderer = renderer;
 }
 
 void InputManager::tick() {
-	printf("Ticking!");
 	while (al_get_next_event(_event_queue, &_current_event)) {
-			printf("Reacting!");
 			react();
 	}
 }
 
 void InputManager::react() {
+	Position pos = _renderer->getViewpoint();
 	if (_current_event.type == ALLEGRO_EVENT_KEY_DOWN) {
 		switch(_current_event.keyboard.keycode) {
 		case (ALLEGRO_KEY_SPACE):
-			printf("Space key pressed.");
+			printf("Space key pressed.\n");
+			break;
+		case (ALLEGRO_KEY_UP):
+			_renderer->setViewpoint(pos.getX(), pos.getY() + 1);
+			break;
+		case (ALLEGRO_KEY_DOWN):
+			_renderer->setViewpoint(pos.getX(), pos.getY() - 1);
+			break;
+		case (ALLEGRO_KEY_LEFT):
+			_renderer->setViewpoint(pos.getX() - 1, pos.getY());
+			break;
+		case (ALLEGRO_KEY_RIGHT):
+			_renderer->setViewpoint(pos.getX() + 1, pos.getY());
+			break;
 		}
 	}
 }

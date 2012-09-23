@@ -1,16 +1,18 @@
 #ifndef INPUTMANAGER_HXX
 #define INPUTMANAGER_HXX
+#include "Renderer.hxx"
 #include <allegro5/allegro.h>
 
 class InputManager {
 public:
-	InputManager();
+	InputManager(Renderer * renderer);
 	virtual ~InputManager() {};
 	virtual void tick();
 protected:
 	virtual void react();
 	ALLEGRO_EVENT_QUEUE * _event_queue;
 	ALLEGRO_EVENT _current_event;
+	Renderer * _renderer;
 };
 
 #endif /* INPUTMANAGER_HXX */

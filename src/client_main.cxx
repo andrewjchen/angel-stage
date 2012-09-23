@@ -42,7 +42,7 @@ int main(int argc, char **argv)
 
 	Map *map = NULL;
 	Renderer *renderer = new Renderer();
-	InputManager * input = new InputManager();
+	InputManager * input = new InputManager(renderer);
 	ClientGameState *gs = new ClientGameState();
 
 	int xoff = 0, yoff = 0;
@@ -131,13 +131,11 @@ int main(int argc, char **argv)
 
 		al_clear_to_color(al_map_rgb(0,0,0));
 		if(renderer) {
-			renderer->setViewpoint(xoff, yoff);
+			// renderer->setViewpoint(xoff, yoff);
 			renderer->render();
 
 		}
 
-		//hack
-		al_flip_display();
 		//boost::this_thread::sleep(boost::posix_time::milliseconds(1));
 	}
 
