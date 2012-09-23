@@ -14,6 +14,7 @@ InputManager::InputManager(Renderer * renderer) {
 	}
 	al_register_event_source(_event_queue, keyboard_source);
 	_renderer = renderer;
+	_keep_running = true;
 }
 
 void InputManager::tick() {
@@ -41,6 +42,13 @@ void InputManager::react() {
 		case (ALLEGRO_KEY_RIGHT):
 			_renderer->setViewpoint(pos.getX() + 1, pos.getY());
 			break;
+		case (ALLEGRO_KEY_U):
+			_keep_running = false;
+			break;
 		}
 	}
+}
+
+bool InputManager::keep_running() {
+	return _keep_running;
 }

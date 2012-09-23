@@ -56,7 +56,7 @@ int main(int argc, char **argv)
 
 
 
-	while(1)
+	while(input->keep_running())
 	{
 		input->tick();
 		Packet *p;
