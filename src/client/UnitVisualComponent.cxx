@@ -1,11 +1,11 @@
 #include "UnitVisualComponent.hxx"
-#include "Entity.hxx"
+#include "ClientEntity.hxx"
 #include "RenderSetup.hxx"
 #include "Debug.hxx"
 #include <math.h>
 
 
-UnitVisualComponent::UnitVisualComponent(Entity * entity) : VisualComponent(entity) {
+UnitVisualComponent::UnitVisualComponent(ClientEntity * entity) : VisualComponent(entity) {
 	_bitmap = al_load_bitmap("res/unit.png");
 	if (!_bitmap) {
 		DEBUG("Bitmap res/unit.png could not be loaded!\n");
@@ -15,6 +15,7 @@ UnitVisualComponent::UnitVisualComponent(Entity * entity) : VisualComponent(enti
 }
 
 void UnitVisualComponent::tick(double wallTime, double deltaT) {
+	
 }
 
 void UnitVisualComponent::render(const Position & viewpoint) {

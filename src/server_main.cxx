@@ -11,8 +11,8 @@
 
 #include "ClientsConnection.hxx"
 #include "Packet.hxx"
-#include "GameState.hxx"
-#include "UnitStateComponent.hxx"
+#include "ServerGameState.hxx"
+#include "ServerUnitStateComponent.hxx"
 #include "Debug.hxx"
 
 ClientsConnection * clientsConnection;
@@ -30,8 +30,8 @@ int main(int argc, char **argv)
 	
 	std::cout << "Starting server!\n";
 	
-	GameState *gs = new GameState();
-	Entity* ent = new Entity(0);
+	ServerGameState *gs = new ServerGameState();
+	ServerEntity* ent = new ServerEntity(0);
 	gs->set_entity(0, ent);
 	ent->set_gamestate(gs);
 	ent->set_unit_state_component(new ServerUnitStateComponent(ent));

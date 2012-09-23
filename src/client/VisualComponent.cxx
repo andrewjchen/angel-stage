@@ -1,6 +1,6 @@
 #include "VisualComponent.hxx"
 
-VisualComponent::VisualComponent(Entity * entity) : Component(entity) {
+VisualComponent::VisualComponent(ClientEntity * entity) : ClientComponent(entity) {
 }
 
 void VisualComponent::tick(double wallTime, double deltaT) {

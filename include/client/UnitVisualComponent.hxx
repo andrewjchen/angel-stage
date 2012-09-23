@@ -7,7 +7,7 @@
 
 class UnitVisualComponent : VisualComponent {
 public:
-	UnitVisualComponent(Entity * entity);
+	UnitVisualComponent(ClientEntity * entity);
 	virtual ~UnitVisualComponent() {};
 	virtual void tick(double wallTime, double deltaT);
 	virtual void render(const Position & viewpoint);

@@ -1,11 +1,11 @@
 #include "ServerUnitStateComponent.hxx"
-#include "GameState.hxx"
-#include "Entity.hxx"
+#include "ServerGameState.hxx"
+#include "ServerEntity.hxx"
 #include <math.h>
 #include "Debug.hxx"
 
 
-ServerUnitStateComponent::ServerUnitStateComponent(Entity* entity) : UnitStateComponent(entity) {
+ServerUnitStateComponent::ServerUnitStateComponent(ServerEntity* entity) : ServerComponent(entity) {
 	entity->get_gamestate()->addClockListener(this);
 	DEBUG("Added unit state component");
 }
