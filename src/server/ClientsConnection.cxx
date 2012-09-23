@@ -81,6 +81,8 @@ void ClientsConnection::tick()
 		pt->addTXPacket(pm);
 		
 		UnitFeedbackEvent *ufe = new UnitFeedbackEvent();
+		//shut up, valgrind
+		memset(ufe,  0, sizeof(UnitFeedbackEvent));
 		ufe->header.header.event_type = EVENT_ENTITY_SPAWN;
 		ufe->header.header.total_byte_count = sizeof(UnitFeedbackEvent);
 		ufe->header.entity_id = 12345;
