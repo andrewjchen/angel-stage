@@ -49,31 +49,29 @@ int main(int argc, char **argv)
 	
 	while(run) 
 	{
-		if(!clientsConnection) continue;//if null, don't act
-
 		clientsConnection->nm_mutex.lock();// lock the network managers
-			for(int i = 0; i < clientsConnection->packetTransporters.size(); i++)
+			for(unsigned int i = 0; i < clientsConnection->packetTransporters.size(); i++)
 			{
 				//process packets
 				Packet *p;
-				PacketTransporter *nm = clientsConnection->packetTransporters[i];
-				if(nm == 0) continue;
-				while(nm && ((p = nm->getRXPacket()) != NULL))
+				PacketTransporter *pt = clientsConnection->packetTransporters[i];
+				if(pt == 0) continue;
+				while(pt && ((p = pt->getRXPacket()) != NULL))
 				{
 					//std::cout << "got a packet!\n";
 					switch(p->type)
 					{
 					case PACKET_PING:
 						std::cout << "got a ping request!\n";
-						nm->addTXPacket(p);//logic
+						pt->addTXPacket(p);//logic
 						break;
 					case PACKET_DISCONNECT:
 						std::cout << "got a disconnect packet!\n";
-						//std::cout << "Disconnected to client " << std::hex << nm->peer_ip << "\n";
-						printf("Disconnected to client %012lX\n", nm->peer_ip);
-						nm->close(); //logic
+						//std::cout << "Disconnected to client " << std::hex << pt->peer_ip << "\n";
+						printf("Disconnected to client %012lX\n", pt->peer_ip);
+						pt->close(); //logic
 						delete p;
-						nm = 0;
+						pt = 0;
 						clientsConnection->packetTransporters[i] = 0; //TODO delete members
 						break;
 					case PACKET_EVENT:
