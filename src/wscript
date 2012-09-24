@@ -18,7 +18,7 @@ def build(bld):
     common_libpath = [join(bld.top_dir, 'deps', 'usr', 'local', 'lib')]
     client_includes = common_includes + [join(bld.top_dir, 'include', 'client')]
     server_includes = common_includes + [join(bld.top_dir, 'include', 'server')]
-    common_lib = ['boost_system', 'boost_thread','SDL_net']
+    common_lib = ['boost_system', 'boost_thread', 'boost_timer', 'SDL_net']
     server_defines = ['SERVER_SIDE']
     client_defines = ['CLIENT_SIDE']
     bld.stlib(

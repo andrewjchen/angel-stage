@@ -26,6 +26,7 @@ const Position & Renderer::getViewpoint() {
 }
 
 void Renderer::addToUnitLayer(VisualComponent * visual_comp) {
+	DEBUG("adding visual component to Unit layer.\n");
 	_unit_layer.push_back(visual_comp);
 }
 
