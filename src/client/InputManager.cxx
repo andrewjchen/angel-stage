@@ -1,6 +1,6 @@
 #include "InputManager.hxx"
 #include "Debug.hxx"
-#include "ClientGlobalsImport.hxx"
+#include "ClientGlobals.hxx"
 #include "Event.hxx"
 #include "EventTypes.hxx"
 #include "NetworkConnecter.hxx"

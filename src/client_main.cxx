@@ -14,7 +14,7 @@
 #include "EventTypes.hxx"
 #include "Map.hxx"
 #include "RenderSetup.hxx"
-#include "ClientGlobalsImport.hxx"
+#include "ClientGlobals.hxx"
 #include "Renderer.hxx"
 #include "InputManager.hxx"
 
