@@ -9,8 +9,7 @@
 #include <math.h>
 #include "Debug.hxx"
 
-ClientsConnection::ClientsConnection(uint16_t port)
-{
+ClientsConnection::ClientsConnection(uint16_t port) {
 
 	IPaddress ip;
 	
@@ -25,14 +24,12 @@ ClientsConnection::ClientsConnection(uint16_t port)
 	stopped = false;
 }
 
-ClientsConnection::~ClientsConnection()
-{
+ClientsConnection::~ClientsConnection() {
 	if(running)
 		stop();
 }
 
-void ClientsConnection::start()
-{
+void ClientsConnection::start() {
 	if(running)
 		throw "Already running!";
 	if(stopped)
@@ -42,23 +39,20 @@ void ClientsConnection::start()
 	listenThread = new boost::thread(boost::bind(&ClientsConnection::listen, this));
 }
 
-void ClientsConnection::stop()
-{
+void ClientsConnection::stop() {
 	stopped = true;
 	running = false;
 	
 	listenThread->join();
 	delete listenThread;
 	listenThread = NULL;
-	if(listenSock)
-	{
+	if(listenSock) {
 		SDLNet_TCP_Close(listenSock);
 		listenSock = NULL;
 	}
 }
 
-void ClientsConnection::tick()
-{
+void ClientsConnection::tick() {
 	if(!running)
 		throw "Not running!";
 	if(stopped)
@@ -117,8 +111,7 @@ void ClientsConnection::listen(){
 	}
 }
 
-void ClientsConnection::sendPacket(Packet *p, uint64_t client)
-{
+void ClientsConnection::sendPacket(Packet *p, uint64_t client) {
 	nm_mutex.lock();
 		for(std::list<PacketTransporter*>::iterator i = packetTransporters.begin(); i != packetTransporters.end(); i++)
 		{
@@ -131,6 +124,21 @@ void ClientsConnection::sendPacket(Packet *p, uint64_t client)
 			}
 		}
 	nm_mutex.unlock();
+}
+
+void ClientsConnection::sendPacket(Packet* p){
+	nm_mutex.lock();
+	std::list<PacketTransporter*>::iterator i;
+	for(i = packetTransporters.begin(); i != packetTransporters.end(); i++) {
+		PacketTransporter *pt = *i;
+		if(pt == NULL) {
+			continue;
+		}
+		pt->addTXPacket(p);
+	}
+	nm_mutex.unlock();
+
+
 }
 
 std::list<Packet*> ClientsConnection::getPackets(){

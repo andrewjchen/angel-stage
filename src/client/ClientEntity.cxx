@@ -10,7 +10,7 @@ void ClientEntity::react(EntityEvent * event) {
 		case (EVENT_UNIT_MOVE):
 			if (_unit_state_component) {
 				UnitFeedbackEvent *ufe = (UnitFeedbackEvent*)(event);
-				DEBUG("Move entity with id " << ufe->header.entity_id << "\n");
+				DEBUG("Move entity with id=" << ufe->header.entity_id << ", x=" <<ufe->x << ", y=" << ufe->y);
 				_unit_state_component->feedback(ufe);
 			}
 			break;

@@ -15,14 +15,24 @@ ClientGameState::~ClientGameState() {
 }
 
 ClientEntity * ClientGameState::get_entity(EntityID id) {
-	if (_entities.count(id)) {
-		return _entities[id];
-	} else {
-		return NULL;
+	if ( _entities.count(id) == 0) { //if entity doens't exist
+		//intialize new gamestate
+		ClientEntity* ce = new ClientEntity(id);
+		ce->set_gamestate(this);
+
+		//components
+		UnitVisualComponent *uvc = new UnitVisualComponent(ce);
+		ClientUnitStateComponent *usc = new ClientUnitStateComponent(ce);
+		ce->set_visual_component(uvc);
+		ce->set_unit_state_component(usc);
+		globalRenderer->addToUnitLayer(uvc);
+
+		set_entity(id, ce);
 	}
+	return _entities[id];
 }
 
-void ClientGameState::set_entity(EntityID id, ClientEntity * entity) {
+void ClientGameState::set_entity(EntityID id, ClientEntity* entity) {
 	_entities[id] = entity;
 }
 
@@ -35,28 +45,30 @@ void ClientGameState::react(Event * event) {
 		}
 	} else if (is_global_event(event)) {
 		/* TODO: Do things. */
-		printf("Received global event!\n");
+		DEBUG("Received global event!");
 		switch (event->event_type) {
-			case EVENT_ENTITY_SPAWN:
-				{
-					UnitFeedbackEvent *ufe = (UnitFeedbackEvent*)(event);
-					std::cout << "Spawn an entity with id " << ufe->header.entity_id << "\n";
-					ClientEntity *ce = new ClientEntity(ufe->header.entity_id);
-					ce->set_gamestate(this);
-					UnitVisualComponent *uvc = new UnitVisualComponent(ce);
-					ClientUnitStateComponent *usc = new ClientUnitStateComponent(ce);
-					ce->set_visual_component(uvc);
-					ce->set_unit_state_component(usc);
-					ce->react((EntityEvent*)ufe);
-					set_entity(ufe->header.entity_id, ce);
-					globalRenderer->addToUnitLayer(ce->get_visual_component());
-				}
-				break;
-
-			case EVENT_TEST:
-				printf("Received a test event!\n");
+			case EVENT_ENTITY_SPAWN: { 
+			 	UnitFeedbackEvent *ufe = (UnitFeedbackEvent*)(event);
+				// std::cout << "Spawn an entity with id " << ufe->header.entity_id << "\n";
+				// ClientEntity *ce = new ClientEntity(ufe->header.entity_id);
+				// ce->set_gamestate(this);
+				// UnitVisualComponent *uvc = new UnitVisualComponent(ce);
+				// ClientUnitStateComponent *usc = new ClientUnitStateComponent(ce);
+				// ce->set_visual_component(uvc);
+				// ce->set_unit_state_component(usc);
+				// globalRenderer->addToUnitLayer(ce->get_visual_component());
+				// // ClientEntity* ce = get_entity(ufe->header.entity_id);
+				// // ce->react((EntityEvent*)ufe);
+				// set_entity(ufe->header.entity_id, ce);
+				ClientEntity* ce = get_entity(ufe->header.entity_id);
+				ce->react((EntityEvent*)ufe);
 				break;
 			}
+			case EVENT_TEST: { 
+				DEBUG("Received a test event!");
+				break;
+			}
+		}
 	}
 }
 

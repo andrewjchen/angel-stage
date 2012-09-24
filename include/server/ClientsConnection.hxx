@@ -29,6 +29,7 @@ public:
 	void stop();
 
 	void sendPacket(Packet *p, uint64_t client);
+	void sendPacket(Packet *p);
 	std::list<Packet*> getPackets();
 
 	boost::mutex nm_mutex;
