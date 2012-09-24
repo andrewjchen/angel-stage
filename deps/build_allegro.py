@@ -56,5 +56,3 @@ update_allegro_repo()
 make_allegro_build_directory()
 build_allegro()
 install_allegro_to_deps()
-
-

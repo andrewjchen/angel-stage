@@ -25,6 +25,7 @@ wbuild
 # deps build directory
 deps/builds
 deps/usr
+*.tar.*
 
 # Emacs autosave files
 .#*

@@ -6,8 +6,8 @@
 #include <iomanip>
 #include <cstdio>
 #include <boost/thread/thread.hpp>
-// #include <boost/timer.hpp>
-#include <boost/timer/timer.hpp>
+#include <boost/chrono.hpp>
+// #include <boost/timer/timer.hpp>
 #include <signal.h>
 
 #include "ClientsConnection.hxx"
@@ -40,14 +40,12 @@ int main(int argc, char **argv)
 	ent->set_gamestate(gs);
 	ent->set_unit_state_component(new ServerUnitStateComponent(ent));
 
-	//timekeeping
-	// boost::timer *time0 = new boost::timer();
-	// boost::timer *prevTime = new boost::timer();
-	boost::timer::cpu_timer * time = new boost::timer::cpu_timer();
-	boost::timer::cpu_timer * wallTime = new boost::timer::cpu_timer();
-	wallTime->start();
-	time->stop();
-	double deltaTime = 0.0;
+	boost::chrono::high_resolution_clock::time_point start = boost::chrono::high_resolution_clock::now();
+	boost::chrono::high_resolution_clock::time_point lastTime;
+	boost::chrono::high_resolution_clock::time_point thisTime;
+	typedef boost::chrono::duration<double, boost::milli> ms;
+	ms wallTime = boost::chrono::duration_cast<ms>(start - boost::chrono::high_resolution_clock::now());
+	ms deltaTime;
 
 	SDLNet_Init();
 
@@ -56,6 +54,12 @@ int main(int argc, char **argv)
 
 	while(run)
 	{
+		thisTime = boost::chrono::high_resolution_clock::now();
+		wallTime = boost::chrono::duration_cast<ms>(thisTime - start);
+		deltaTime = boost::chrono::duration_cast<ms>(thisTime - lastTime);
+		lastTime = thisTime;
+		printf("deltaTime = %lf\n", deltaTime.count());
+		printf("wallTime = %lf", wallTime.count());
 		clientsConnection->nm_mutex.lock();// lock the network managers
 			std::list<PacketTransporter*>::iterator i = clientsConnection->packetTransporters.begin();
 			while(i != clientsConnection->packetTransporters.end())
@@ -100,8 +104,8 @@ int main(int argc, char **argv)
 					ufe->header.header.event_type = EVENT_UNIT_MOVE;
 					ufe->header.header.total_byte_count = sizeof(UnitFeedbackEvent);
 					ufe->header.entity_id = 12345;
-					ufe->x = 10 * sin(wallTime->elapsed().wall / 1000000.0) + 0;
-					ufe->y = 10 * cos(wallTime->elapsed().wall / 1000000.0) + 0;
+					ufe->x = 10 * sin(wallTime.count()) + 0;
+					ufe->y = 10 * cos(wallTime.count()) + 0;
 					DEBUG("Unit feedback event sending: x="<<  ufe->x << ", y=" << ufe->y);
 
 					ufe->theta = 45.0;
@@ -116,14 +120,9 @@ int main(int argc, char **argv)
 			}
 		clientsConnection->nm_mutex.unlock();
 
-		//timekeeping
-		// gs->tick(time0->elapsed() * 1000.0, prevTime->elapsed() * 1000.0);
-		gs->tick(deltaTime, deltaTime);
-		// prevTime->restart();
+		gs->tick(deltaTime.count(), wallTime.count());
 
 		boost::this_thread::sleep(boost::posix_time::milliseconds(0));
-		deltaTime = time->elapsed().wall / 1000.0L;
-		time->start();
 	}
 
 	std::cout << "Cleaning up server!\n";
@@ -135,9 +134,4 @@ int main(int argc, char **argv)
 	delete clientsConnection;
 	delete gs;
 	delete ent;
-	delete time;
-	delete wallTime;
-
-	// delete time0;
-	// delete prevTime;
 }
