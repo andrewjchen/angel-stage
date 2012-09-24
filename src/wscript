@@ -12,11 +12,11 @@ def build(bld):
     sdl_libs = ['SDL', 'SDL_image']
     allegro_libs = ['allegro', 'allegro_image']
     common_includes = ['.',
-                       join(bld.top_dir, 'deps'),
-                       join(bld.top_dir, 'include'),
                        join(bld.top_dir, 'deps', 'usr', 'local', 'include'),
+                       join(bld.top_dir, 'include'),
                        join(bld.top_dir, 'include', 'shared')]
-    common_libpath = [join(bld.top_dir, 'deps', 'usr', 'local', 'lib')]
+    in_repo_libpath = join(bld.top_dir, 'deps', 'usr', 'local', 'lib')
+    common_libpath = [in_repo_libpath]
     client_includes = common_includes + [join(bld.top_dir, 'include', 'client')]
     server_includes = common_includes + [join(bld.top_dir, 'include', 'server')]
     common_lib = ['boost_system', 'boost_thread', 'boost_timer', 'boost_chrono', 'SDL_net']
@@ -44,6 +44,7 @@ def build(bld):
         libpath = common_libpath,
         lib = common_lib + allegro_libs,
         use = ['angel-stage-shared-client-lib', 'angel-stage-client-lib'],
+        linkflags='-Wl,-R ' + in_repo_libpath,
         )
     bld.stlib(
         source = bld.path.ant_glob('shared/*.cxx'),
@@ -66,4 +67,5 @@ def build(bld):
         libpath = common_libpath,
         use = ['angel-stage-shared-server-lib', 'angel-stage-server-lib'],
         defines = server_defines,
+        linkflags='-Wl,-R ' + in_repo_libpath,
         )
