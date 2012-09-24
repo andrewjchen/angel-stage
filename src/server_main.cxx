@@ -90,11 +90,11 @@ int main(int argc, char **argv)
 
 				//send feedback event
 				UnitFeedbackEvent *ufe = new UnitFeedbackEvent();
-				ufe->header.header.event_type = EVENT_ENTITY_SPAWN;
+				ufe->header.header.event_type = EVENT_UNIT_MOVE;
 				ufe->header.header.total_byte_count = sizeof(UnitFeedbackEvent);
 				ufe->header.entity_id = 12345;
-				ufe->x = 2 * sin(time0->elapsed() * 10.0) + 0;
-				ufe->y = 2 * cos(time0->elapsed() * 10.0) + 0;
+				ufe->x = 10 * sin(time0->elapsed() * 10.0) + 0;
+				ufe->y = 10 * cos(time0->elapsed() * 10.0) + 0;
 				DEBUG("Unit feedback event sending: x="<<  ufe->x << ", y=" << ufe->y);
 
 				ufe->theta = 45.0;
@@ -112,7 +112,7 @@ int main(int argc, char **argv)
 		gs->tick(time0->elapsed() * 1000, prevTime->elapsed() * 1000);
 		prevTime->restart();
 
-		boost::this_thread::sleep(boost::posix_time::milliseconds(50));
+		boost::this_thread::sleep(boost::posix_time::milliseconds(5));
 	}
 
 	std::cout << "Cleaning up server!\n";

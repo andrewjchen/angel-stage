@@ -1,14 +1,17 @@
 #include <cstdio>
 #include "ClientEntity.hxx"
 #include "EventTypes.hxx"
+#include "Debug.hxx"
 
 void ClientEntity::react(EntityEvent * event) {
 	printf("Entity at %p received event!\n", this);
 	switch (event->header.event_type) {
 		case (EVENT_UNIT_FEEDBACK):
-		case (EVENT_ENTITY_SPAWN):
+		case (EVENT_UNIT_MOVE):
 			if (_unit_state_component) {
-				_unit_state_component->feedback((UnitFeedbackEvent *) event);
+				UnitFeedbackEvent *ufe = (UnitFeedbackEvent*)(event);
+				DEBUG("Move entity with id " << ufe->header.entity_id << "\n");
+				_unit_state_component->feedback(ufe);
 			}
 			break;
 	}
