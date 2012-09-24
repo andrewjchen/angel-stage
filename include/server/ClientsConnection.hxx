@@ -29,7 +29,7 @@ public:
 	void stop();
 
 	void sendPacket(Packet *p, uint64_t client);
-	void getPackets();
+	std::list<Packet*> getPackets();
 
 	boost::mutex nm_mutex;
 
@@ -37,6 +37,7 @@ public:
 	std::list<PacketTransporter*> packetTransporters;
 
 private:
+
 	bool stopped;
 	bool running;
 	void tick(); //called by listen thread

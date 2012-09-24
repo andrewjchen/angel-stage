@@ -6,8 +6,12 @@
 #include "Event.hxx"
 #include "EventTypes.hxx"
 
+#include <math.h>
+#include "Debug.hxx"
+
 ClientsConnection::ClientsConnection(uint16_t port)
 {
+
 	IPaddress ip;
 	
 	if(SDLNet_ResolveHost(&ip, NULL, port) != 0)
@@ -61,8 +65,10 @@ void ClientsConnection::tick()
 		throw "Stopped! (and therefore invalid)";
 	if(listenSock == NULL)
 		throw "listenSock is null!";
+
 		
 	TCPsocket clientSock;
+	//on client join
 	while((clientSock = SDLNet_TCP_Accept(listenSock)) != NULL)
 	{
 		PacketTransporter *pt = new PacketTransporter(clientSock);
@@ -75,7 +81,7 @@ void ClientsConnection::tick()
 		pt->read_thread = new_peer_thread_read;
 		pt->write_thread = new_peer_thread_write;
 		
-		//stuff to send to client on login
+		//stuff to send to client on loginpt
 		PacketMap *pm = new PacketMap(PACKET_MAP);
 		pm->size = 48;
 		pt->addTXPacket(pm);
@@ -85,8 +91,9 @@ void ClientsConnection::tick()
 		ufe->header.header.event_type = EVENT_ENTITY_SPAWN;
 		ufe->header.header.total_byte_count = sizeof(UnitFeedbackEvent);
 		ufe->header.entity_id = 12345;
-		ufe->x = 2.0;
-		ufe->y = 2.0;
+		ufe->x = 2;
+		ufe->y = 2;
+
 		ufe->theta = 45.0;
 		PacketEvent *pe = new PacketEvent(PACKET_EVENT);
 		pe->setEvent((Event*)ufe);
@@ -124,4 +131,29 @@ void ClientsConnection::sendPacket(Packet *p, uint64_t client)
 			}
 		}
 	nm_mutex.unlock();
+}
+
+std::list<Packet*> ClientsConnection::getPackets(){
+	std::list<Packet*> retu;
+
+	// nm_mutex.lock();
+
+	// std::list<PacketTransporter*>::iterator i;
+	// for(i = packetTransporters.begin(); i!=packetTransporters.end(); i++){
+	// 	Packet* p;
+	// 	PacketTransporter* pt = *i;
+	// 	if(pt == 0){
+	// 		continue;
+	// 	}
+
+	// 	while(pt && ((p = pt->getRXPacket()) != NULL)){
+	// 		retu.push_back(p);
+	// 	}
+
+	// }
+
+	// nm_mutex.unlock();
+
+	return retu;
+
 }
