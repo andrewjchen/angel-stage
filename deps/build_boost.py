@@ -11,7 +11,7 @@ def try_call(*args, **kwargs):
     try:
         subprocess.check_call(*args, **kwargs)
     except subprocess.CalledProcessError as e:
-        print('Failed to build Allegro 5!')
+        print('Failed to build boost!')
         sys.exit(e.returncode)
 
 boost_extracted = ""
