@@ -20,11 +20,12 @@ Server::~Server() {
 
 void Server::run() {
 	_running = true;
-
-	ServerEntity* ent = new ServerEntity(0);
-	_gamestate->set_entity(0, ent);
-	ent->set_gamestate(_gamestate);
-	ent->set_unit_state_component(new ServerUnitStateComponent(ent));
+	
+	_gamestate->get_entity(1);
+	_gamestate->get_entity(2);
+	_gamestate->get_entity(3);
+	_gamestate->get_entity(4);
+	_gamestate->get_entity(5);
 
 	_conn->start();
 
@@ -67,7 +68,5 @@ void Server::run() {
 
 	_conn->stop();
 	SDLNet_Quit();
-
-	delete ent;
 
 }

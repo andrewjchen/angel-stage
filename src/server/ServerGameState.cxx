@@ -4,11 +4,16 @@
 #include "Debug.hxx"
 
 ServerEntity * ServerGameState::get_entity(EntityID id) {
-	if (_entities.count(id)) {
-		return _entities[id];
-	} else {
-		return NULL;
-	}
+	if (_entities.count(id) == 0) { //entity doens't exist
+		ServerEntity* ent = new ServerEntity(id);
+		ent->set_gamestate(this);
+		ent->set_unit_state_component(new ServerUnitStateComponent(ent));
+
+		_entities[id] = ent;
+
+	} 
+		 
+	return _entities[id];
 }
 
 void ServerGameState::set_entity(EntityID id, ServerEntity * entity) {
