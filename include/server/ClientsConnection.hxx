@@ -1,11 +1,12 @@
 #ifndef CLIENT_ACCEPTER_H
 #define CLIENT_ACCEPTER_H
+#include <map>
 #include <list>
+#include <deque>
 #include <memory>
 #include <stdint.h>
 #include <boost/thread/thread.hpp>
 #include "SDL/SDL_net.h"
-#include "PacketTransporter.hxx"
 #include "Packet.hxx"
 
 #define CLIENT_ID_EVERYBODY 0
@@ -24,27 +25,30 @@ public:
 	ClientsConnection(uint16_t port);
 	~ClientsConnection();
 
-	//starts listening for 
 	void start(); 
 	void stop();
 
 	void sendPacket(Packet *p, uint64_t client);
 	void sendPacket(Packet *p);
-	std::list<Packet*> getPackets();
-
-	boost::mutex nm_mutex;
-
-	//TODO map int->PacketTransporter*?
-	std::list<PacketTransporter*> packetTransporters;
+	std::list<Packet*> getPackets(int n = 1);
+	void closeClient(uint64_t client);
 
 private:
-
-	bool stopped;
+	bool valid;
 	bool running;
-	void tick(); //called by listen thread
-	void listen(); //called by start()
-	TCPsocket listenSock;
-	boost::thread* listenThread;
+	
+	void listenthread();
+	void readthread();
+	
+	boost::thread *listenThread;
+	boost::thread *readThread;
+	boost::mutex queue_mutex;
+	std::deque<Packet *> rx_queue;
+	
+	int listenfd;
+	std::map<uint64_t,int> clientfds;
+	std::map<int,uint64_t> fd_to_client;
+	boost::mutex clientfd_mutex;
 };
 
 #endif

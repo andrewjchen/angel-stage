@@ -1,54 +1,120 @@
 #include <iostream>
+#include <poll.h>
+#include <unistd.h>
+#include <netinet/in.h>
+#include <arpa/inet.h>
 #include "NetworkConnecter.hxx"
 
-NetworkConnecter::NetworkConnecter(const char * server, uint16_t port){
-	IPaddress ip;
+NetworkConnecter::NetworkConnecter(const char * server, uint16_t port) {
+	struct sockaddr_in sa;
+	memset(&sa, 0, sizeof(struct sockaddr_in));
+	sa.sin_family = AF_INET;
+	sa.sin_port = htons(port);
+	if(inet_pton(AF_INET, server, &sa.sin_addr.s_addr) != 1)
+		throw "inet_pton error";
 
-	if(SDLNet_ResolveHost(&ip, server, port) != 0)
-		throw "SDLNet_ResolveHost error";
-
-	clientSock = SDLNet_TCP_Open(&ip);
-	if(clientSock == NULL)
-		throw "SDLNet_TCP_Open error";
+	sockfd = socket(AF_INET, SOCK_STREAM, 0);
+	if(sockfd == -1)
+		throw "socket error";
+	
+	if(connect(sockfd, (struct sockaddr *)&sa, sizeof(sa)) == -1)
+		throw "connect error";
+	
+	valid = true;
+	running = false;
 }
 
 NetworkConnecter::~NetworkConnecter(){
-	if (clientSock) {
-		SDLNet_TCP_Close(clientSock);
+	if (running) {
+		disconnect();
 	}
 }
 
-void NetworkConnecter::connect(){
-	if(clientSock == NULL)
-		throw "clientSock is null!";
-	PacketTransporter *pt = new PacketTransporter(clientSock);
-	IPaddress *ip = SDLNet_TCP_GetPeerAddress(clientSock);
-	pt->peer_ip = ((uint64_t)(ip->host) << 16) | (ip->port);
-	boost::thread *new_peer_thread_read = new boost::thread(boost::bind(PacketTransporter::peer_thread_read, pt));
-	boost::thread *new_peer_thread_write = new boost::thread(boost::bind(PacketTransporter::peer_thread_write, pt));
-
-	pt->read_thread = new_peer_thread_read;
-	pt->write_thread = new_peer_thread_write;
-
-	packetTransport = pt;
+void NetworkConnecter::start() {
+	if(running)
+		throw "Already running!";
+	if(!valid)
+		throw "Stopped! (and therefore invalid)";
+	
+	running = true;
+	readThread = new boost::thread(boost::bind(&NetworkConnecter::readthread, this));
 }
 
-void NetworkConnecter::disconnect(){
-	packetTransport->close();
-	delete packetTransport;
-	/* ClientSock is closed in PacketTransporter::close() */
-	clientSock = NULL;
-	packetTransport = NULL;
+void NetworkConnecter::disconnect() {
+	valid = false;
+	running = false;
+	
+	readThread->join();
+	delete readThread;
+	readThread = NULL;
+	
+	if(sockfd > 0)
+	{
+		close(sockfd);
+		sockfd = -1;
+	}
 }
 
-bool NetworkConnecter::isConnected(){
-	return packetTransport != NULL;
+void NetworkConnecter::readthread() {
+	while(running)
+	{
+		struct pollfd pfd[1];
+		pfd[0].fd = sockfd;
+		pfd[0].events = POLLIN;
+		pfd[0].revents = 0;
+			
+		int pollres = poll(pfd, 1, 5000);
+			
+		if(pollres == -1)
+		{
+			valid = false;
+			throw "poll error";
+		}
+		
+		if(pollres == 1)
+		{
+			if((pfd[0].revents & POLLERR) || (pfd[0].revents & POLLNVAL))
+			{
+				std::cout << "Error poll from server\n";
+				valid = false;
+				running = false;
+				close(sockfd);
+				return;
+			}
+			
+			if(pfd[0].revents & POLLIN)
+			{
+				Packet *p = Packet::readByType(pfd[0].fd);
+				if(p)
+				{
+					queue_mutex.lock();
+						rx_queue.push_back(p);
+					queue_mutex.unlock();
+				}
+			}
+		}
+	}
 }
 
-void NetworkConnecter::sendPacket(Packet* p){
-	packetTransport->addTXPacket(p);
+bool NetworkConnecter::isConnected() {
+	return running;
 }
 
-Packet* NetworkConnecter::getPacket(){
-	return packetTransport->getRXPacket();
+void NetworkConnecter::sendPacket(Packet* p) {
+	p->writeSock(sockfd);
+}
+
+std::list<Packet*> NetworkConnecter::getPacket(int n) {
+	std::list<Packet*> retu;
+
+	queue_mutex.lock();
+		for(int i = 0; i < n; i++)
+		{
+			if(rx_queue.size() == 0) break;
+			retu.push_back(rx_queue.front());
+			rx_queue.pop_front();
+		}
+	queue_mutex.unlock();
+
+	return retu;
 }

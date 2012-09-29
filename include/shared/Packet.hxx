@@ -1,7 +1,6 @@
 #ifndef PACKET_H
 #define PACKET_H
 #include <stdint.h>
-#include "SDL/SDL_net.h"
 #include "Event.hxx"
 
 const uint8_t PACKET_PING           = 0x41;
@@ -15,15 +14,16 @@ class Packet
 {
 public:
 	Packet(uint8_t _type);
-	static Packet *readByType(TCPsocket _sock, uint8_t _type);
-	virtual void write(TCPsocket sock) = 0;
+	static Packet *readByType(int _sock);
+	virtual void writeSock(int sock) = 0;
 
 	uint8_t type;
 	virtual ~Packet() {};
+	uint64_t from;
 
 protected:
-	virtual void read(TCPsocket sock) = 0;
-	void writeHeader(TCPsocket sock);
+	virtual void readSock(int sock) = 0;
+	void writeHeader(int sock);
 };
 
 /////////////////////////////////////////////// PACKET_PING ////////////////////////////////////////////////////////////////////////////
@@ -32,12 +32,12 @@ class PacketPing: public Packet
 {
 public:
 	PacketPing(uint8_t _type);
-	void write(TCPsocket sock);
+	void writeSock(int sock);
 
 	uint32_t pingstuff;
 
 protected:
-	void read(TCPsocket sock);
+	void readSock(int sock);
 };
 
 /////////////////////////////////////////////// PACKET_DISCONNECT ////////////////////////////////////////////////////////////////////////////
@@ -46,10 +46,10 @@ class PacketDisconnect: public Packet
 {
 public:
 	PacketDisconnect(uint8_t _type);
-	void write(TCPsocket sock);
+	void writeSock(int sock);
 
 protected:
-	void read(TCPsocket sock);
+	void readSock(int sock);
 };
 
 /////////////////////////////////////////////// PACKET_EVENT ////////////////////////////////////////////////////////////////////////////
@@ -59,13 +59,13 @@ class PacketEvent: public Packet
 public:
 	PacketEvent(uint8_t _type);
 	~PacketEvent();
-	void write(TCPsocket sock);
+	void writeSock(int sock);
 	void setEvent(Event *_event);
 	Event *getEvent();
 
 protected:
 	uint8_t *event;
-	void read(TCPsocket sock);
+	void readSock(int sock);
 };
 
 /////////////////////////////////////////////// PACKET_MAP ////////////////////////////////////////////////////////////////////////////
@@ -74,12 +74,12 @@ class PacketMap: public Packet
 {
 public:
 	PacketMap(uint8_t _type);
-	void write(TCPsocket sock);
+	void writeSock(int sock);
 
 	int size;
 
 protected:
-	void read(TCPsocket sock);
+	void readSock(int sock);
 };
 
 #endif

@@ -1,11 +1,10 @@
 #ifndef NETCONNECT_H
 #define NETCONNECT_H
 #include <vector>
+#include <list>
 #include <memory>
 #include <stdint.h>
 #include <boost/thread/thread.hpp>
-#include "SDL/SDL_net.h"
-#include "PacketTransporter.hxx"
 #include "Packet.hxx"
 
 class NetworkConnecter
@@ -13,16 +12,24 @@ class NetworkConnecter
 public:
 	NetworkConnecter(const char * server, uint16_t port);
 	virtual ~NetworkConnecter();
-	void connect();
+	
+	void start();
 	void disconnect();
 	bool isConnected();
 
 	void sendPacket(Packet* p);
-	Packet* getPacket();
+	std::list<Packet*> getPacket(int n = 1);
 
 private:
-	PacketTransporter* packetTransport; /* deleted in disconnect() */
-	TCPsocket clientSock;
+	bool valid;
+	bool running;
+	
+	int sockfd;
+	
+	void readthread();
+	boost::thread *readThread;
+	boost::mutex queue_mutex;
+	std::deque<Packet *> rx_queue;
 };
 
 #endif
