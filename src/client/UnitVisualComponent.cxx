@@ -31,7 +31,7 @@ void UnitVisualComponent::render(const Position & viewpoint) {
 		_bitmap) {
 		al_draw_tinted_scaled_rotated_bitmap(
 			_bitmap,
-			al_map_rgb(255, 0, 255),
+			al_map_rgb(0xFF, 0xFF, 0xFF),
 			_half_bitmap_width,
 			_half_bitmap_height,
 			screenX,

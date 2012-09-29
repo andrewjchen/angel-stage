@@ -68,9 +68,4 @@ void Client::run() {
 	_conn->sendPacket((Packet*)&p);
 	DEBUG("trying to disconnect");
 	_conn->disconnect();
-
-	delete _conn;
-	al_destroy_display(display);
-	delete _renderer;
-	delete _gamestate;
 }

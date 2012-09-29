@@ -20,6 +20,7 @@ void ServerUnitStateComponent::tick(double wallTime, double deltaT){
 	// DEBUG("Tick: walltime=" << wallTime << ", deltaT=" << deltaT);
 	_pos.setX(160 * cos(wallTime/1000.0) + 300);
 	_pos.setY(160 * sin(wallTime/1000.0) + 400);
+	_theta = -wallTime / 1000.0 -  3.14159265358979323846;
 
 	//constructing packet to send
 	UnitFeedbackEvent *ufe = new UnitFeedbackEvent();
