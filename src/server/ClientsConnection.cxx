@@ -93,9 +93,9 @@ void ClientsConnection::listenthread() {
 				if(clientfd == -1)
 						throw "accept error";
 				
-				//TODO: SEND ON LOGIN
-				
 				uint64_t peer_ip = ((uint64_t)(sa.sin_addr.s_addr) << 16) | (sa.sin_port);
+				
+				sendOnLoginData(peer_ip, clientfd);
 				
 				clientfd_mutex.lock();
 					clientfds[peer_ip] = clientfd;
@@ -106,6 +106,27 @@ void ClientsConnection::listenthread() {
 	} catch (const char *e){
 		std::cout << e << std::endl;
 	}
+}
+
+void ClientsConnection::sendOnLoginData(uint64_t client, int fd)
+{
+	PacketMap *pm = new PacketMap(PACKET_MAP);
+	pm->size = 48;
+	pm->writeSock(fd);
+	
+	UnitFeedbackEvent *ufe = new UnitFeedbackEvent();
+	memset(ufe,  0, sizeof(UnitFeedbackEvent));
+	ufe->header.header.event_type = EVENT_ENTITY_SPAWN;
+	ufe->header.header.total_byte_count = sizeof(UnitFeedbackEvent);
+	ufe->header.entity_id = 12345;
+	ufe->x = 2;
+	ufe->y = 2;
+	
+	ufe->theta = 45.0;
+	PacketEvent *pe = new PacketEvent(PACKET_EVENT);
+	pe->setEvent((Event*)ufe);
+	delete ufe;
+	pe->writeSock(fd);
 }
 
 void ClientsConnection::readthread() {

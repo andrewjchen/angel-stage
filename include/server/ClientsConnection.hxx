@@ -40,6 +40,8 @@ private:
 	void listenthread();
 	void readthread();
 	
+	void sendOnLoginData(uint64_t client, int fd);
+	
 	boost::thread *listenThread;
 	boost::thread *readThread;
 	boost::mutex queue_mutex;
