@@ -65,8 +65,8 @@ void Client::run() {
 		_running = _input->keep_running();
 	}
 
-	Packet * p = new PacketDisconnect(PACKET_DISCONNECT);
-	_conn->sendPacket(p);
+	PacketDisconnect p;
+	_conn->sendPacket((Packet*)&p);
 	DEBUG("trying to disconnect");
 	_conn->disconnect();
 

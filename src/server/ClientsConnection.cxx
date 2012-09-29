@@ -110,9 +110,9 @@ void ClientsConnection::listenthread() {
 
 void ClientsConnection::sendOnLoginData(uint64_t client, int fd)
 {
-	PacketMap *pm = new PacketMap(PACKET_MAP);
-	pm->size = 48;
-	pm->writeSock(fd);
+	PacketMap pm;
+	pm.size = 48;
+	pm.writeSock(fd);
 	
 	UnitFeedbackEvent *ufe = new UnitFeedbackEvent();
 	memset(ufe,  0, sizeof(UnitFeedbackEvent));
@@ -123,10 +123,10 @@ void ClientsConnection::sendOnLoginData(uint64_t client, int fd)
 	ufe->y = 2;
 	
 	ufe->theta = 45.0;
-	PacketEvent *pe = new PacketEvent(PACKET_EVENT);
-	pe->setEvent((Event*)ufe);
+	PacketEvent pe;
+	pe.setEvent((Event*)ufe);
 	delete ufe;
-	pe->writeSock(fd);
+	pe.writeSock(fd);
 }
 
 void ClientsConnection::readthread() {

@@ -31,7 +31,7 @@ protected:
 class PacketPing: public Packet
 {
 public:
-	PacketPing(uint8_t _type);
+	PacketPing();
 	void writeSock(int sock);
 
 	uint32_t pingstuff;
@@ -45,7 +45,7 @@ protected:
 class PacketDisconnect: public Packet
 {
 public:
-	PacketDisconnect(uint8_t _type);
+	PacketDisconnect();
 	void writeSock(int sock);
 
 protected:
@@ -57,7 +57,7 @@ protected:
 class PacketEvent: public Packet
 {
 public:
-	PacketEvent(uint8_t _type);
+	PacketEvent();
 	~PacketEvent();
 	void writeSock(int sock);
 	void setEvent(Event *_event);
@@ -73,7 +73,7 @@ protected:
 class PacketMap: public Packet
 {
 public:
-	PacketMap(uint8_t _type);
+	PacketMap();
 	void writeSock(int sock);
 
 	int size;

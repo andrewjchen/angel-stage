@@ -140,4 +140,5 @@ int main(int argc, char **argv)
 	server = new Server();
 	server->run();
 
+	delete server;
 }

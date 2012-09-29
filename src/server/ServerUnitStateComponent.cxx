@@ -21,18 +21,19 @@ void ServerUnitStateComponent::tick(double wallTime, double deltaT){
 
 	//constructing packet to send
 	UnitFeedbackEvent *ufe = new UnitFeedbackEvent();
+	memset(ufe,  0, sizeof(UnitFeedbackEvent));
 	ufe->header.header.event_type = EVENT_UNIT_MOVE;
 	ufe->header.header.total_byte_count = sizeof(UnitFeedbackEvent);
 	ufe->header.entity_id = _entity->get_id();
 	ufe->x = _pos.getX();
 	ufe->y = _pos.getY();
 	ufe->theta = _theta;
-	PacketEvent *pe = new PacketEvent(PACKET_EVENT);
-	pe->setEvent((Event*)ufe);//does a memcopy
+	PacketEvent pe;
+	pe.setEvent((Event*)ufe);//does a memcopy
 	delete ufe;
 
 	//send
-	_entity->get_gamestate()->get_server()->get_clientsconnection()->sendPacket(pe);
+	_entity->get_gamestate()->get_server()->get_clientsconnection()->sendPacket((Packet*)(&pe));
 
 
 }

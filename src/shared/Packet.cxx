@@ -22,16 +22,16 @@ Packet *Packet::readByType(int _sock)
 	switch(_type)
 	{
 	case PACKET_PING:
-		p = new PacketPing(_type);
+		p = new PacketPing();
 		break;
 	case PACKET_DISCONNECT:
-		p = new PacketDisconnect(_type);
+		p = new PacketDisconnect();
 		break;
 	case PACKET_EVENT:
-		p = new PacketEvent(_type);
+		p = new PacketEvent();
 		break;
 	case PACKET_MAP:
-		p = new PacketMap(_type);
+		p = new PacketMap();
 		break;
 	}
 	if(!p) return 0;
@@ -41,7 +41,7 @@ Packet *Packet::readByType(int _sock)
 
 /////////////////////////////////////////////// PACKET_PING ////////////////////////////////////////////////////////////////////////////
 
-PacketPing::PacketPing(uint8_t _type) : Packet(_type)
+PacketPing::PacketPing() : Packet(PACKET_PING)
 {
 }
 
@@ -58,7 +58,7 @@ void PacketPing::writeSock(int sock)
 
 /////////////////////////////////////////////// PACKET_DISCONNECT ////////////////////////////////////////////////////////////////////////////
 
-PacketDisconnect::PacketDisconnect(uint8_t _type) : Packet(_type)
+PacketDisconnect::PacketDisconnect() : Packet(PACKET_DISCONNECT)
 {
 }
 
@@ -74,7 +74,7 @@ void PacketDisconnect::writeSock(int sock)
 
 /////////////////////////////////////////////// PACKET_EVENT ////////////////////////////////////////////////////////////////////////////
 
-PacketEvent::PacketEvent(uint8_t _type) : Packet(_type)
+PacketEvent::PacketEvent() : Packet(PACKET_EVENT)
 {
 	event = NULL;
 }
@@ -117,7 +117,7 @@ void PacketEvent::writeSock(int sock)
 
 /////////////////////////////////////////////// PACKET_MAP ////////////////////////////////////////////////////////////////////////////
 
-PacketMap::PacketMap(uint8_t _type) : Packet(_type)
+PacketMap::PacketMap() : Packet(PACKET_MAP)
 {
 }
 

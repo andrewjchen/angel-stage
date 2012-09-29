@@ -57,16 +57,18 @@ void InputManager::react() {
 			Event *e = new Event();
 			e->event_type = EVENT_TEST;
 			e->total_byte_count = sizeof(Event);
-			Packet * p = new PacketEvent(PACKET_EVENT);
-			((PacketEvent*)p)->setEvent(e);
+			PacketEvent p;
+			p.setEvent(e);
 			delete e;
-			_net_connecter->sendPacket(p);
+			_net_connecter->sendPacket((Packet*)&p);
 		}
+			break;
 		case (ALLEGRO_KEY_A): {
-			Packet * p = new PacketPing(PACKET_PING);
-			((PacketPing*)p)->pingstuff = 0x12345678;
-			_net_connecter->sendPacket(p);
+			PacketPing p;
+			p.pingstuff = 0x12345678;
+			_net_connecter->sendPacket((Packet*)&p);
 		}
+			break;
 		}
 	}
 }
