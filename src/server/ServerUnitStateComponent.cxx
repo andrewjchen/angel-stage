@@ -37,7 +37,7 @@ void ServerUnitStateComponent::tick(double wallTime, double deltaT){
 	//send
 	_entity->get_gamestate()->get_server()->get_clientsconnection()->sendPacket((Packet*)(&pe));
 
-
+	delete pe;
 }
 
 const Position & ServerUnitStateComponent::getPosition() {
