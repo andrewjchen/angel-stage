@@ -3,6 +3,7 @@
 #include "RenderSetup.hxx"
 #include "Debug.hxx"
 #include "ClientGlobals.hxx"
+#include "Timer.hxx"
 
 Client::Client() {
 
@@ -30,7 +31,9 @@ Client::~Client(){
 void Client::run() {
 	_running = true;
 
+	Timer timer;
 	while(_running){
+		timer.reset_delta();
 
 		//get packets from server
 		Packet* p;
@@ -54,7 +57,7 @@ void Client::run() {
 					break;
 			}
 		}
-		_input->tick();
+		_input->tick(timer.wall(), timer.delta());
 		_renderer->render();
 		//stop running if a quit is issued by keyboard
 		_running = _input->keep_running();

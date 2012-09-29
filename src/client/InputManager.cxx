@@ -22,7 +22,7 @@ InputManager::InputManager(Renderer * renderer, NetworkConnecter * net_connecter
 	_net_connecter = net_connecter;
 }
 
-void InputManager::tick() {
+void InputManager::tick(double wall, double delta) {
 	while (al_get_next_event(_event_queue, &_current_event)) {
 		react();
 	}

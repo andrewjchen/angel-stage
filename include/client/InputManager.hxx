@@ -8,7 +8,7 @@ class InputManager {
 public:
 	InputManager(Renderer * renderer, NetworkConnecter * net_connecter);
 	virtual ~InputManager() {};
-	virtual void tick();
+	virtual void tick(double wall, double delta);
 	virtual bool keep_running();
 protected:
 	virtual void react();
