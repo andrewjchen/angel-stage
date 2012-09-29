@@ -19,7 +19,7 @@ def build(bld):
     common_libpath = [in_repo_libpath]
     client_includes = common_includes + [join(bld.top_dir, 'include', 'client')]
     server_includes = common_includes + [join(bld.top_dir, 'include', 'server')]
-    common_lib = ['boost_system', 'boost_thread', 'SDL_net', 'SDL' ]
+    common_lib = ['boost_system', 'boost_thread', 'boost_chrono', 'SDL_net', 'SDL' ]
     #common_lib = ['boost_system', 'boost_thread', 'boost_timer', #'boost_chrono', 'SDL_net']
     server_lib = common_lib
     server_defines = ['SERVER_SIDE']

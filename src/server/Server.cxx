@@ -4,10 +4,8 @@
 
 #include "ServerEntity.hxx"
 #include "ServerUnitStateComponent.hxx"
-// #include <boost/chrono.hpp>
 
-#include <SDL/SDL_net.h>
-#include <SDL/SDL_timer.h>
+#include "Timer.hxx"
 #include "Debug.hxx"
 
 Server::Server() {
@@ -30,18 +28,9 @@ void Server::run() {
 
 	_conn->start();
 
-	double time0 = SDL_GetTicks();
-	double prevTime = time0;
+	Timer timer;
 	while (_running) {
-
-		double wallTime= SDL_GetTicks() - time0;
-		double deltaTime = wallTime- prevTime;
-
-		//boost::timer::cpu_timer* time = new boost::timer::cpu_timer();
-		//boost::timer::cpu_timer* wallTime = new boost::timer::cpu_timer();
-		//wallTime->start();
-		//time->stop();
-		//double deltaTime = 0.0;
+		timer.reset_delta();
 
 		_conn->nm_mutex.lock();// lock the network managers
 		std::list<PacketTransporter*>::iterator i = _conn->packetTransporters.begin();
@@ -82,16 +71,9 @@ void Server::run() {
 		}
 		_conn->nm_mutex.unlock();
 
-		//timekeeping
-		// gs->tick(time0->elapsed() * 1000.0, prevTime->elapsed() * 1000.0);
-		_gamestate->tick(wallTime, deltaTime);
-		// prevTime->restart();
+		_gamestate->tick(timer.wall(), timer.delta());
 
 		boost::this_thread::sleep(boost::posix_time::milliseconds(1));
-		//deltaTime = time->elapsed().wall / 1000.0L;
-		//time->start();
-		prevTime = wallTime;
-
 	}
 	DEBUG("Cleaning up server...");
 

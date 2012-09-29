@@ -27,12 +27,8 @@ Client::~Client(){
 	delete _gamestate;
 }
 
-void Client::run(){
+void Client::run() {
 	_running = true;
-
-
-	Map* map = NULL;
-
 
 	while(_running){
 
@@ -53,9 +49,7 @@ void Client::run(){
 					break;
 				case PACKET_MAP:
 					DEBUG("got map data!");
-					map = new Map(((PacketMap*)p)->size);
-					// render = new MapRenderer(map);
-					_renderer->addMap(map);
+					_renderer->addMap(new Map(((PacketMap*)p)->size));
 					delete p;
 					break;
 			}
