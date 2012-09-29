@@ -99,7 +99,7 @@ void PacketTransporter::processNetworkWrite()
 		{
 			Packet *pout = tx_queue.front();
 			tx_queue.pop_front();
-			std::cout << "processNetworkWrite" << pout->type << "\n";
+			// DEBUG("processNetworkWrite type = " << pout->type);
 			pout->write(sock);
 			delete pout;
 		}

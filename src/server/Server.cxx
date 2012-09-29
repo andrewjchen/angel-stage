@@ -70,8 +70,6 @@ void Server::run() {
 			i++;
 		}
 		_conn->nm_mutex.unlock();
-
-		DEBUG("wall: " << timer.wall() << " " << "delta: " << timer.delta());
 		_gamestate->tick(timer.wall(), timer.delta());
 
 		boost::this_thread::sleep(boost::posix_time::milliseconds(1));
@@ -81,6 +79,6 @@ void Server::run() {
 	_conn->stop();
 	SDLNet_Quit();
 
-	// delete ent;
+	delete ent;
 
 }

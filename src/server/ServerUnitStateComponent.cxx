@@ -15,7 +15,7 @@ ServerUnitStateComponent::ServerUnitStateComponent(ServerEntity* entity) : Serve
 }
 
 void ServerUnitStateComponent::tick(double wallTime, double deltaT){
-	DEBUG("Tick: walltime=" << wallTime << ", deltaT=" << deltaT);
+	// DEBUG("Tick: walltime=" << wallTime << ", deltaT=" << deltaT);
 	_pos.setX(10* cos(wallTime/1000.0) + 0);
 	_pos.setY(10* sin(wallTime/1000.0) + 0);
 
