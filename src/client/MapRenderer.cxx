@@ -18,19 +18,22 @@ MapRenderer::~MapRenderer()
 
 void MapRenderer::render(int xoff, int yoff)
 {
-	int xto = xoff + SCREEN_WIDTH;
-	int yto = yoff + SCREEN_HEIGHT;
-	
-	if(xto > map->width()) xto = map->width();
-	if(yto > map->height()) yto = map->height();
+	int xtilefrom = xoff / 16;
+	int ytilefrom = yoff / 16;
+	int xpartialtile = xoff % 16;
+	int ypartialtile = yoff % 16;
+	int xtileto = (xoff + SCREEN_WIDTH + 15) / 16;
+	int ytileto = (yoff + SCREEN_HEIGHT + 15) / 16;
 
-	for(int y = yoff; y < yto; y++)
+	for(int y = ytilefrom; y < ytileto; y++)
 	{
-		for(int x = xoff; x < xto; x++)
+		for(int x = xtilefrom; x < xtileto; x++)
 		{
-			ALLEGRO_BITMAP *b = tiles[(*map)[y*map->width()+x]];
+			ALLEGRO_BITMAP *b = NULL;
+			if(!(x < 0 || y < 0 || x >= map->width() || y >= map->height()))
+				b = tiles[(*map)[y*map->width()+x]];
 			if(b)
-				al_draw_bitmap(b, (x - xoff) * TILE_WIDTH, (y - yoff) * TILE_HEIGHT, 0);
+				al_draw_bitmap(b, (x - xtilefrom) * TILE_WIDTH - xpartialtile, (y - ytilefrom) * TILE_HEIGHT - ypartialtile, 0);
 		}
 	}
 }

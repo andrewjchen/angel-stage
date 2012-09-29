@@ -6,8 +6,8 @@
 
 #define TILE_WIDTH    16
 #define TILE_HEIGHT   16
-#define SCREEN_WIDTH  (800/16)
-#define SCREEN_HEIGHT (600/16)
+#define SCREEN_WIDTH  800
+#define SCREEN_HEIGHT 600
 
 class MapRenderer
 {
