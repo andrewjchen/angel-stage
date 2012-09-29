@@ -42,8 +42,8 @@ void Client::run() {
 			Packet *p = *i;
 			switch(p->type) {
 				case PACKET_PING:
-					DEBUG("got a ping reply!");
-					DEBUG(((PacketPing*)p)->pingstuff);
+					//DEBUG("got a ping reply!");
+					//DEBUG(((PacketPing*)p)->pingstuff);
 					delete p;
 					break;
 				case PACKET_EVENT:

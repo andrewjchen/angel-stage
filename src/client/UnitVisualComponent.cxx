@@ -15,6 +15,7 @@ UnitVisualComponent::UnitVisualComponent(ClientEntity * entity) : VisualComponen
 }
 
 void UnitVisualComponent::tick(double wallTime, double deltaT) {
+	
 }
 
 void UnitVisualComponent::render(const Position & viewpoint) {
@@ -30,6 +31,15 @@ void UnitVisualComponent::render(const Position & viewpoint) {
 					   x - _half_bitmap_width,
 					   y - _half_bitmap_height,
 					   0);*/
-		al_draw_tinted_scaled_rotated_bitmap(_bitmap, al_map_rgb(255,0,0), 256, 256, x - (_half_bitmap_width * 16.0 / 512.0), y - (_half_bitmap_height * 16.0 / 512.0), 16.0 / 512.0, 16.0 / 512.0, -this->_entity->get_unit_state_component()->getTheta(), 0);
+		al_draw_tinted_scaled_rotated_bitmap(
+			_bitmap, 
+			al_map_rgb(255,0,0), 
+			256, 
+			256, 
+			x - (_half_bitmap_width * 16.0 / 512.0), 
+			y - (_half_bitmap_height * 16.0 / 512.0), 
+			16.0 / 512.0, 16.0 / 512.0, 
+			-this->_entity->get_unit_state_component()->getTheta(), 
+			0);
 	}
 }

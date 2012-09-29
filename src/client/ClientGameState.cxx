@@ -44,7 +44,6 @@ void ClientGameState::react(Event * event) {
 			e->react((EntityEvent *) event);
 		}
 	} else if (is_global_event(event)) {
-		/* TODO: Do things. */
 		DEBUG("Received global event!");
 		switch (event->event_type) {
 			case EVENT_ENTITY_SPAWN: { 

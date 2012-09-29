@@ -4,6 +4,8 @@
 #include "NetworkConnecter.hxx"
 #include <allegro5/allegro.h>
 
+#include <map>
+
 class InputManager {
 public:
 	InputManager(Renderer * renderer, NetworkConnecter * net_connecter);
@@ -17,6 +19,8 @@ protected:
 	Renderer * _renderer;
 	bool _keep_running;
 	NetworkConnecter * _net_connecter;
+
+	std::map<int, bool> eventStates;
 };
 
 #endif /* INPUTMANAGER_HXX */

@@ -19,16 +19,28 @@ class ClientGameState;
 class ClientEntity: public Entity {
 protected:
 	ClientGameState* gamestate;
+
+	VisualComponent* _visual_component;
+	ClientUnitStateComponent* _unit_state_component;
+
+
 public:
 	ClientEntity(EntityID id) : Entity(id) {};
 	~ClientEntity();
 	EntityID get_id() const;
 	virtual void react(EntityEvent * event);
+
 	ClientGameState* get_gamestate() { return gamestate;};
 	void set_gamestate(ClientGameState* gs) { gamestate = gs;};
 
-	DECLARE_COMPONENT(VisualComponent, visual_component);
-	DECLARE_COMPONENT(ClientUnitStateComponent, unit_state_component);
+
+	VisualComponent* get_visual_component(){ return _visual_component; };
+	void set_visual_component(VisualComponent* comp) {_visual_component = comp; };
+
+	ClientUnitStateComponent* get_unit_state_component(){ return _unit_state_component; };
+	void set_unit_state_component(ClientUnitStateComponent* comp) { _unit_state_component = comp; };
+
+	
 };
 
 #endif /* _ENTITY_HXX_ */

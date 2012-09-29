@@ -45,7 +45,7 @@ void InputManager::tick(double wall, double delta) {
 
 void InputManager::react() {
 	Position pos = _renderer->getViewpoint();
-	if (_current_event.type == ALLEGRO_EVENT_KEY_DOWN) {
+	if (_current_event.type == 11) {
 		switch(_current_event.keyboard.keycode) {
 		case (ALLEGRO_KEY_SPACE):
 			printf("Space key pressed.\n");
