@@ -22,9 +22,11 @@ protected:
 	bool _keep_running;
 	NetworkConnecter * _net_connecter;
 
-private:
+protected:
 
 	Client* _client;
+	Position _mouse_corner_start; // Screen coordinate
+	Position _mouse_corner_end; // Screen coordinate
 };
 
 #endif /* INPUTMANAGER_HXX */

@@ -21,4 +21,11 @@ public:
 	virtual coordinate_t distance(const Position & other) const;
 };
 
+
+Position gameFromScreen(const Position & viewpoint,
+						const Position & screen_pos);
+
+Position screenFromGame(const Position & viewpoint,
+						const Position & game_pos);
+
 #endif /* _POSITION_H_ */

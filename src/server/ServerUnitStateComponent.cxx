@@ -17,9 +17,9 @@ ServerUnitStateComponent::ServerUnitStateComponent(ServerEntity* entity) : Serve
 }
 
 void ServerUnitStateComponent::tick(double wallTime, double deltaT){
-	DEBUG("Tick: walltime=" << wallTime << ", deltaT=" << deltaT);
-	_pos.setX(2 * cos(wallTime/1000.0) + _orbit_pos.getX());
-	_pos.setY(2 * sin(wallTime/1000.0) + _orbit_pos.getY());
+	// DEBUG("Tick: walltime=" << wallTime << ", deltaT=" << deltaT);
+	_pos.setX(160 * cos(wallTime/1000.0) + 300);
+	_pos.setY(160 * sin(wallTime/1000.0) + 400);
 
 	//constructing packet to send
 	UnitFeedbackEvent *ufe = new UnitFeedbackEvent();
@@ -37,7 +37,7 @@ void ServerUnitStateComponent::tick(double wallTime, double deltaT){
 	//send
 	_entity->get_gamestate()->get_server()->get_clientsconnection()->sendPacket((Packet*)(&pe));
 
-	delete pe;
+	// delete pe;
 }
 
 const Position & ServerUnitStateComponent::getPosition() {

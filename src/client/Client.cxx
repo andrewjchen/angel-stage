@@ -51,7 +51,7 @@ void Client::run() {
 					delete p;
 					break;
 				case PACKET_MAP:
-					DEBUG("got map data!");
+					// DEBUG("got map data!");
 					_renderer->addMap(new Map(((PacketMap*)p)->size));
 					delete p;
 					break;

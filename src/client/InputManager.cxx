@@ -13,12 +13,17 @@ InputManager::InputManager(Client* client, Renderer * renderer, NetworkConnecter
 	if(!al_install_keyboard()) {
 		DEBUG("!al_install_keyboard");
 	}
+	if(!al_install_mouse()) {
+		DEBUG("!al_install_mouse");
+	}
 	_event_queue = al_create_event_queue();
 	ALLEGRO_EVENT_SOURCE * keyboard_source = al_get_keyboard_event_source();
-	if (!keyboard_source || !_event_queue) {
-		DEBUG("!keyboard_source || !_event_queue");
+	ALLEGRO_EVENT_SOURCE * mouse_source = al_get_mouse_event_source();
+	if (!keyboard_source || !_event_queue || !mouse_source) {
+		DEBUG("!keyboard_source || !_event_queue || !mouse_source");
 	}
 	al_register_event_source(_event_queue, keyboard_source);
+	al_register_event_source(_event_queue, mouse_source);
 	_renderer = renderer;
 	_keep_running = true;
 	_net_connecter = net_connecter;
@@ -30,16 +35,16 @@ void InputManager::tick(double wall, double delta) {
 	al_get_keyboard_state(&keyboard);
 	Position pos = _renderer->getViewpoint();
 	if (al_key_down(&keyboard, ALLEGRO_KEY_DOWN)) {
-		_renderer->setViewpoint(pos.getX(), pos.getY() + delta / 40.0);
+		_renderer->setViewpoint(pos.getX(), pos.getY() + delta / 4.0);
 	}
 	if (al_key_down(&keyboard, ALLEGRO_KEY_UP)) {
-		_renderer->setViewpoint(pos.getX(), pos.getY() - delta / 40.0);
+		_renderer->setViewpoint(pos.getX(), pos.getY() - delta / 4.0);
 	}
 	if (al_key_down(&keyboard, ALLEGRO_KEY_LEFT)) {
-		_renderer->setViewpoint(pos.getX() - delta / 40.0, pos.getY());
+		_renderer->setViewpoint(pos.getX() - delta / 4.0, pos.getY());
 	}
 	if (al_key_down(&keyboard, ALLEGRO_KEY_RIGHT)) {
-		_renderer->setViewpoint(pos.getX() + delta / 40.0, pos.getY());
+		_renderer->setViewpoint(pos.getX() + delta / 4.0, pos.getY());
 	}
 	if (al_key_down(&keyboard, ALLEGRO_KEY_S)) {
 		DEBUG("S");
@@ -62,15 +67,18 @@ void InputManager::tick(double wall, double delta) {
 
 void InputManager::react() {
 	Position pos = _renderer->getViewpoint();
-	if (_current_event.type == ALLEGRO_KEY_DOWN) {
+	switch (_current_event.type) {
+	case ALLEGRO_EVENT_KEY_DOWN: {
 		switch(_current_event.keyboard.keycode) {
-		case (ALLEGRO_KEY_SPACE):
+		case ALLEGRO_KEY_SPACE: {
 			printf("Space key pressed.\n");
 			break;
-		case (ALLEGRO_KEY_U):
-			_keep_running = false;
-			break;
-		case (ALLEGRO_KEY_B): {
+		}
+		case ALLEGRO_KEY_U: {
+				_keep_running = false;
+				break;
+		}
+		case ALLEGRO_KEY_B: {
 			Event *e = new Event();
 			e->event_type = EVENT_TEST;
 			e->total_byte_count = sizeof(Event);
@@ -87,6 +95,34 @@ void InputManager::react() {
 		}
 			break;
 		}
+		break;
+	}
+	case ALLEGRO_EVENT_MOUSE_BUTTON_DOWN: {
+		switch (_current_event.mouse.button) {
+		case 1: {
+			DEBUG("MOUSE_BUTTON_DOWN!");
+			Position screen_pos(_current_event.mouse.x, _current_event.mouse.y);
+			_mouse_corner_start = gameFromScreen(_renderer->getViewpoint(), screen_pos);
+			break;
+		}
+		}
+		break;
+	}
+	case ALLEGRO_EVENT_MOUSE_BUTTON_UP: {
+		switch (_current_event.mouse.button) {
+		case 1: {
+			DEBUG("MOUSE_BUTTON_UP!");
+			Position screen_pos(_current_event.mouse.x, _current_event.mouse.y);
+			_mouse_corner_end = gameFromScreen(_renderer->getViewpoint(), screen_pos);
+			DEBUG("Start corner: " << _mouse_corner_start.getX() <<
+				  ", " <<_mouse_corner_start.getY());
+			DEBUG("End corner: " << _mouse_corner_end.getX() <<
+				  ", " << _mouse_corner_end.getY());
+			break;
+		}
+		}
+		break;
+	}
 	}
 }
 
