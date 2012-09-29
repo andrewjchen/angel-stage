@@ -20,7 +20,7 @@ def extract_boost():
     os.chdir(root_path)
     os.chdir('deps')
     boost_version = "1_51_0"
-    try_call(["tar", "-xvf", "boost_{0}.tar.gz".format(boost_version)])
+    try_call(["tar", "-xvf", "boost_{0}.tar.bz2".format(boost_version)])
     boost_extracted = "boost_" + boost_version
     shutil.move(boost_extracted, 'builds')
 
