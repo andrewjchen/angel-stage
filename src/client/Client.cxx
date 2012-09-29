@@ -21,6 +21,8 @@ Client::Client() {
 }
 
 Client::~Client(){
+	al_destroy_display(display);
+	delete _renderer;
 	delete _conn;
 	delete _gamestate;
 }
@@ -68,13 +70,5 @@ void Client::run(){
 	_conn->sendPacket(p);
 	DEBUG("trying to disconnect");
 	_conn->disconnect();
-
-	delete _conn;
 	SDLNet_Quit();
-	al_destroy_display(display);
-	if(map)
-		delete map;
-	delete _renderer;
-	delete _gamestate;
-
 }
