@@ -23,6 +23,21 @@ InputManager::InputManager(Renderer * renderer, NetworkConnecter * net_connecter
 }
 
 void InputManager::tick(double wall, double delta) {
+	ALLEGRO_KEYBOARD_STATE keyboard;
+	al_get_keyboard_state(&keyboard);
+	Position pos = _renderer->getViewpoint();
+	if (al_key_down(&keyboard, ALLEGRO_KEY_DOWN)) {
+		_renderer->setViewpoint(pos.getX(), pos.getY() + delta / 40.0);
+	}
+	if (al_key_down(&keyboard, ALLEGRO_KEY_UP)) {
+		_renderer->setViewpoint(pos.getX(), pos.getY() - delta / 40.0);
+	}
+	if (al_key_down(&keyboard, ALLEGRO_KEY_LEFT)) {
+		_renderer->setViewpoint(pos.getX() - delta / 40.0, pos.getY());
+	}
+	if (al_key_down(&keyboard, ALLEGRO_KEY_RIGHT)) {
+		_renderer->setViewpoint(pos.getX() + delta / 40.0, pos.getY());
+	}
 	while (al_get_next_event(_event_queue, &_current_event)) {
 		react();
 	}
@@ -34,18 +49,6 @@ void InputManager::react() {
 		switch(_current_event.keyboard.keycode) {
 		case (ALLEGRO_KEY_SPACE):
 			printf("Space key pressed.\n");
-			break;
-		case (ALLEGRO_KEY_UP):
-			_renderer->setViewpoint(pos.getX(), pos.getY() + 1);
-			break;
-		case (ALLEGRO_KEY_DOWN):
-			_renderer->setViewpoint(pos.getX(), pos.getY() - 1);
-			break;
-		case (ALLEGRO_KEY_LEFT):
-			_renderer->setViewpoint(pos.getX() - 1, pos.getY());
-			break;
-		case (ALLEGRO_KEY_RIGHT):
-			_renderer->setViewpoint(pos.getX() + 1, pos.getY());
 			break;
 		case (ALLEGRO_KEY_U):
 			_keep_running = false;
