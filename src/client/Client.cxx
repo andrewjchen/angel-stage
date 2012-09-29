@@ -13,10 +13,9 @@ Client::Client() {
 	_renderer = new Renderer();
 	_gamestate = new ClientGameState(_renderer);
 
-
 	_conn = new NetworkConnecter("127.0.0.1", 20000);
 	_conn->start();
-	_input = new InputManager(_renderer, _conn);
+	_input = new InputManager(this,_renderer, _conn);
 
 }
 

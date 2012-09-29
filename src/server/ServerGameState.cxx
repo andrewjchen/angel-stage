@@ -3,6 +3,13 @@
 #include "Event.hxx"
 #include "Debug.hxx"
 
+ServerEntity* ServerGameState::new_entity() {
+
+	EntityID last_id = _entities.rbegin()->first;
+
+	return get_entity(++last_id);
+}
+
 ServerEntity * ServerGameState::get_entity(EntityID id) {
 	if (_entities.count(id) == 0) { //entity doens't exist
 		ServerEntity* ent = new ServerEntity(id);

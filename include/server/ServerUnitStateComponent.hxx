@@ -11,9 +11,11 @@ public:
 	virtual ~ServerUnitStateComponent() {};
 	virtual void tick(double wallTime, double deltaT);
 	virtual const Position & getPosition();
+	virtual void setPosition(Position newpos);
 
 protected:
 	Position _pos;
+	Position _orbit_pos;
 	double _theta;
 };
 

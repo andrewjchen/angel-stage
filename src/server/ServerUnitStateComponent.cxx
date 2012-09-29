@@ -12,12 +12,14 @@
 ServerUnitStateComponent::ServerUnitStateComponent(ServerEntity* entity) : ServerComponent(entity) {
 	entity->get_gamestate()->addClockListener(this);
 	DEBUG("Added unit state component");
+	_orbit_pos.setX(_entity->get_id());
+	_orbit_pos.setY(_entity->get_id());
 }
 
 void ServerUnitStateComponent::tick(double wallTime, double deltaT){
-	// DEBUG("Tick: walltime=" << wallTime << ", deltaT=" << deltaT);
-	_pos.setX(10* cos(wallTime/1000.0) + 0);
-	_pos.setY(10* sin(wallTime/1000.0) + 0);
+	DEBUG("Tick: walltime=" << wallTime << ", deltaT=" << deltaT);
+	_pos.setX(2 * cos(wallTime/1000.0) + _orbit_pos.getX());
+	_pos.setY(2 * sin(wallTime/1000.0) + _orbit_pos.getY());
 
 	//constructing packet to send
 	UnitFeedbackEvent *ufe = new UnitFeedbackEvent();
@@ -40,4 +42,10 @@ void ServerUnitStateComponent::tick(double wallTime, double deltaT){
 
 const Position & ServerUnitStateComponent::getPosition() {
 	return _pos;
+}
+
+void ServerUnitStateComponent::setPosition(Position newpos) {
+	_pos = newpos;
+	_orbit_pos = newpos;//using orbitpos just to add weird motion
+
 }

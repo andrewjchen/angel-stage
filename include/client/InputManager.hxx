@@ -6,9 +6,11 @@
 
 #include <map>
 
+class Client;
+
 class InputManager {
 public:
-	InputManager(Renderer * renderer, NetworkConnecter * net_connecter);
+	InputManager(Client* client, Renderer * renderer, NetworkConnecter * net_connecter);
 	virtual ~InputManager() {};
 	virtual void tick(double wall, double delta);
 	virtual bool keep_running();
@@ -20,7 +22,9 @@ protected:
 	bool _keep_running;
 	NetworkConnecter * _net_connecter;
 
-	std::map<int, bool> eventStates;
+private:
+
+	Client* _client;
 };
 
 #endif /* INPUTMANAGER_HXX */

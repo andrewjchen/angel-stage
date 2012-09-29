@@ -30,4 +30,11 @@ struct UnitFeedbackEvent {
 	double theta;
 };
 
+struct UnitSplitEvent {
+	EntityEvent header;
+	
+	//attributes to split, how much to split	
+
+};
+
 #endif /* _EVENT_TYPES_HXX_ */

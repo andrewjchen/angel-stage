@@ -7,7 +7,9 @@
 #include "Packet.hxx"
 #include <stdio.h>
 
-InputManager::InputManager(Renderer * renderer, NetworkConnecter * net_connecter) {
+#include "Client.hxx"
+
+InputManager::InputManager(Client* client, Renderer * renderer, NetworkConnecter * net_connecter) {
 	if(!al_install_keyboard()) {
 		DEBUG("!al_install_keyboard");
 	}
@@ -20,6 +22,7 @@ InputManager::InputManager(Renderer * renderer, NetworkConnecter * net_connecter
 	_renderer = renderer;
 	_keep_running = true;
 	_net_connecter = net_connecter;
+	_client = client;
 }
 
 void InputManager::tick(double wall, double delta) {
@@ -38,6 +41,20 @@ void InputManager::tick(double wall, double delta) {
 	if (al_key_down(&keyboard, ALLEGRO_KEY_RIGHT)) {
 		_renderer->setViewpoint(pos.getX() + delta / 40.0, pos.getY());
 	}
+	if (al_key_down(&keyboard, ALLEGRO_KEY_S)) {
+		DEBUG("S");
+
+		UnitSplitEvent* ev = new UnitSplitEvent();
+		ev->header.header.event_type = EVENT_UNIT_SPLIT;
+		ev->header.header.total_byte_count = sizeof(UnitSplitEvent);
+		ev->header.entity_id = 4;
+
+		PacketEvent *pe = new PacketEvent();
+		pe->setEvent((Event*)ev);
+
+		_client->get_networkconnecter()->sendPacket(pe);
+
+	}
 	while (al_get_next_event(_event_queue, &_current_event)) {
 		react();
 	}
@@ -45,7 +62,7 @@ void InputManager::tick(double wall, double delta) {
 
 void InputManager::react() {
 	Position pos = _renderer->getViewpoint();
-	if (_current_event.type == 11) {
+	if (_current_event.type == ALLEGRO_KEY_DOWN) {
 		switch(_current_event.keyboard.keycode) {
 		case (ALLEGRO_KEY_SPACE):
 			printf("Space key pressed.\n");

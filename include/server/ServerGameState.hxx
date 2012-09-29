@@ -15,10 +15,12 @@ public:
 	ServerGameState(Server* server) { _server = server; };
 	virtual ~ServerGameState(void) {};
 	virtual ServerEntity * get_entity(EntityID id);
+	virtual ServerEntity* new_entity();
 	virtual void set_entity(EntityID id, ServerEntity * entity);
 	virtual void react(Event * event);
 	virtual void tick(double time, double deltaTime);
 	virtual Server* get_server() { return _server; };
+
 
 	virtual void addClockListener(ServerComponent* toListen);
 	virtual void removeClockListener(ServerComponent* toListen);
