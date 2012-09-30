@@ -28,7 +28,6 @@ const EventTypeID EVENT_ENTITY_MAXIMUM    = 0x81020000;
 struct UnitDieEvent {
 	Event header;
 	EntityID entity_id;
-
 };
 
 struct UnitFeedbackEvent {
@@ -42,8 +41,7 @@ struct UnitFeedbackEvent {
 
 struct UnitSplitEvent {
 	EntityEvent header;
-	
-	//attributes to split, how much to split	
+	//attributes to split, how much to split
 
 };
 
@@ -57,10 +55,9 @@ struct UnitMoveEvent {
 
 struct UnitChaseEvent {
 	EntityEvent header;
-	
 	EntityID target;
 };
-	
+
 struct UnitMergeEvent{
 	EntityEvent header;
 	EntityID partner;

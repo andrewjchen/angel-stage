@@ -16,7 +16,7 @@ Client::Client() {
 	//_conn = new NetworkConnecter("172.16.0.111", 20000);
 	_conn = new NetworkConnecter("127.0.0.1", 20000);
 	_conn->start();
-	_input = new InputManager(this, _renderer, _conn);
+	_input = new InputManager(this, _renderer, _conn, _gamestate);
 
 }
 

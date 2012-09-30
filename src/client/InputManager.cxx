@@ -1,6 +1,7 @@
 #include "InputManager.hxx"
 #include "Debug.hxx"
 #include "ClientGlobals.hxx"
+#include "ClientGameState.hxx"
 #include "Event.hxx"
 #include "EventTypes.hxx"
 #include "NetworkConnecter.hxx"
@@ -9,11 +10,7 @@
 
 #include "Client.hxx"
 
-int a = 0;
-EntityID yourmom1;
-EntityID yourmom2;
-
-InputManager::InputManager(Client* client, Renderer * renderer, NetworkConnecter * net_connecter) {
+InputManager::InputManager(Client* client, Renderer * renderer, NetworkConnecter * net_connecter, ClientGameState * gamestate) {
 	if(!al_install_keyboard()) {
 		DEBUG("!al_install_keyboard");
 	}
@@ -33,6 +30,7 @@ InputManager::InputManager(Client* client, Renderer * renderer, NetworkConnecter
 	_net_connecter = net_connecter;
 	_client = client;
 	_selected_units = NULL;
+	_gamestate = gamestate;
 }
 
 void InputManager::tick(double wall, double delta) {
@@ -86,7 +84,13 @@ void InputManager::react() {
 		case ALLEGRO_EVENT_KEY_DOWN: {
 			switch(_current_event.keyboard.keycode) {
 				case ALLEGRO_KEY_SPACE: {
-					printf("Space key pressed.\n");
+					DEBUG("Space key pressed.\n");
+					Event e;
+					e.event_type = EVENT_ENTITY_SPAWN;
+					e.total_byte_count = sizeof(Event);
+					PacketEvent p;
+					p.setEvent(&e);
+					_net_connecter->sendPacket((Packet*)&p);
 					break;
 				}
 				case ALLEGRO_KEY_U: {
@@ -174,15 +178,23 @@ void InputManager::react() {
 					}
 				case ALLEGRO_KEY_H:
 					{
-						UnitChaseEvent *e = new UnitChaseEvent();
-						e->header.header.event_type = EVENT_UNIT_CHASE;
-						e->header.header.total_byte_count = sizeof(UnitChaseEvent);
-						e->header.entity_id = yourmom1;
-						e->target = yourmom2;
-						PacketEvent p;
-						p.setEvent((Event*)e);
-						delete e;
-						_net_connecter->sendPacket((Packet*)&p);
+						if(_selected_units && _selected_units->size() > 1){
+							//merge unit 0 to unit 1
+							std::vector<ClientEntity *>::iterator iter = _selected_units->begin();
+							EntityID to_chase = (*iter)->get_id();
+							while (iter != _selected_units->end()) {
+								UnitChaseEvent *e = new UnitChaseEvent();
+								e->header.header.event_type = EVENT_UNIT_CHASE;
+								e->header.header.total_byte_count = sizeof(UnitChaseEvent);
+								e->header.entity_id = (*iter)->get_id();
+								e->target = to_chase;
+								PacketEvent p;
+								p.setEvent((Event*)e);
+								delete e;
+								_net_connecter->sendPacket((Packet*)&p);
+								++iter;
+							}
+						}
 					}
 				break;
 			}
@@ -254,19 +266,4 @@ void InputManager::select_from_rect() {
 	}
 	_selected_units = _client->get_clientgamestate()->get_entities_in_rect(_mouse_corner_start, _mouse_corner_end);
 	DEBUG(_selected_units->size() << " units selected.");
-	if(_selected_units->size() == 1)
-	{
-		if(a == 0)
-		{
-			yourmom1 = (*_selected_units)[0]->get_id();
-			DEBUG("A has been set");
-			a = 1;
-		}
-		else if(a == 1)
-		{
-			yourmom2 = (*_selected_units)[0]->get_id();
-			DEBUG("B has been set");
-			a = 0;
-		}
-	}
 }

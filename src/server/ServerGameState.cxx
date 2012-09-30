@@ -60,7 +60,8 @@ void ServerGameState::react(Event * event) {
 	} else if (is_global_event(event)) {
 		/* TODO: Do things. */
 		if (event->event_type == EVENT_ENTITY_SPAWN) {
-			DEBUG("ERROR INCORRECT USE OF EVENT_ENTITY_SPAWN ON SERVER!");
+			get_entity(spawn_entity())->get_unit_state_component()->setPosition(Position(400, 300));
+			// DEBUG("ERROR INCORRECT USE OF EVENT_ENTITY_SPAWN ON SERVER!");
 		}
 		printf("Received global event!\n");
 		switch (event->event_type) {

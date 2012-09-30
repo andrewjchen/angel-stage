@@ -2,6 +2,7 @@
 #define INPUTMANAGER_HXX
 #include "Renderer.hxx"
 #include "NetworkConnecter.hxx"
+#include "ClientGameState.hxx"
 #include <allegro5/allegro.h>
 #include "Entity.hxx"
 
@@ -13,7 +14,7 @@ class ClientEntity;
 
 class InputManager {
 public:
-	InputManager(Client* client, Renderer * renderer, NetworkConnecter * net_connecter);
+	InputManager(Client* client, Renderer * renderer, NetworkConnecter * net_connecter, ClientGameState * gamestate);
 	virtual ~InputManager() {};
 	virtual void tick(double wall, double delta);
 	virtual bool keep_running();
@@ -28,6 +29,7 @@ protected:
 	NetworkConnecter * _net_connecter;
 
 	Client* _client;
+	ClientGameState* _gamestate;
 	Position _mouse_corner_start; // Screen coordinate
 	Position _mouse_corner_end; // Screen coordinate
 	ALLEGRO_KEYBOARD_STATE _keyboard;
