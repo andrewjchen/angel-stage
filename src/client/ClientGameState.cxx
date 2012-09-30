@@ -74,7 +74,7 @@ void ClientGameState::react(Event * event) {
 		DEBUG("Received global event!");
 		switch (event->event_type) {
 			case EVENT_ENTITY_SPAWN: { 
-			 	UnitFeedbackEvent *ufe = (UnitFeedbackEvent*)(event);
+				UnitFeedbackEvent *ufe = (UnitFeedbackEvent*)(event);
 				// std::cout << "Spawn an entity with id " << ufe->header.entity_id << "\n";
 				// ClientEntity *ce = new ClientEntity(ufe->header.entity_id);
 				// ce->set_gamestate(this);

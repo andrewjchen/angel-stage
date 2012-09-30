@@ -19,22 +19,30 @@ ServerUnitStateComponent::ServerUnitStateComponent(ServerEntity* entity) : Serve
 	_target = 0xFFFFFFFF;
 }
 
-void ServerUnitStateComponent::tick(double wallTime, double deltaT) {
+void ServerUnitStateComponent::sync() {
+	UnitFeedbackEvent *ufe = new UnitFeedbackEvent();
+	memset(ufe,  0, sizeof(UnitFeedbackEvent));
+	ufe->header.header.event_type = EVENT_UNIT_MOVE;
+	ufe->header.header.total_byte_count = sizeof(UnitFeedbackEvent);
+	ufe->header.entity_id = _entity->get_id();
+	ufe->x = _pos.getX();
+	ufe->y = _pos.getY();
+	ufe->theta = _theta;
+	ufe->size = _size;
+	PacketEvent pe;
+	pe.setEvent((Event*)ufe);//does a memcopy
+	delete ufe;
+	_entity->get_gamestate()->get_server()->get_clientsconnection()->sendPacket((Packet*)(&pe));
+};
 
-	/*
-	// DEBUG("Tick: walltime=" << wallTime << ", deltaT=" << deltaT);
-	_pos.setX(160 * cos(wallTime/1000.0) + 300);
-	_pos.setY(160 * sin(wallTime/1000.0) + 400);
-	_theta = -wallTime / 1000.0 -  3.14159265358979323846;
-	*/
+void ServerUnitStateComponent::tick(double wallTime, double deltaT) {
 	switch(_state)
 	{
 	case STATE_NOT_MOVING:
 		break;
-	
 	case STATE_CHASING_UNIT:
 		{
-			ServerEntity *target = _entity->get_gamestate()->get_entity(_target, false);
+			ServerEntity *target = _entity->get_gamestate()->get_entity(_target);
 			if(!target)
 			{
 				_target = 0xFFFFFFFF;
@@ -93,37 +101,16 @@ void ServerUnitStateComponent::tick(double wallTime, double deltaT) {
 				
 			}
 		}
-
-		//TODO this is just a stupid size changing thing
-		//_size = 10.0 * sin(wallTime / 1000.0) + 10.0;
-		_size = 1;
-
-		//constructing packet to send
-		UnitFeedbackEvent *ufe = new UnitFeedbackEvent();
-		memset(ufe,  0, sizeof(UnitFeedbackEvent));
-		ufe->header.header.event_type = EVENT_UNIT_MOVE;
-		ufe->header.header.total_byte_count = sizeof(UnitFeedbackEvent);
-		ufe->header.entity_id = _entity->get_id();
-		ufe->x = _pos.getX();
-		ufe->y = _pos.getY();
-		ufe->theta = _theta;
-		ufe->size = _size;
-		PacketEvent pe;
-		pe.setEvent((Event*)ufe);//does a memcopy
-		delete ufe;
-
-		//send
-		_entity->get_gamestate()->get_server()->get_clientsconnection()->sendPacket((Packet*)(&pe));
 		break;
 	}
-
+	sync();
 }
 
 const Position & ServerUnitStateComponent::getPosition() {
 	return _pos;
 }
 
-const double ServerUnitStateComponent::getSize(){
+const double ServerUnitStateComponent::getSize() {
 	return _size;
 }
 
@@ -135,8 +122,7 @@ void ServerUnitStateComponent::setPosition(Position newpos) {
 
 }
 
-void ServerUnitStateComponent::setGoalEntity(EntityID target)
-{
+void ServerUnitStateComponent::setGoalEntity(EntityID target) {
 	_state = STATE_CHASING_UNIT;
 	_target = target;
 }
@@ -153,8 +139,6 @@ void ServerUnitStateComponent::setGoal(Position goal) {
 	_yVel = ydir * UNIT_VELOCITY / 1000.0;
 
 	_theta = atan2(_xVel, _yVel) + 3.14159265358979323846;
-
-
 }
 
 void ServerUnitStateComponent::setGoalPoint(Position goal) {
@@ -163,7 +147,6 @@ void ServerUnitStateComponent::setGoalPoint(Position goal) {
 }
 
 void ServerUnitStateComponent::mergeWith(EntityID partner){
-
 	_size += 
 		_entity
 		->get_gamestate()
@@ -171,10 +154,7 @@ void ServerUnitStateComponent::mergeWith(EntityID partner){
 		->get_unit_state_component()
 		->getSize();
 
-	//delete partner
 	_entity
 		->get_gamestate()
 		->delete_entity(partner);
-
-
 }

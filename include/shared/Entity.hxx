@@ -5,15 +5,6 @@
 #include <map>
 #include "Ids.hxx"
 
-#define DECLARE_COMPONENT(_comp_type_, _comp_name_)					\
-	private: _comp_type_ * _##_comp_name_;								\
-	public: virtual _comp_type_ * get_##_comp_name_() {				\
-		return _##_comp_name_;											\
-	};																	\
-	public: virtual void set_##_comp_name_(_comp_type_ * _comp_name_) { \
-		_##_comp_name_ = _comp_name_;									\
-	};
-
 #include "Event.hxx"
 #include "EventTypes.hxx"
 

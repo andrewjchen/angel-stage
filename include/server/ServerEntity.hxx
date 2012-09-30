@@ -17,19 +17,18 @@ class ServerGameState;
 
 class ServerEntity : public Entity {
 protected:
-	ServerGameState* gamestate;
-
+	EntityID _id;
+	ServerGameState* _gamestate;
 	ServerUnitStateComponent* _unit_state_component;
 
 public:
-	ServerEntity(EntityID id) : Entity(id) {};
+	ServerEntity(EntityID id, ServerGameState * gamestate) : Entity(id),
+															 _gamestate(gamestate) {};
 	virtual ~ServerEntity() {};
 	virtual void react(EntityEvent * event);
 
-	ServerGameState* get_gamestate() { return gamestate; };
-	void set_gamestate(ServerGameState* state) { gamestate = state; };
-
-	//DECLARE_COMPONENT(ServerUnitStateComponent, unit_state_component);
+	ServerGameState* get_gamestate() { return _gamestate; };
+	void set_gamestate(ServerGameState* state) { _gamestate = state; };
 
 	ServerUnitStateComponent* get_unit_state_component(){ return _unit_state_component; };
 	void set_unit_state_component(ServerUnitStateComponent* comp) {_unit_state_component = comp; };

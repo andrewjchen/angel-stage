@@ -10,7 +10,7 @@ void ServerEntity::react(EntityEvent * event) {
 	switch (event->header.event_type) {
 		case EVENT_UNIT_SPLIT: {
 			DEBUG("unit split event received");
-			ServerEntity* ent = gamestate->new_entity();
+			ServerEntity* ent = _gamestate->get_entity(_gamestate->spawn_entity());
 			Position my_pos = _unit_state_component->getPosition();
 
 			//TODO smarter split
@@ -34,10 +34,6 @@ void ServerEntity::react(EntityEvent * event) {
 		case EVENT_UNIT_MERGE :{
 			UnitMergeEvent *ume = (UnitMergeEvent*) (event);
 			_unit_state_component->mergeWith(ume->partner);
-
-
 		}
-
-
 	}
 }

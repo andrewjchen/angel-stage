@@ -5,25 +5,26 @@
 #include "Packet.hxx"
 #include "Server.hxx"
 
-ServerEntity* ServerGameState::new_entity() {
-
-	EntityID last_id = _entities.rbegin()->first;
-
-	return get_entity(++last_id);
+ServerGameState::ServerGameState(Server * server) {
+	_server = server;
+	_next_id = 0;
 }
 
-ServerEntity * ServerGameState::get_entity(EntityID id, bool create) {
-	if (_entities.count(id) == 0) { //entity doens't exist
-		if(!create) return NULL;
-		ServerEntity* ent = new ServerEntity(id);
-		ent->set_gamestate(this);
-		ent->set_unit_state_component(new ServerUnitStateComponent(ent));
+EntityID ServerGameState::spawn_entity() {
+	EntityID id = _next_id;
+	++_next_id;
+	ServerEntity* ent = new ServerEntity(id, this);
+	_entities[id] = ent;
+	ent->set_unit_state_component(new ServerUnitStateComponent(ent));
+	return id;
+}
 
-		_entities[id] = ent;
-
-	} 
-		 
-	return _entities[id];
+ServerEntity * ServerGameState::get_entity(EntityID id) {
+	if (_entities.count(id)) {
+		return _entities[id];
+	} else {
+		return NULL;
+	}
 }
 
 void ServerGameState::set_entity(EntityID id, ServerEntity * entity) {
@@ -31,17 +32,6 @@ void ServerGameState::set_entity(EntityID id, ServerEntity * entity) {
 }
 
 void ServerGameState::delete_entity(EntityID id) {
-
-	//TODO make this better
-
-	// std::map<EntityID, ServerEntity*>::iterator it;
-	// for(it = _entities.begin(); it != _entities.end(); it++) {
-	// 	if (it->first == id){
-	// 		_entities.
-
-	// 	}
-
-	// }
 
 	DEBUG("NUM ENTITIES=" << _entities.size());
 	_entities.erase(id);
@@ -69,6 +59,9 @@ void ServerGameState::react(Event * event) {
 		}
 	} else if (is_global_event(event)) {
 		/* TODO: Do things. */
+		if (event->event_type == EVENT_ENTITY_SPAWN) {
+			DEBUG("ERROR INCORRECT USE OF EVENT_ENTITY_SPAWN ON SERVER!");
+		}
 		printf("Received global event!\n");
 		switch (event->event_type) {
 		case EVENT_TEST:
@@ -101,6 +94,4 @@ void ServerGameState::removeClockListener(ServerComponent* toListen){
 			clockReceivers.erase(it);
 		}
 	}
-
-
-}	
+}

@@ -27,12 +27,13 @@ public:
 	virtual void setPosition(Position newpos);
 	virtual void setGoal(Position goal);
 	virtual void mergeWith(EntityID partner);
+	virtual void sync();
 
 protected:
 	// MOTION AND POSITION
 	Position _pos;
 	Position _orbit_pos;
-	
+
 	EntityID _target;
 
 	double _xVel;
@@ -41,8 +42,6 @@ protected:
 	Position _goal;
 	double _theta;
 	double _size;
-	
-	
 	int _state;
 };
 

@@ -6,7 +6,7 @@
 void ClientEntity::react(EntityEvent * event) {
 	//printf("Entity at %p received event!\n", this);
 	switch (event->header.event_type) {
-		case (EVENT_UNIT_FEEDBACK):
+		case EVENT_UNIT_FEEDBACK:
 		case (EVENT_UNIT_MOVE):
 			if (_unit_state_component) {
 				UnitFeedbackEvent *ufe = (UnitFeedbackEvent*)(event);

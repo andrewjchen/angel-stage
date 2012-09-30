@@ -123,7 +123,6 @@ void InputManager::react() {
 						_client->get_networkconnecter()->sendPacket(pe);
 						delete pe;
 						delete ume;
-
 					}
 					break;
 				}
@@ -185,7 +184,6 @@ void InputManager::react() {
 						delete e;
 						_net_connecter->sendPacket((Packet*)&p);
 					}
-				
 				break;
 			}
 			break;
@@ -256,7 +254,6 @@ void InputManager::select_from_rect() {
 	}
 	_selected_units = _client->get_clientgamestate()->get_entities_in_rect(_mouse_corner_start, _mouse_corner_end);
 	DEBUG(_selected_units->size() << " units selected.");
-	
 	if(_selected_units->size() == 1)
 	{
 		if(a == 0)

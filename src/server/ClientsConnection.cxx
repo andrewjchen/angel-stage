@@ -18,16 +18,14 @@ ClientsConnection::ClientsConnection(uint16_t port, boost::function<void (uint64
 	sa.sin_family = AF_INET;
 	sa.sin_port = htons(port);
 	sa.sin_addr.s_addr = htonl(INADDR_ANY);
-	
 	listenfd = socket(AF_INET, SOCK_STREAM, 0);
 	if(listenfd == -1)
 		throw "socket error";
-	
 	if(bind(listenfd, (struct sockaddr *)&sa, sizeof(sa)) == -1)
 		throw "bind error";
-	
+
 	onLoginCallback = _onLoginCallback;
-	
+
 	valid = true;
 	running = false;
 }
@@ -42,7 +40,6 @@ void ClientsConnection::start() {
 		throw "Already running!";
 	if(!valid)
 		throw "Stopped! (and therefore invalid)";
-	
 	if(listen(listenfd, 2) == -1)
 		throw "listen error";
 
@@ -54,15 +51,12 @@ void ClientsConnection::start() {
 void ClientsConnection::stop() {
 	valid = false;
 	running = false;
-	
 	readThread->join();
 	delete readThread;
 	readThread = NULL;
-	
 	listenThread->join();
 	delete listenThread;
 	listenThread = NULL;
-	
 	if(listenfd > 0) {
 		close(listenfd);
 		listenfd = -1;
@@ -76,33 +70,30 @@ void ClientsConnection::listenthread() {
 			pfd[0].fd = listenfd;
 			pfd[0].events = POLLIN;
 			pfd[0].revents = 0;
-			
 			int pollres = poll(pfd, 1, 5000);
-			
 			if(pollres == -1)
 			{
 				valid = false;
 				throw "poll error";
 			}
-			
 			if(pollres == 1 && (pfd[0].revents & POLLIN))
 			{
 				//there are clients waiting
 				struct sockaddr_in sa;
 				socklen_t slen = sizeof(sa);
 				int clientfd = accept(listenfd, (struct sockaddr *)&sa, &slen);
-				
 				if(clientfd == -1)
 						throw "accept error";
-				
 				uint64_t peer_ip = ((uint64_t)(sa.sin_addr.s_addr) << 16) | (sa.sin_port);
-				
+
 				onLoginCallback(peer_ip, clientfd);
-				
+
 				clientfd_mutex.lock();
 					clientfds[peer_ip] = clientfd;
 					fd_to_client[clientfd] = peer_ip;
-				clientfd_mutex.unlock();
+
+
+					clientfd_mutex.unlock();
 			}
 		}
 	} catch (const char *e){
@@ -167,7 +158,6 @@ void ClientsConnection::readthread() {
 						clientfd_mutex.unlock();
 						close(pfd[i].fd);
 					}
-					
 					if(pfd[i].revents & POLLIN)
 					{
 						Packet *p = Packet::readByType(pfd[i].fd);
@@ -181,7 +171,6 @@ void ClientsConnection::readthread() {
 					}
 				}
 		}
-		
 		delete[] pfd;
 	}
 }
@@ -201,7 +190,6 @@ void ClientsConnection::sendPacket(std::list<Packet *> ps, uint64_t client) {
 	clientfd_mutex.lock();
 		int fd = clientfds[client];
 	clientfd_mutex.unlock();
-	
 	int size;
 	uint8_t *b = crunchIntoBuffer(ps, &size);
 	write(fd, b, size);
@@ -223,7 +211,6 @@ void ClientsConnection::sendPacket(std::list<Packet *> ps) {
 			fds[i] = (*it).second;
 		}
 	clientfd_mutex.unlock();
-	
 	int bufsize;
 	uint8_t *b = crunchIntoBuffer(ps, &bufsize);
 	for(i = 0; i < size; i++)
@@ -239,7 +226,6 @@ void ClientsConnection::sendPacket(Packet *p) {
 
 std::list<Packet*> ClientsConnection::getPackets(int n) {
 	std::list<Packet*> retu;
-
 	queue_mutex.lock();
 		for(int i = 0; i < n; i++)
 		{
@@ -248,6 +234,5 @@ std::list<Packet*> ClientsConnection::getPackets(int n) {
 			rx_queue.pop_front();
 		}
 	queue_mutex.unlock();
-
 	return retu;
 }

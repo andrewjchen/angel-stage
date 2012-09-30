@@ -36,11 +36,8 @@ void Server::sendOnLoginData(uint64_t client, int fd)
 
 void Server::run() {
 	_running = true;
-	
-	_gamestate->get_entity(1);
-	_gamestate->get_entity(2);
-	_gamestate->get_entity(0)->get_unit_state_component()->setPosition(Position(50, 50));
-
+	_gamestate->get_entity(_gamestate->spawn_entity())
+		->get_unit_state_component()->setPosition(Position(400, 300));
 	_conn->start();
 
 	Timer timer;
@@ -51,7 +48,6 @@ void Server::run() {
 		std::list<Packet*>::iterator i = packets.begin();
 		while(i != packets.end()) {
 
-			//process packets
 			Packet *p = *i;
 
 			switch(p->type) {
@@ -79,8 +75,6 @@ void Server::run() {
 		boost::this_thread::sleep(boost::posix_time::milliseconds(1));
 	}
 	DEBUG("Cleaning up server...");
-
 	_conn->stop();
 	SDLNet_Quit();
-
 }
