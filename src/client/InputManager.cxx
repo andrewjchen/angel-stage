@@ -271,4 +271,7 @@ void InputManager::select_from_rect() {
 	}
 	_selected_units = _client->get_clientgamestate()->get_entities_in_rect(_mouse_corner_start, _mouse_corner_end);
 	DEBUG(_selected_units->size() << " units selected.");
+	for(unsigned int i = 0; i < _selected_units->size(); i++){
+		DEBUG("_selected unit: id="<< _selected_units->at(i)->get_id());
+	}
 }

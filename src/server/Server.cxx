@@ -38,6 +38,8 @@ void Server::run() {
 	_running = true;
 	_gamestate->get_entity(_gamestate->spawn_entity())
 		->get_unit_state_component()->setPosition(Position(400, 300));
+	_gamestate->get_entity(_gamestate->spawn_entity())
+		->get_unit_state_component()->setPosition(Position(200, 200));
 	_conn->start();
 
 	Timer timer;

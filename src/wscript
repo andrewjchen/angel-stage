@@ -47,6 +47,16 @@ def build(bld):
         use = ['angel-stage-shared-client-lib', 'angel-stage-client-lib'],
         linkflags='-Wl,-R ' + in_repo_libpath,
         )
+    bld.program(
+        source = 'client_test.cxx',
+        target = 'client_test',
+        includes = client_includes,
+        defines = client_defines,
+        libpath = common_libpath,
+        lib = common_lib + allegro_libs,
+        use = ['angel-stage-shared-client-lib', 'angel-stage-client-lib'],
+        linkflags='-Wl,-R ' + in_repo_libpath,
+        )
     bld.stlib(
         source = bld.path.ant_glob('shared/*.cxx'),
         includes = server_includes,
