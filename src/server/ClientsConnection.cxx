@@ -114,6 +114,7 @@ void ClientsConnection::sendOnLoginData(uint64_t client, int fd)
 
 	PacketMap pm;
 	pm.size = 48;
+	pm.seed = 123;
 	//pm.writeSock(fd);
 	ps.push_back((Packet*)(&pm));
 	

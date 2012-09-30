@@ -83,6 +83,7 @@ public:
 	int writeToBuf(uint8_t *buf);
 
 	int size;
+	int seed;
 
 protected:
 	void readSock(int sock);

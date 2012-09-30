@@ -43,4 +43,5 @@ void MapRenderer::load_tiles()
 	tiles[TILE_TYPE_NOTHING] = 0;
 	tiles[TILE_TYPE_GRASS] = al_load_bitmap("res/tiles/grass.png");
 	tiles[TILE_TYPE_WALL] = al_load_bitmap("res/tiles/wall.png");
+	tiles[TILE_TYPE_MITHRIL] = al_load_bitmap("res/tiles/mithril.png");
 }
