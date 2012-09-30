@@ -10,7 +10,7 @@ def configure(conf):
 from os.path import join
 def build(bld):
     sdl_libs = ['SDL', 'SDL_image']
-    allegro_libs = ['allegro', 'allegro_image']
+    allegro_libs = ['allegro', 'allegro_image', 'allegro_primitives']
     common_includes = ['.',
                        join(bld.top_dir, 'deps', 'usr', 'local', 'include'),
                        join(bld.top_dir, 'include'),

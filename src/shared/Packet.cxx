@@ -9,9 +9,9 @@ Packet::Packet(uint8_t _type)
 	type = _type;
 }
 
-void Packet::writeHeader(int sock)
+void Packet::writeHeader(uint8_t *buf)
 {
-	write(sock, &type, 1);
+	buf[0] = type;
 }
 
 Packet *Packet::readByType(int _sock)
@@ -50,10 +50,17 @@ void PacketPing::readSock(int sock)
 	read(sock, &pingstuff, 4);
 }
 
-void PacketPing::writeSock(int sock)
+int PacketPing::estimateSize()
 {
-	writeHeader(sock);
-	write(sock, &pingstuff, 4);
+	return headerSize + 4;
+}
+
+int PacketPing::writeToBuf(uint8_t *buf)
+{
+	writeHeader(buf);
+	memcpy(buf + headerSize, &pingstuff, 4);
+	
+	return headerSize + 4;
 }
 
 /////////////////////////////////////////////// PACKET_DISCONNECT ////////////////////////////////////////////////////////////////////////////
@@ -67,9 +74,16 @@ void PacketDisconnect::readSock(int sock)
 	//no extra bytes
 }
 
-void PacketDisconnect::writeSock(int sock)
+int PacketDisconnect::estimateSize()
 {
-	writeHeader(sock);
+	return headerSize;
+}
+
+int PacketDisconnect::writeToBuf(uint8_t *buf)
+{
+	writeHeader(buf);
+	
+	return headerSize;
 }
 
 /////////////////////////////////////////////// PACKET_EVENT ////////////////////////////////////////////////////////////////////////////
@@ -108,11 +122,19 @@ Event* PacketEvent::getEvent(void)
 	return (Event*)event;
 }
 
-void PacketEvent::writeSock(int sock)
+int PacketEvent::estimateSize()
 {
-	if(!event) return;
-	writeHeader(sock);
-	write(sock, event, ((Event*)event)->total_byte_count);
+	if(!event) return 0;
+	return headerSize + ((Event*)event)->total_byte_count;
+}
+
+int PacketEvent::writeToBuf(uint8_t *buf)
+{
+	if(!event) return 0;
+	writeHeader(buf);
+	memcpy(buf + headerSize, event, ((Event*)event)->total_byte_count);
+	
+	return headerSize + ((Event*)event)->total_byte_count;
 }
 
 /////////////////////////////////////////////// PACKET_MAP ////////////////////////////////////////////////////////////////////////////
@@ -126,8 +148,15 @@ void PacketMap::readSock(int sock)
 	read(sock, &size, 4);
 }
 
-void PacketMap::writeSock(int sock)
+int PacketMap::estimateSize()
 {
-	writeHeader(sock);
-	write(sock, &size, 4);
+	return headerSize + 4;
+}
+
+int PacketMap::writeToBuf(uint8_t *buf)
+{
+	writeHeader(buf);
+	memcpy(buf + headerSize, &size, 4);
+	
+	return headerSize + 4;
 }

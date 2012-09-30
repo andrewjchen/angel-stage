@@ -110,9 +110,12 @@ void ClientsConnection::listenthread() {
 
 void ClientsConnection::sendOnLoginData(uint64_t client, int fd)
 {
+	std::list<Packet *> ps;
+
 	PacketMap pm;
 	pm.size = 48;
-	pm.writeSock(fd);
+	//pm.writeSock(fd);
+	ps.push_back((Packet*)(&pm));
 	
 	UnitFeedbackEvent *ufe = new UnitFeedbackEvent();
 	memset(ufe,  0, sizeof(UnitFeedbackEvent));
@@ -126,23 +129,50 @@ void ClientsConnection::sendOnLoginData(uint64_t client, int fd)
 	PacketEvent pe;
 	pe.setEvent((Event*)ufe);
 	delete ufe;
-	pe.writeSock(fd);
+	//pe.writeSock(fd);
+	ps.push_back((Packet*)(&pe));
+	
+	int size;
+	uint8_t *b = crunchIntoBuffer(ps, &size);
+	write(fd, b, size);
+	delete[] b;
+}
+
+uint8_t *ClientsConnection::crunchIntoBuffer(std::list<Packet *> ps, int *outsize)
+{
+	int size = 0;
+	for(std::list<Packet *> ::iterator it = ps.begin(); it != ps.end(); it++)
+		size += (*it)->estimateSize();
+	
+	uint8_t *buf = new uint8_t[size];
+	int i = 0;
+	for(std::list<Packet *> ::iterator it = ps.begin(); it != ps.end(); it++)
+		i += (*it)->writeToBuf(buf + i);
+	
+	*outsize = i;
+	return buf;
 }
 
 void ClientsConnection::readthread() {
 	while(running)
 	{
+		std::map<uint64_t,int> clientfds_cache;
+		std::map<int,uint64_t> fd_to_client_cache;
+	
 		clientfd_mutex.lock();
-			int size = clientfds.size();
-			struct pollfd *pfd = new struct pollfd[size];
-			int i = 0;
-			for(std::map<uint64_t,int>::iterator it = clientfds.begin(); it != clientfds.end(); it++, i++)
-			{
-				pfd[i].fd = (*it).second;
-				pfd[i].events = POLLIN;
-				pfd[i].revents = 0;
-			}
+			clientfds_cache = clientfds;
+			fd_to_client_cache = fd_to_client;
 		clientfd_mutex.unlock();
+		
+		int size = clientfds_cache.size();
+		struct pollfd *pfd = new struct pollfd[size];
+		int i = 0;
+		for(std::map<uint64_t,int>::iterator it = clientfds_cache.begin(); it != clientfds_cache.end(); it++, i++)
+		{
+			pfd[i].fd = (*it).second;
+			pfd[i].events = POLLIN;
+			pfd[i].revents = 0;
+		}
 			
 		int pollres = poll(pfd, size, 5000);
 			
@@ -154,14 +184,15 @@ void ClientsConnection::readthread() {
 		
 		if(pollres > 0)
 		{
-			clientfd_mutex.lock();
 				for(i = 0; i < size; i++)
 				{
 					if((pfd[i].revents & POLLERR) || (pfd[i].revents & POLLNVAL))
 					{
 						std::cout << "Error poll from client " << std::hex << fd_to_client[pfd[i].fd] << "\n";
-						clientfds.erase(fd_to_client[pfd[i].fd]);
-						fd_to_client.erase(pfd[i].fd);
+						clientfd_mutex.lock();
+							clientfds.erase(fd_to_client[pfd[i].fd]);
+							fd_to_client.erase(pfd[i].fd);
+						clientfd_mutex.unlock();
 						close(pfd[i].fd);
 					}
 					
@@ -170,14 +201,13 @@ void ClientsConnection::readthread() {
 						Packet *p = Packet::readByType(pfd[i].fd);
 						if(p)
 						{
-							p->from = fd_to_client[pfd[i].fd];
+							p->from = fd_to_client_cache[pfd[i].fd];
 							queue_mutex.lock();
 								rx_queue.push_back(p);
 							queue_mutex.unlock();
 						}
 					}
 				}
-			clientfd_mutex.unlock();
 		}
 		
 		delete[] pfd;
@@ -187,24 +217,52 @@ void ClientsConnection::readthread() {
 void ClientsConnection::closeClient(uint64_t client)
 {
 	clientfd_mutex.lock();
-		fd_to_client.erase(clientfds[client]);
-		close(clientfds[client]);
+		int fd;
+		fd_to_client.erase(fd = clientfds[client]);
 		clientfds.erase(client);
 	clientfd_mutex.unlock();
+
+	close(fd);
+}
+
+void ClientsConnection::sendPacket(std::list<Packet *> ps, uint64_t client) {
+	clientfd_mutex.lock();
+		int fd = clientfds[client];
+	clientfd_mutex.unlock();
+	
+	int size;
+	uint8_t *b = crunchIntoBuffer(ps, &size);
+	write(fd, b, size);
+	delete[] b;
 }
 
 void ClientsConnection::sendPacket(Packet *p, uint64_t client) {
-	clientfd_mutex.lock();
-		p->writeSock(clientfds[client]);
-	clientfd_mutex.unlock();
+	std::list<Packet *> ps;
+	ps.push_back(p);
+	sendPacket(ps, client);
 }
 
-void ClientsConnection::sendPacket(Packet* p) {
+void ClientsConnection::sendPacket(std::list<Packet *> ps) {
 	clientfd_mutex.lock();
-		for(std::map<uint64_t,int>::iterator i = clientfds.begin(); i != clientfds.end(); i++) {
-			p->writeSock((*i).second);
+		int size = clientfds.size();
+		int *fds = new int[size];
+		int i = 0;
+		for(std::map<uint64_t,int>::iterator it = clientfds.begin(); it != clientfds.end(); it++, i++) {
+			fds[i] = (*it).second;
 		}
 	clientfd_mutex.unlock();
+	
+	int bufsize;
+	uint8_t *b = crunchIntoBuffer(ps, &bufsize);
+	for(i = 0; i < size; i++)
+		write(fds[i], b, bufsize);
+	delete[] b;
+}
+
+void ClientsConnection::sendPacket(Packet *p) {
+	std::list<Packet *> ps;
+	ps.push_back(p);
+	sendPacket(ps);
 }
 
 std::list<Packet*> ClientsConnection::getPackets(int n) {

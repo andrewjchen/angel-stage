@@ -15,7 +15,8 @@ class Packet
 public:
 	Packet(uint8_t _type);
 	static Packet *readByType(int _sock);
-	virtual void writeSock(int sock) = 0;
+	virtual int estimateSize() = 0;
+	virtual int writeToBuf(uint8_t *buf) = 0;
 
 	uint8_t type;
 	virtual ~Packet() {};
@@ -23,7 +24,8 @@ public:
 
 protected:
 	virtual void readSock(int sock) = 0;
-	void writeHeader(int sock);
+	const static int headerSize = 1;
+	void writeHeader(uint8_t *buf);
 };
 
 /////////////////////////////////////////////// PACKET_PING ////////////////////////////////////////////////////////////////////////////
@@ -32,7 +34,8 @@ class PacketPing: public Packet
 {
 public:
 	PacketPing();
-	void writeSock(int sock);
+	int estimateSize();
+	int writeToBuf(uint8_t *buf);
 
 	uint32_t pingstuff;
 
@@ -46,7 +49,8 @@ class PacketDisconnect: public Packet
 {
 public:
 	PacketDisconnect();
-	void writeSock(int sock);
+	int estimateSize();
+	int writeToBuf(uint8_t *buf);
 
 protected:
 	void readSock(int sock);
@@ -59,7 +63,8 @@ class PacketEvent: public Packet
 public:
 	PacketEvent();
 	~PacketEvent();
-	void writeSock(int sock);
+	int estimateSize();
+	int writeToBuf(uint8_t *buf);
 	void setEvent(Event *_event);
 	Event *getEvent();
 
@@ -74,7 +79,8 @@ class PacketMap: public Packet
 {
 public:
 	PacketMap();
-	void writeSock(int sock);
+	int estimateSize();
+	int writeToBuf(uint8_t *buf);
 
 	int size;
 

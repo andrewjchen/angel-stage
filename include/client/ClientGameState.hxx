@@ -24,8 +24,10 @@ public:
 
 	virtual void addClockListener(ClientComponent* toListen);
 	virtual void removeClockListener(ClientComponent* toListen);
+	virtual std::vector<ClientEntity *> * get_entities_in_rect(const Position & p1, const Position & p2);
 
 	Renderer *globalRenderer;
+
 
 private:
 	std::map<EntityID, ClientEntity *> _entities;

@@ -3,6 +3,7 @@
 #include <vector>
 #include <allegro5/allegro.h>
 #include <allegro5/allegro_image.h>
+#include <allegro5/allegro_primitives.h>
 
 void Renderer::render() {
 	al_clear_to_color(al_map_rgb(0,0,0));
@@ -12,6 +13,16 @@ void Renderer::render() {
 	std::vector<VisualComponent *>::iterator iter;
 	for (iter = _unit_layer.begin(); iter < _unit_layer.end(); iter++) {
 		(*iter)->render(_viewpoint);
+	}
+	if (_select_rect_start != _select_rect_end) {
+		Position screen1 = screenFromGame(_viewpoint, _select_rect_start);
+		Position screen2 = screenFromGame(_viewpoint, _select_rect_end);
+		double x1 = screen1.getX();
+		double x2 = screen2.getX();
+		double y1 = screen1.getY();
+		double y2 =  screen2.getY();
+		ALLEGRO_COLOR color = al_map_rgb(0xFF, 0xFF, 0xFF);
+		al_draw_rounded_rectangle(x1, y1, x2, y2, 2, 2, color, 2);
 	}
 	al_flip_display();
 }
@@ -36,4 +47,12 @@ void Renderer::addMap(Map * map) {
 	} else {
 		_map_renderer = new MapRenderer(map);
 	}
+}
+
+
+void Renderer::setSelectionRectStart(Position start) {
+	_select_rect_start = start;
+}
+void Renderer::setSelectionRectEnd(Position end) {
+	_select_rect_end = end;
 }

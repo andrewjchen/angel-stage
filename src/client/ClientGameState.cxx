@@ -5,6 +5,7 @@
 #include "ClientUnitStateComponent.hxx"
 #include "Event.hxx"
 #include "Debug.hxx"
+#include <math.h>
 
 ClientGameState::~ClientGameState() {
 	std::map<EntityID, ClientEntity *>::iterator iter = _entities.begin();
@@ -94,6 +95,27 @@ void ClientGameState::removeClockListener(ClientComponent* toListen){
 			clockReceivers.erase(it);
 		}
 	}
+}
 
-
+std::vector<ClientEntity *> * ClientGameState::get_entities_in_rect(const Position & p1,
+												const Position & p2) {
+	std::vector<ClientEntity *> * out = new std::vector<ClientEntity *>;
+	double x1 = p1.getX();
+	double x2 = p2.getX();
+	double left  = x1 < x2 ? x1 : x2;
+	double right = x1 < x2 ? x2 : x1;
+	double y1 = p1.getY();
+	double y2 = p2.getY();
+	double bottom  = y1 < y2 ? y1 : y2;
+	double top = y1 < y2 ? y2 : y1;
+	Position top_left(left, top);
+	Position bottom_right(right, bottom);
+	std::map<EntityID, ClientEntity *>::iterator iter = _entities.begin();
+	while (iter != _entities.end()) {
+		if (iter->second->get_unit_state_component()->getPosition().in_rect(top_left, bottom_right)) {
+			out->push_back(iter->second);
+		}
+		++iter;
+	}
+	return out;
 }
