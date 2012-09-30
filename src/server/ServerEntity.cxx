@@ -21,11 +21,16 @@ void ServerEntity::react(EntityEvent * event) {
 		}
 		case EVENT_UNIT_MOVE :{
 			UnitMoveEvent *ume = (UnitMoveEvent*) (event);
-			_unit_state_component->setGoal(Position(ume->xGoal, ume->yGoal));
+			_unit_state_component->setGoalPoint(Position(ume->xGoal, ume->yGoal));
 			break;
 
 		}
-
+		case EVENT_UNIT_CHASE:
+		{
+			UnitChaseEvent *ume = (UnitChaseEvent*) (event);
+			_unit_state_component->setGoalEntity(ume->target);
+			break;
+		}
 
 	}
 }

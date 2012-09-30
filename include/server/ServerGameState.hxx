@@ -14,7 +14,7 @@ class ServerGameState {
 public:
 	ServerGameState(Server* server) { _server = server; };
 	virtual ~ServerGameState(void) {};
-	virtual ServerEntity * get_entity(EntityID id);
+	virtual ServerEntity * get_entity(EntityID id, bool create = true);
 	virtual ServerEntity* new_entity();
 	virtual void set_entity(EntityID id, ServerEntity * entity);
 	virtual void react(Event * event);

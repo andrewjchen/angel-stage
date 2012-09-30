@@ -10,8 +10,9 @@ ServerEntity* ServerGameState::new_entity() {
 	return get_entity(++last_id);
 }
 
-ServerEntity * ServerGameState::get_entity(EntityID id) {
+ServerEntity * ServerGameState::get_entity(EntityID id, bool create) {
 	if (_entities.count(id) == 0) { //entity doens't exist
+		if(!create) return NULL;
 		ServerEntity* ent = new ServerEntity(id);
 		ent->set_gamestate(this);
 		ent->set_unit_state_component(new ServerUnitStateComponent(ent));

@@ -21,6 +21,7 @@ const EventTypeID EVENT_UNIT_MERGE        = 0x81010006;
 const EventTypeID EVENT_UNIT_FEEDBACK     = 0x81010007;
 const EventTypeID EVENT_RESOURCE_FEEDBACK = 0x81010008;
 const EventTypeID EVENT_PLAYER_FEEDBACK   = 0x81010009;
+const EventTypeID EVENT_UNIT_CHASE        = 0x8101000A;
 const EventTypeID EVENT_ENTITY_MAXIMUM    = 0x81020000;
 
 struct UnitFeedbackEvent {
@@ -45,6 +46,12 @@ struct UnitMoveEvent {
 	double xGoal;
 	double yGoal;
 
+};
+
+struct UnitChaseEvent {
+	EntityEvent header;
+	
+	EntityID target;
 };
 
 #endif /* _EVENT_TYPES_HXX_ */
