@@ -5,6 +5,8 @@
 #include "Packet.hxx"
 #include "Server.hxx"
 
+#include "Unit.hxx"
+
 ServerGameState::ServerGameState(Server * server) {
 	_server = server;
 	_next_id = 0;
@@ -25,6 +27,17 @@ EntityID ServerGameState::spawn_entity() {
 	_entities[id] = ent;
 	ent->set_unit_state_component(new ServerUnitStateComponent(ent));
 	return id;
+}
+
+EntityID ServerGameState::spawn_unit() {
+	EntityID id = _next_id;
+	_next_id++;
+	Unit* unit = new Unit(id, this);
+	_entities[id] = unit;
+	unit->set_pose(new Pose(unit));
+	unit->set_size(new Size(unit));
+	return id;
+
 }
 
 ServerEntity * ServerGameState::get_entity(EntityID id) {

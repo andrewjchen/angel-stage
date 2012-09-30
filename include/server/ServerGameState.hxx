@@ -21,6 +21,7 @@ public:
 	virtual void tick(double time, double deltaTime);
 	virtual Server* get_server() { return _server; };
 	virtual EntityID spawn_entity();
+	virtual EntityID spawn_unit();
 
 	virtual void addClockListener(ServerComponent* toListen);
 	virtual void removeClockListener(ServerComponent* toListen);
