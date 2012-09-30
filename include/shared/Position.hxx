@@ -19,6 +19,14 @@ public:
 	virtual Position relative(const Position & origin) const;
 	virtual bool within(const coordinate_t & w, const coordinate_t & h) const;
 	virtual coordinate_t distance(const Position & other) const;
+	virtual bool operator==(const Position & other) {
+		return (_x == other.getX() && _y == other.getY());
+	};
+	virtual bool operator!=(const Position & other) {
+		return (_x != other.getX() && _y != other.getY());
+	};
+	virtual bool in_rect(const Position & corner1,
+						 const Position & corner2) const;
 };
 
 
@@ -27,5 +35,6 @@ Position gameFromScreen(const Position & viewpoint,
 
 Position screenFromGame(const Position & viewpoint,
 						const Position & game_pos);
+
 
 #endif /* _POSITION_H_ */

@@ -50,3 +50,11 @@ Position gameFromScreen(const Position & viewpoint,
 	return Position(viewpoint.getX() + screen_pos.getX(),
 					viewpoint.getY() + screen_pos.getY());
 }
+
+bool Position::in_rect(const Position & top_left,
+					   const Position & bottom_right) const {
+	return (top_left.getX()     < _x &&
+			bottom_right.getX() > _x &&
+			top_left.getY()     > _y &&
+			bottom_right.getY() < _y);
+}
