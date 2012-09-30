@@ -17,9 +17,11 @@ public:
 	virtual ServerEntity * get_entity(EntityID id, bool create = true);
 	virtual ServerEntity* new_entity();
 	virtual void set_entity(EntityID id, ServerEntity * entity);
+	virtual void delete_entity(EntityID id);
 	virtual void react(Event * event);
 	virtual void tick(double time, double deltaTime);
 	virtual Server* get_server() { return _server; };
+
 
 
 	virtual void addClockListener(ServerComponent* toListen);

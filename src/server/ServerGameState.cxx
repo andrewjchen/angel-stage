@@ -28,6 +28,25 @@ void ServerGameState::set_entity(EntityID id, ServerEntity * entity) {
 	_entities[id] = entity;
 }
 
+void ServerGameState::delete_entity(EntityID id) {
+
+	//TODO make this better
+
+	// std::map<EntityID, ServerEntity*>::iterator it;
+	// for(it = _entities.begin(); it != _entities.end(); it++) {
+	// 	if (it->first == id){
+	// 		_entities.
+
+	// 	}
+
+	// }
+
+	_entities.erase(id);
+
+
+
+}
+
 void ServerGameState::react(Event * event) {
 	if (is_entity_event(event)) {
 		EntityID id = ((EntityEvent *) event)->entity_id;

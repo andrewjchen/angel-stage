@@ -1,6 +1,8 @@
 #ifndef _SERVER_UNIT_STATE_COMPONENT_HXX_
 #define _SERVER_UNIT_STATE_COMPONENT_HXX_
 
+
+#include "Ids.hxx"
 #include "Position.hxx"
 #include "Ids.hxx"
 #include "ServerComponent.hxx"
@@ -18,10 +20,13 @@ public:
 	virtual ~ServerUnitStateComponent() {};
 	virtual void tick(double wallTime, double deltaT);
 	virtual const Position & getPosition();
-	virtual void setPosition(Position newpos);
 
 	virtual void setGoalPoint(Position goal);
 	virtual void setGoalEntity(EntityID target);
+	virtual const double getSize();
+	virtual void setPosition(Position newpos);
+	virtual void setGoal(Position goal);
+	virtual void mergeWith(EntityID partner);
 
 protected:
 	// MOTION AND POSITION
@@ -37,7 +42,6 @@ protected:
 	double _theta;
 	double _size;
 	
-	virtual void setGoal(Position goal);
 	
 	int _state;
 };

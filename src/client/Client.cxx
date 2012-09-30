@@ -11,7 +11,7 @@ Client::Client() {
 		//TODO, do something
 	}
 	_renderer = new Renderer();
-	_gamestate = new ClientGameState(_renderer);
+	_gamestate = new ClientGameState(this,_renderer);
 
 	//_conn = new NetworkConnecter("172.16.0.111", 20000);
 	_conn = new NetworkConnecter("127.0.0.1", 20000);

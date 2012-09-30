@@ -76,11 +76,18 @@ void ServerUnitStateComponent::tick(double wallTime, double deltaT) {
 		_entity->get_gamestate()->get_server()->get_clientsconnection()->sendPacket((Packet*)(&pe));
 		break;
 	}
+
 }
 
 const Position & ServerUnitStateComponent::getPosition() {
 	return _pos;
 }
+
+const double ServerUnitStateComponent::getSize(){
+	return _size;
+}
+
+
 
 void ServerUnitStateComponent::setPosition(Position newpos) {
 	_pos = newpos;
@@ -113,4 +120,21 @@ void ServerUnitStateComponent::setGoal(Position goal) {
 void ServerUnitStateComponent::setGoalPoint(Position goal) {
 	_state = STATE_CHASING_POINT;
 	setGoal(goal);
+}
+
+void ServerUnitStateComponent::mergeWith(EntityID partner){
+
+	_size += 
+		_entity
+		->get_gamestate()
+		->get_entity(partner)
+		->get_unit_state_component()
+		->getSize();
+
+	//delete partner
+	_entity
+		->get_gamestate()
+		->delete_entity(partner);
+
+
 }

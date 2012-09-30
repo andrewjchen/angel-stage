@@ -53,5 +53,11 @@ struct UnitChaseEvent {
 	
 	EntityID target;
 };
+	
+struct UnitMergeEvent{
+	EntityEvent header;
+	EntityID partner;
+
+};
 
 #endif /* _EVENT_TYPES_HXX_ */

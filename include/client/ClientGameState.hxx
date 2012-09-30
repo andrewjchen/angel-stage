@@ -9,16 +9,19 @@
 #include "Renderer.hxx"
 
 struct ClientEvent;
+class Client;
 
 class ClientGameState {
 public:
-	ClientGameState(Renderer *render)
+	ClientGameState(Client* client, Renderer *render)
 	{
+		_client = client;
 		globalRenderer = render;
 	};
 	virtual ~ClientGameState(void);
 	virtual ClientEntity * get_entity(EntityID id);
 	virtual void set_entity(EntityID id, ClientEntity * entity);
+	//virtual void delete_entity(EntityID id);
 	virtual void react(Event * event);
 	virtual void tick(double time, double deltaTime);
 
@@ -32,6 +35,8 @@ public:
 private:
 	std::map<EntityID, ClientEntity *> _entities;
 	std::vector<ClientComponent* > clockReceivers;
+
+	Client* _client;
 };
 
 #endif /* _GAMESTATE_HXX_ */

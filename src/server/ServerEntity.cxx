@@ -17,7 +17,7 @@ void ServerEntity::react(EntityEvent * event) {
 			Position new_pos(my_pos.getX() + 1, my_pos.getY() + 1);
 
 			ent->get_unit_state_component()->setPosition(new_pos);
-			break;	
+			break;
 		}
 		case EVENT_UNIT_MOVE :{
 			UnitMoveEvent *ume = (UnitMoveEvent*) (event);
@@ -31,6 +31,13 @@ void ServerEntity::react(EntityEvent * event) {
 			_unit_state_component->setGoalEntity(ume->target);
 			break;
 		}
+		case EVENT_UNIT_MERGE :{
+			UnitMergeEvent *ume = (UnitMergeEvent*) (event);
+			_unit_state_component->mergeWith(ume->partner);
+
+
+		}
+
 
 	}
 }
