@@ -18,6 +18,7 @@ public:
 	virtual void setGoal(Position goal);
 
 protected:
+	// MOTION AND POSITION
 	Position _pos;
 	Position _orbit_pos;
 
@@ -26,6 +27,10 @@ protected:
 
 	Position _goal;
 	double _theta;
+
+	//ATTRIBUTES
+
+	double _size;
 };
 
 #endif

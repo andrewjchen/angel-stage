@@ -49,6 +49,19 @@ void InputManager::tick(double wall, double delta) {
 	if (al_key_down(&keyboard, ALLEGRO_KEY_S)) {
 		DEBUG("S");
 
+		UnitMoveEvent* ume = new UnitMoveEvent();
+		ume->header.header.event_type = EVENT_UNIT_MOVE;
+		ume->header.header.total_byte_count = sizeof(UnitMoveEvent);
+		ume->header.entity_id = 1;
+
+		ume->xGoal = 500;
+		ume->yGoal = 500;
+
+		PacketEvent *pe = new PacketEvent();
+		pe->setEvent((Event*)ume);
+
+		_client->get_networkconnecter()->sendPacket(pe);
+
 		// UnitSplitEvent* ev = new UnitSplitEvent();
 		// ev->header.header.event_type = EVENT_UNIT_SPLIT;
 		// ev->header.header.total_byte_count = sizeof(UnitSplitEvent);

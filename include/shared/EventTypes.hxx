@@ -28,6 +28,8 @@ struct UnitFeedbackEvent {
 	double x;
 	double y;
 	double theta;
+
+	double size;
 };
 
 struct UnitSplitEvent {

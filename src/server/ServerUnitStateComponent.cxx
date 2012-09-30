@@ -14,6 +14,7 @@ ServerUnitStateComponent::ServerUnitStateComponent(ServerEntity* entity) : Serve
 	DEBUG("Added unit state component");
 	_orbit_pos.setX(_entity->get_id());
 	_orbit_pos.setY(_entity->get_id());
+	_size = 1;
 }
 
 void ServerUnitStateComponent::tick(double wallTime, double deltaT){
@@ -36,6 +37,9 @@ void ServerUnitStateComponent::tick(double wallTime, double deltaT){
 		_pos.setY(_pos.getY() + _yVel * deltaT);
 	}
 
+	//TODO this is just a stupid size changing thing
+	_size = 10.0 * sin(wallTime / 1000.0) + 10.0;
+
 	//constructing packet to send
 	UnitFeedbackEvent *ufe = new UnitFeedbackEvent();
 	memset(ufe,  0, sizeof(UnitFeedbackEvent));
@@ -45,6 +49,7 @@ void ServerUnitStateComponent::tick(double wallTime, double deltaT){
 	ufe->x = _pos.getX();
 	ufe->y = _pos.getY();
 	ufe->theta = _theta;
+	ufe->size = _size;
 	PacketEvent pe;
 	pe.setEvent((Event*)ufe);//does a memcopy
 	delete ufe;

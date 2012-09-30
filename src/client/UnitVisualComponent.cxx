@@ -23,7 +23,7 @@ void UnitVisualComponent::render(const Position & viewpoint) {
 	Position screen_pos = screenFromGame(viewpoint, _entity->get_unit_state_component()->getPosition());
 	double screenX = screen_pos.getX();
 	double screenY = screen_pos.getY();
-	double scale = 16.0 / 512.0;
+	double scale = 16.0 / 512.0 * _entity->get_unit_state_component()->getSize();
 	if (screenX - _half_bitmap_width < display_width &&
 		screenY - _half_bitmap_height < display_height &&
 		screenX + _half_bitmap_width > 0 &&

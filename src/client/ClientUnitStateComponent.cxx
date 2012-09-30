@@ -14,6 +14,7 @@ void ClientUnitStateComponent::feedback(UnitFeedbackEvent* event) {
 	_pos.setX(event->x);
 	_pos.setY(event->y);
 	_theta = event->theta;
+	_size = event->size;
 }
 
 const Position & ClientUnitStateComponent::getPosition() {
@@ -24,7 +25,12 @@ void ClientUnitStateComponent::tick(double wallTime, double deltaT) {
 	
 }
 
-double ClientUnitStateComponent::getTheta()
-{
+double ClientUnitStateComponent::getTheta() {
 	return _theta;
 }
+
+double ClientUnitStateComponent::getSize(){
+	return _size;
+}
+
+
