@@ -105,7 +105,7 @@ void ServerUnitStateComponent::setGoal(Position goal) {
 	_xVel = xdir * UNIT_VELOCITY / 1000.0;
 	_yVel = ydir * UNIT_VELOCITY / 1000.0;
 
-	_theta = atan2(_xVel, _yVel);
+	_theta = atan2(_xVel, _yVel) + 3.14159265358979323846;
 
 
 }

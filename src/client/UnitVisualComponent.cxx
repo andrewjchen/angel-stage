@@ -16,7 +16,6 @@ UnitVisualComponent::UnitVisualComponent(ClientEntity * entity) : VisualComponen
 }
 
 void UnitVisualComponent::tick(double wallTime, double deltaT) {
-	
 }
 
 void UnitVisualComponent::render(const Position & viewpoint) {
@@ -31,7 +30,7 @@ void UnitVisualComponent::render(const Position & viewpoint) {
 		_bitmap) {
 		al_draw_tinted_scaled_rotated_bitmap(
 			_bitmap,
-			al_map_rgb(0xFF, 0xFF, 0xFF),
+			al_map_rgba(0xFF, 0xFF, 0xFF, 0xD0),
 			_half_bitmap_width,
 			_half_bitmap_height,
 			screenX,

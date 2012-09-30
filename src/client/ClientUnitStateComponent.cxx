@@ -22,7 +22,6 @@ const Position & ClientUnitStateComponent::getPosition() {
 }
 
 void ClientUnitStateComponent::tick(double wallTime, double deltaT) {
-	
 }
 
 double ClientUnitStateComponent::getTheta() {
@@ -32,5 +31,3 @@ double ClientUnitStateComponent::getTheta() {
 double ClientUnitStateComponent::getSize(){
 	return _size;
 }
-
-
