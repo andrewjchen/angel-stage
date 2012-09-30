@@ -9,6 +9,10 @@
 
 #include "Client.hxx"
 
+int a = 0;
+EntityID yourmom1;
+EntityID yourmom2;
+
 InputManager::InputManager(Client* client, Renderer * renderer, NetworkConnecter * net_connecter) {
 	if(!al_install_keyboard()) {
 		DEBUG("!al_install_keyboard");
@@ -104,6 +108,66 @@ void InputManager::react() {
 					p.pingstuff = 0x12345678;
 					_net_connecter->sendPacket((Packet*)&p);
 				}
+				
+				case ALLEGRO_KEY_Q:
+					{
+						DEBUG("MOUSE_BUTTON_UP!");
+						Position screen_pos(_current_event.mouse.x, _current_event.mouse.y);
+						_mouse_corner_end = gameFromScreen(_renderer->getViewpoint(), screen_pos);
+						DEBUG("Start corner: " << _mouse_corner_start.getX() <<
+							  ", " <<_mouse_corner_start.getY());
+						DEBUG("End corner: " << _mouse_corner_end.getX() <<
+							  ", " << _mouse_corner_end.getY());
+						UnitMoveEvent* ume = new UnitMoveEvent();
+						ume->header.header.event_type = EVENT_UNIT_MOVE;
+						ume->header.header.total_byte_count = sizeof(UnitMoveEvent);
+						ume->header.entity_id = 1;
+
+						ume->xGoal = _mouse_corner_end.getX();
+						ume->yGoal = _mouse_corner_end.getY();
+
+						PacketEvent *pe = new PacketEvent();
+						pe->setEvent((Event*)ume);
+
+						_client->get_networkconnecter()->sendPacket(pe);
+						break;
+					}
+				case ALLEGRO_KEY_W:
+					{
+						DEBUG("MOUSE_BUTTON_UP!");
+						Position screen_pos(_current_event.mouse.x, _current_event.mouse.y);
+						_mouse_corner_end = gameFromScreen(_renderer->getViewpoint(), screen_pos);
+						DEBUG("Start corner: " << _mouse_corner_start.getX() <<
+							  ", " <<_mouse_corner_start.getY());
+						DEBUG("End corner: " << _mouse_corner_end.getX() <<
+							  ", " << _mouse_corner_end.getY());
+						UnitMoveEvent* ume = new UnitMoveEvent();
+						ume->header.header.event_type = EVENT_UNIT_MOVE;
+						ume->header.header.total_byte_count = sizeof(UnitMoveEvent);
+						ume->header.entity_id = 2;
+
+						ume->xGoal = _mouse_corner_end.getX();
+						ume->yGoal = _mouse_corner_end.getY();
+
+						PacketEvent *pe = new PacketEvent();
+						pe->setEvent((Event*)ume);
+
+						_client->get_networkconnecter()->sendPacket(pe);
+						break;
+					}
+				case ALLEGRO_KEY_M:
+					{
+						UnitChaseEvent *e = new UnitChaseEvent();
+						e->header.header.event_type = EVENT_UNIT_CHASE;
+						e->header.header.total_byte_count = sizeof(UnitChaseEvent);
+						e->header.entity_id = yourmom1;
+						e->target = yourmom2;
+						PacketEvent p;
+						p.setEvent((Event*)e);
+						delete e;
+						_net_connecter->sendPacket((Packet*)&p);
+					}
+				
 				break;
 			}
 			break;
@@ -174,4 +238,20 @@ void InputManager::select_from_rect() {
 	}
 	_selected_units = _client->get_clientgamestate()->get_entities_in_rect(_mouse_corner_start, _mouse_corner_end);
 	DEBUG(_selected_units->size() << " units selected.");
+	
+	if(_selected_units->size() == 1)
+	{
+		if(a == 0)
+		{
+			yourmom1 = (*_selected_units)[0]->get_id();
+			DEBUG("A has been set");
+			a = 1;
+		}
+		else if(a == 1)
+		{
+			yourmom2 = (*_selected_units)[0]->get_id();
+			DEBUG("B has been set");
+			a = 0;
+		}
+	}
 }
