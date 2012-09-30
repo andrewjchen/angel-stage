@@ -13,7 +13,7 @@ class Server;
 class ServerGameState {
 public:
 	ServerGameState(Server* server);
-	virtual ~ServerGameState(void) {};
+	virtual ~ServerGameState(void);
 	virtual ServerEntity * get_entity(EntityID id);
 	virtual void set_entity(EntityID id, ServerEntity * entity);
 	virtual void delete_entity(EntityID id);

@@ -10,6 +10,16 @@ ServerGameState::ServerGameState(Server * server) {
 	_next_id = 0;
 }
 
+ServerGameState::~ServerGameState() {
+	std::map<EntityID, ServerEntity *>::iterator i = _entities.begin();
+	while (i != _entities.end()) {
+		// ServerEntity * ent = i->second;
+		// delete ent;
+		delete i->second;
+		++i;
+	}
+}
+
 EntityID ServerGameState::spawn_entity() {
 	EntityID id = _next_id;
 	++_next_id;
