@@ -15,7 +15,7 @@ class ClientEntity;
 class InputManager {
 public:
 	InputManager(Client* client, Renderer * renderer, NetworkConnecter * net_connecter, ClientGameState * gamestate);
-	virtual ~InputManager() {};
+	virtual ~InputManager();
 	virtual void tick(double wall, double delta);
 	virtual bool keep_running();
 

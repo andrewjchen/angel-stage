@@ -33,6 +33,11 @@ InputManager::InputManager(Client* client, Renderer * renderer, NetworkConnecter
 	_gamestate = gamestate;
 }
 
+InputManager::~InputManager()
+{
+	if(_selected_units) delete _selected_units;
+}
+
 void InputManager::tick(double wall, double delta) {
 	al_get_keyboard_state(&_keyboard);
 	al_get_mouse_state(&_mouse);
