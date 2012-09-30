@@ -215,6 +215,7 @@ void ClientsConnection::sendPacket(std::list<Packet *> ps) {
 	uint8_t *b = crunchIntoBuffer(ps, &bufsize);
 	for(i = 0; i < size; i++)
 		write(fds[i], b, bufsize);
+	delete[] fds;
 	delete[] b;
 }
 

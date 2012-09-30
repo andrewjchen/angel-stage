@@ -38,16 +38,15 @@ void ServerGameState::delete_entity(EntityID id) {
 	DEBUG("NUM ENTITIES=" << _entities.size());
 
 	//notify client
-	UnitDieEvent* ude = new UnitDieEvent();
-	ude->header.event_type = EVENT_ENTITY_DIE;
-	ude->header.total_byte_count = sizeof(UnitDieEvent);
-	ude->entity_id = id;
+	UnitDieEvent ude;
+	ude.header.event_type = EVENT_ENTITY_DIE;
+	ude.header.total_byte_count = sizeof(UnitDieEvent);
+	ude.entity_id = id;
 
 	PacketEvent* pe = new PacketEvent();
-	pe->setEvent((Event*)ude);
+	pe->setEvent((Event*)&ude);
 	_server->get_clientsconnection()->sendPacket(pe);
-
-
+	delete pe;
 }
 
 void ServerGameState::react(Event * event) {

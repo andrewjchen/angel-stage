@@ -22,6 +22,11 @@ Map::Map(int _size, unsigned int prngseed)
 	}
 }
 
+Map::~Map()
+{
+	if(data) delete[] data;
+}
+
 int Map::width()
 {
 	return size;
@@ -40,7 +45,7 @@ const uint8_t &Map::operator[](int i)
 uint8_t *Map::save(int *_size)
 {
 	uint8_t *buf = new uint8_t[size * size + sizeof(size)];
-	*_size = size * size;
+	*_size = size * size + sizeof(size);
 	memcpy(buf, &size, sizeof(size));
 	memcpy(buf + sizeof(size), data, size * size);
 	

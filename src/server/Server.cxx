@@ -54,6 +54,7 @@ void Server::run() {
 				case PACKET_PING:
 					DEBUG("got a ping request!");
 					_conn->sendPacket(p, p->from);//logic
+					delete p;
 					break;
 				case PACKET_DISCONNECT:
 					std::cout << "got a disconnect packet!\n";

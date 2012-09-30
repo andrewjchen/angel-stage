@@ -25,6 +25,7 @@ class Map
 {
 public:
 	Map(int _size, unsigned int prngseed);
+	~Map();
 	int width();
 	int height();
 	const uint8_t &operator[](int i);
