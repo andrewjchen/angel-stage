@@ -100,8 +100,32 @@ bool NetworkConnecter::isConnected() {
 	return running;
 }
 
-void NetworkConnecter::sendPacket(Packet* p) {
-	p->writeSock(sockfd);
+uint8_t *NetworkConnecter::crunchIntoBuffer(std::list<Packet *> ps, int *outsize)
+{
+	int size = 0;
+	for(std::list<Packet *> ::iterator it = ps.begin(); it != ps.end(); it++)
+		size += (*it)->estimateSize();
+	
+	uint8_t *buf = new uint8_t[size];
+	int i = 0;
+	for(std::list<Packet *> ::iterator it = ps.begin(); it != ps.end(); it++)
+		i += (*it)->writeToBuf(buf + i);
+	
+	*outsize = i;
+	return buf;
+}
+
+void NetworkConnecter::sendPacket(std::list<Packet*> ps) {
+	int size;
+	uint8_t *b = crunchIntoBuffer(ps, &size);
+	write(sockfd, b, size);
+	delete[] b;
+}
+
+void NetworkConnecter::sendPacket(Packet *p) {
+	std::list<Packet *> ps;
+	ps.push_back(p);
+	sendPacket(ps);
 }
 
 std::list<Packet*> NetworkConnecter::getPacket(int n) {

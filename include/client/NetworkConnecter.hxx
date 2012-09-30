@@ -18,11 +18,14 @@ public:
 	bool isConnected();
 
 	void sendPacket(Packet* p);
+	void sendPacket(std::list<Packet*> ps);
 	std::list<Packet*> getPacket(int n = 1);
 
 private:
 	bool valid;
 	bool running;
+	
+	uint8_t *crunchIntoBuffer(std::list<Packet *> ps, int *outsize);
 	
 	int sockfd;
 	
