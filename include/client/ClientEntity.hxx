@@ -27,7 +27,6 @@ protected:
 public:
 	ClientEntity(EntityID id) : Entity(id) {};
 	~ClientEntity();
-	EntityID get_id() const;
 	virtual void react(EntityEvent * event);
 
 	ClientGameState* get_gamestate() { return gamestate;};
@@ -40,7 +39,6 @@ public:
 	ClientUnitStateComponent* get_unit_state_component(){ return _unit_state_component; };
 	void set_unit_state_component(ClientUnitStateComponent* comp) { _unit_state_component = comp; };
 
-	
 };
 
 #endif /* _ENTITY_HXX_ */
