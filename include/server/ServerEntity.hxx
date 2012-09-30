@@ -24,7 +24,7 @@ protected:
 public:
 	ServerEntity(EntityID id, ServerGameState * gamestate) : Entity(id),
 															 _gamestate(gamestate) {};
-	virtual ~ServerEntity() {};
+	virtual ~ServerEntity();
 	virtual void react(EntityEvent * event);
 
 	ServerGameState* get_gamestate() { return _gamestate; };

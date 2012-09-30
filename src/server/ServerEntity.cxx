@@ -5,6 +5,12 @@
 
 #include "ServerGameState.hxx"
 
+ServerEntity::~ServerEntity() {
+	if (_unit_state_component) {
+		delete _unit_state_component;
+	}
+}
+
 void ServerEntity::react(EntityEvent * event) {
 	DEBUG("Entity id=" << _id << " received event");
 	switch (event->header.event_type) {
@@ -19,19 +25,18 @@ void ServerEntity::react(EntityEvent * event) {
 			ent->get_unit_state_component()->setPosition(new_pos);
 			break;
 		}
-		case EVENT_UNIT_MOVE :{
+		case EVENT_UNIT_MOVE : {
 			UnitMoveEvent *ume = (UnitMoveEvent*) (event);
 			_unit_state_component->setGoalPoint(Position(ume->xGoal, ume->yGoal));
 			break;
 
 		}
-		case EVENT_UNIT_CHASE:
-		{
+		case EVENT_UNIT_CHASE: {
 			UnitChaseEvent *ume = (UnitChaseEvent*) (event);
 			_unit_state_component->setGoalEntity(ume->target);
 			break;
 		}
-		case EVENT_UNIT_MERGE :{
+		case EVENT_UNIT_MERGE : {
 			UnitMergeEvent *ume = (UnitMergeEvent*) (event);
 			_unit_state_component->mergeWith(ume->partner);
 		}
