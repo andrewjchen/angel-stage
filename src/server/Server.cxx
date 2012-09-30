@@ -73,7 +73,7 @@ void Server::run() {
 		}
 		_gamestate->tick(timer.wall(), timer.delta());
 
-		boost::this_thread::sleep(boost::posix_time::milliseconds(1));
+		boost::this_thread::sleep(boost::posix_time::milliseconds(10));
 	}
 	DEBUG("Cleaning up server...");
 	_conn->stop();
