@@ -21,7 +21,7 @@ public:
 	virtual ~ClientGameState(void);
 	virtual ClientEntity * get_entity(EntityID id);
 	virtual void set_entity(EntityID id, ClientEntity * entity);
-	//virtual void delete_entity(EntityID id);
+	virtual void delete_entity(EntityID id);
 	virtual void react(Event * event);
 	virtual void tick(double time, double deltaTime);
 

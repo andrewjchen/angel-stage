@@ -2,6 +2,8 @@
 #include "ServerGameState.hxx"
 #include "Event.hxx"
 #include "Debug.hxx"
+#include "Packet.hxx"
+#include "Server.hxx"
 
 ServerEntity* ServerGameState::new_entity() {
 
@@ -41,8 +43,19 @@ void ServerGameState::delete_entity(EntityID id) {
 
 	// }
 
+	DEBUG("NUM ENTITIES=" << _entities.size());
 	_entities.erase(id);
+	DEBUG("NUM ENTITIES=" << _entities.size());
 
+	//notify client
+	UnitDieEvent* ude = new UnitDieEvent();
+	ude->header.event_type = EVENT_ENTITY_DIE;
+	ude->header.total_byte_count = sizeof(UnitDieEvent);
+	ude->entity_id = id;
+
+	PacketEvent* pe = new PacketEvent();
+	pe->setEvent((Event*)ude);
+	_server->get_clientsconnection()->sendPacket(pe);
 
 
 }

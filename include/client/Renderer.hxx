@@ -16,6 +16,7 @@ public:
 	virtual void setViewpoint(coordinate_t x, coordinate_t y);
 	virtual const Position & getViewpoint();
 	virtual void addToUnitLayer(VisualComponent * visual_comp);
+	virtual void removeFromUnitLayer(VisualComponent* visual_comp);
 	virtual void addMap(Map * map);
 	virtual void setSelectionRectStart(Position start);
 	virtual void setSelectionRectEnd(Position end);

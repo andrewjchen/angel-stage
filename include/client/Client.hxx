@@ -18,6 +18,7 @@ public:
 
  	NetworkConnecter* get_networkconnecter() { return _conn; };
 	ClientGameState* get_clientgamestate() { return _gamestate; };
+	Renderer* get_renderer() { return _renderer; };
 
 private:
 

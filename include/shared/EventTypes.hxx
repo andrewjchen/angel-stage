@@ -10,6 +10,7 @@ const EventTypeID EVENT_DEBUG_MSG         = 0x81000002;
 const EventTypeID EVENT_JOIN              = 0x81000003;
 const EventTypeID EVENT_UNJOIN            = 0x81000004;
 const EventTypeID EVENT_ENTITY_SPAWN      = 0x81000005;
+const EventTypeID EVENT_ENTITY_DIE		  = 0x81000006;
 const EventTypeID EVENT_GLOBAL_MAXIMUM    = 0x81010000;
 
 const EventTypeID EVENT_ENTITY_MINIMUM    = 0x81010001;
@@ -23,6 +24,12 @@ const EventTypeID EVENT_RESOURCE_FEEDBACK = 0x81010008;
 const EventTypeID EVENT_PLAYER_FEEDBACK   = 0x81010009;
 const EventTypeID EVENT_UNIT_CHASE        = 0x8101000A;
 const EventTypeID EVENT_ENTITY_MAXIMUM    = 0x81020000;
+
+struct UnitDieEvent {
+	Event header;
+	EntityID entity_id;
+
+};
 
 struct UnitFeedbackEvent {
 	EntityEvent header;

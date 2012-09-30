@@ -23,6 +23,7 @@ void Server::run() {
 	
 	_gamestate->get_entity(1);
 	_gamestate->get_entity(2);
+	_gamestate->get_entity(0)->get_unit_state_component()->setPosition(Position(50, 50));
 
 	_conn->start();
 

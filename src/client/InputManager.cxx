@@ -101,14 +101,32 @@ void InputManager::react() {
 					p.setEvent(e);
 					delete e;
 					_net_connecter->sendPacket((Packet*)&p);
-				}
 					break;
+				}
 				case (ALLEGRO_KEY_A): {
 					PacketPing p;
 					p.pingstuff = 0x12345678;
 					_net_connecter->sendPacket((Packet*)&p);
+					break;
 				}
-				
+
+				case (ALLEGRO_KEY_M): { //MERGE
+					if(_selected_units && _selected_units->size() > 1){
+						//merge unit 0 to unit 1
+						UnitMergeEvent* ume = new UnitMergeEvent();
+						ume->header.header.event_type = EVENT_UNIT_MERGE;
+						ume->header.header.total_byte_count= sizeof(UnitMergeEvent);
+						ume->header.entity_id = _selected_units->at(0)->get_id();
+						ume->partner = _selected_units->at(1)->get_id();
+						PacketEvent *pe = new PacketEvent();
+						pe->setEvent((Event*)ume);
+						_client->get_networkconnecter()->sendPacket(pe);
+						delete pe;
+						delete ume;
+
+					}
+					break;
+				}
 				case ALLEGRO_KEY_Q:
 					{
 						DEBUG("MOUSE_BUTTON_UP!");
@@ -155,7 +173,7 @@ void InputManager::react() {
 						_client->get_networkconnecter()->sendPacket(pe);
 						break;
 					}
-				case ALLEGRO_KEY_M:
+				case ALLEGRO_KEY_H:
 					{
 						UnitChaseEvent *e = new UnitChaseEvent();
 						e->header.header.event_type = EVENT_UNIT_CHASE;
@@ -184,11 +202,11 @@ void InputManager::react() {
 			break;
 		}
 		case ALLEGRO_EVENT_MOUSE_AXES: {
-				if (al_mouse_button_down(&_mouse, 1)) {
-					Position screen_pos(_current_event.mouse.x, _current_event.mouse.y);
-					_renderer->setSelectionRectEnd(gameFromScreen(_renderer->getViewpoint(), screen_pos));
-					_mouse_corner_end = gameFromScreen(_renderer->getViewpoint(), screen_pos);
-				}
+			if (al_mouse_button_down(&_mouse, 1)) {
+				Position screen_pos(_current_event.mouse.x, _current_event.mouse.y);
+				_renderer->setSelectionRectEnd(gameFromScreen(_renderer->getViewpoint(), screen_pos));
+				_mouse_corner_end = gameFromScreen(_renderer->getViewpoint(), screen_pos);
+			}
 			break;
 		}
 		case ALLEGRO_EVENT_MOUSE_BUTTON_UP: {

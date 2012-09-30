@@ -6,6 +6,7 @@
 #include "Event.hxx"
 #include "Debug.hxx"
 #include <math.h>
+#include "Client.hxx"
 
 ClientGameState::~ClientGameState() {
 	std::map<EntityID, ClientEntity *>::iterator iter = _entities.begin();
@@ -31,6 +32,31 @@ ClientEntity * ClientGameState::get_entity(EntityID id) {
 		set_entity(id, ce);
 	}
 	return _entities[id];
+}
+
+void ClientGameState::delete_entity(EntityID id) {
+
+	//TODO make this better
+
+	// std::map<EntityID, ServerEntity*>::iterator it;
+	// for(it = _entities.begin(); it != _entities.end(); it++) {
+	// 	if (it->first == id){
+	// 		_entities.
+
+	// 	}
+
+	// }
+
+
+	VisualComponent* vis = get_entity(id)->get_visual_component();
+	_client->get_renderer()->removeFromUnitLayer(vis);
+
+	DEBUG("NUM ENTITIES=" << _entities.size());
+	_entities.erase(id);
+	DEBUG("NUM ENTITIES=" << _entities.size());
+
+
+
 }
 
 void ClientGameState::set_entity(EntityID id, ClientEntity* entity) {
@@ -62,6 +88,12 @@ void ClientGameState::react(Event * event) {
 				// set_entity(ufe->header.entity_id, ce);
 				ClientEntity* ce = get_entity(ufe->header.entity_id);
 				ce->react((EntityEvent*)ufe);
+				break;
+			}
+			case EVENT_ENTITY_DIE: {
+
+
+
 				break;
 			}
 			case EVENT_TEST: { 

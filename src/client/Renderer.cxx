@@ -37,8 +37,20 @@ const Position & Renderer::getViewpoint() {
 }
 
 void Renderer::addToUnitLayer(VisualComponent * visual_comp) {
-	DEBUG("adding visual component to Unit layer.\n");
+	DEBUG("adding visual component to Unit layer.");
 	_unit_layer.push_back(visual_comp);
+}
+
+void Renderer::removeFromUnitLayer(VisualComponent* visual_comp) {
+	DEBUG("removing visual component from Unit layer.");
+	std::vector<VisualComponent*>::iterator it;
+	for(it = _unit_layer.begin(); it != _unit_layer.end(); it++){
+		if(*it == visual_comp) {
+			_unit_layer.erase(it);
+			return;
+		}
+	}
+
 }
 
 void Renderer::addMap(Map * map) {
