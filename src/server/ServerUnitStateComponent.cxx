@@ -17,10 +17,24 @@ ServerUnitStateComponent::ServerUnitStateComponent(ServerEntity* entity) : Serve
 }
 
 void ServerUnitStateComponent::tick(double wallTime, double deltaT){
+
+	/*
 	// DEBUG("Tick: walltime=" << wallTime << ", deltaT=" << deltaT);
 	_pos.setX(160 * cos(wallTime/1000.0) + 300);
 	_pos.setY(160 * sin(wallTime/1000.0) + 400);
 	_theta = -wallTime / 1000.0 -  3.14159265358979323846;
+	*/
+
+	if (_goal.distance(_pos) < deltaT * UNIT_VELOCITY / 1000.0) {
+		_pos.setX(_goal.getX());
+		_pos.setY(_goal.getY());
+
+		_xVel = 0;
+		_yVel = 0;
+	} else {
+		_pos.setX(_pos.getX() + _xVel * deltaT);
+		_pos.setY(_pos.getY() + _yVel * deltaT);
+	}
 
 	//constructing packet to send
 	UnitFeedbackEvent *ufe = new UnitFeedbackEvent();
@@ -48,5 +62,21 @@ const Position & ServerUnitStateComponent::getPosition() {
 void ServerUnitStateComponent::setPosition(Position newpos) {
 	_pos = newpos;
 	_orbit_pos = newpos;//using orbitpos just to add weird motion
+
+}
+
+void ServerUnitStateComponent::setGoal(Position goal) {
+	_goal = goal;
+
+	double dist = _goal.distance(_pos);
+
+	double xdir = (_goal.getX() - _pos.getX()) / dist;
+	double ydir = (_goal.getY() - _pos.getY()) / dist;
+
+	_xVel = xdir * UNIT_VELOCITY / 1000.0;
+	_yVel = ydir * UNIT_VELOCITY / 1000.0;
+
+	_theta = atan2(_xVel, _yVel);
+
 
 }

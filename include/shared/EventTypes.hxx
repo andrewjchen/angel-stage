@@ -37,4 +37,12 @@ struct UnitSplitEvent {
 
 };
 
+struct UnitMoveEvent {
+	EntityEvent header;
+
+	double xGoal;
+	double yGoal;
+
+};
+
 #endif /* _EVENT_TYPES_HXX_ */

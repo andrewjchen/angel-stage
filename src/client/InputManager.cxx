@@ -49,15 +49,12 @@ void InputManager::tick(double wall, double delta) {
 	if (al_key_down(&keyboard, ALLEGRO_KEY_S)) {
 		DEBUG("S");
 
-		UnitSplitEvent* ev = new UnitSplitEvent();
-		ev->header.header.event_type = EVENT_UNIT_SPLIT;
-		ev->header.header.total_byte_count = sizeof(UnitSplitEvent);
-		ev->header.entity_id = 4;
+		// UnitSplitEvent* ev = new UnitSplitEvent();
+		// ev->header.header.event_type = EVENT_UNIT_SPLIT;
+		// ev->header.header.total_byte_count = sizeof(UnitSplitEvent);
+		// ev->header.entity_id = 4;
 
-		PacketEvent *pe = new PacketEvent();
-		pe->setEvent((Event*)ev);
-
-		_client->get_networkconnecter()->sendPacket(pe);
+		
 
 	}
 	while (al_get_next_event(_event_queue, &_current_event)) {
@@ -68,61 +65,73 @@ void InputManager::tick(double wall, double delta) {
 void InputManager::react() {
 	Position pos = _renderer->getViewpoint();
 	switch (_current_event.type) {
-	case ALLEGRO_EVENT_KEY_DOWN: {
-		switch(_current_event.keyboard.keycode) {
-		case ALLEGRO_KEY_SPACE: {
-			printf("Space key pressed.\n");
-			break;
-		}
-		case ALLEGRO_KEY_U: {
-				_keep_running = false;
+		case ALLEGRO_EVENT_KEY_DOWN: {
+			switch(_current_event.keyboard.keycode) {
+				case ALLEGRO_KEY_SPACE: {
+					printf("Space key pressed.\n");
+					break;
+				}
+				case ALLEGRO_KEY_U: {
+						_keep_running = false;
+						break;
+				}
+				case ALLEGRO_KEY_B: {
+					Event *e = new Event();
+					e->event_type = EVENT_TEST;
+					e->total_byte_count = sizeof(Event);
+					PacketEvent p;
+					p.setEvent(e);
+					delete e;
+					_net_connecter->sendPacket((Packet*)&p);
+				}
+					break;
+				case (ALLEGRO_KEY_A): {
+					PacketPing p;
+					p.pingstuff = 0x12345678;
+					_net_connecter->sendPacket((Packet*)&p);
+				}
 				break;
-		}
-		case ALLEGRO_KEY_B: {
-			Event *e = new Event();
-			e->event_type = EVENT_TEST;
-			e->total_byte_count = sizeof(Event);
-			PacketEvent p;
-			p.setEvent(e);
-			delete e;
-			_net_connecter->sendPacket((Packet*)&p);
-		}
-			break;
-		case (ALLEGRO_KEY_A): {
-			PacketPing p;
-			p.pingstuff = 0x12345678;
-			_net_connecter->sendPacket((Packet*)&p);
-		}
+			}
 			break;
 		}
-		break;
-	}
-	case ALLEGRO_EVENT_MOUSE_BUTTON_DOWN: {
-		switch (_current_event.mouse.button) {
-		case 1: {
-			DEBUG("MOUSE_BUTTON_DOWN!");
-			Position screen_pos(_current_event.mouse.x, _current_event.mouse.y);
-			_mouse_corner_start = gameFromScreen(_renderer->getViewpoint(), screen_pos);
+		case ALLEGRO_EVENT_MOUSE_BUTTON_DOWN: {
+			switch (_current_event.mouse.button) {
+			case 1: {
+				DEBUG("MOUSE_BUTTON_DOWN!");
+				Position screen_pos(_current_event.mouse.x, _current_event.mouse.y);
+				_mouse_corner_start = gameFromScreen(_renderer->getViewpoint(), screen_pos);
+				break;
+			}
+			}
 			break;
 		}
-		}
-		break;
-	}
-	case ALLEGRO_EVENT_MOUSE_BUTTON_UP: {
-		switch (_current_event.mouse.button) {
-		case 1: {
-			DEBUG("MOUSE_BUTTON_UP!");
-			Position screen_pos(_current_event.mouse.x, _current_event.mouse.y);
-			_mouse_corner_end = gameFromScreen(_renderer->getViewpoint(), screen_pos);
-			DEBUG("Start corner: " << _mouse_corner_start.getX() <<
-				  ", " <<_mouse_corner_start.getY());
-			DEBUG("End corner: " << _mouse_corner_end.getX() <<
-				  ", " << _mouse_corner_end.getY());
+		case ALLEGRO_EVENT_MOUSE_BUTTON_UP: {
+			switch (_current_event.mouse.button) {
+			case 1: {
+				DEBUG("MOUSE_BUTTON_UP!");
+				Position screen_pos(_current_event.mouse.x, _current_event.mouse.y);
+				_mouse_corner_end = gameFromScreen(_renderer->getViewpoint(), screen_pos);
+				DEBUG("Start corner: " << _mouse_corner_start.getX() <<
+					  ", " <<_mouse_corner_start.getY());
+				DEBUG("End corner: " << _mouse_corner_end.getX() <<
+					  ", " << _mouse_corner_end.getY());
+				UnitMoveEvent* ume = new UnitMoveEvent();
+				ume->header.header.event_type = EVENT_UNIT_MOVE;
+				ume->header.header.total_byte_count = sizeof(UnitMoveEvent);
+				ume->header.entity_id = 1;
+
+				ume->xGoal = _mouse_corner_end.getX();
+				ume->yGoal = _mouse_corner_end.getY();
+
+				PacketEvent *pe = new PacketEvent();
+				pe->setEvent((Event*)ume);
+
+				_client->get_networkconnecter()->sendPacket(pe);
+				break;
+			}
+			}
 			break;
 		}
-		}
-		break;
-	}
 	}
 }
 

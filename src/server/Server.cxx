@@ -22,10 +22,6 @@ void Server::run() {
 	_running = true;
 	
 	_gamestate->get_entity(1);
-	_gamestate->get_entity(2);
-	_gamestate->get_entity(3);
-	_gamestate->get_entity(4);
-	_gamestate->get_entity(5);
 
 	_conn->start();
 
