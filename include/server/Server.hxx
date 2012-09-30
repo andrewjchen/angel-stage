@@ -3,6 +3,7 @@
 
 #include "ServerGameState.hxx"
 #include "ClientsConnection.hxx"
+#include "Map.hxx"
 
 class Server {
 
@@ -15,8 +16,11 @@ public:
 
 	ClientsConnection* get_clientsconnection() { return _conn; };
 	ServerGameState* get_servergamestate() { return _gamestate; };
+	
+	Map *_map;
 
 private:
+	void sendOnLoginData(uint64_t client, int fd);
 
 	ClientsConnection* _conn;
 	ServerGameState* _gamestate;

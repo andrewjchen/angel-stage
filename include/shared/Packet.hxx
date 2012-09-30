@@ -2,6 +2,7 @@
 #define PACKET_H
 #include <stdint.h>
 #include "Event.hxx"
+#include "Map.hxx"
 
 const uint8_t PACKET_PING           = 0x41;
 const uint8_t PACKET_DISCONNECT     = 0x55;
@@ -79,13 +80,15 @@ class PacketMap: public Packet
 {
 public:
 	PacketMap();
+	~PacketMap();
 	int estimateSize();
 	int writeToBuf(uint8_t *buf);
-
-	int size;
-	int seed;
+	void setMap(Map *map);
+	uint8_t *getStuff();
 
 protected:
+	int size;
+	uint8_t *stuff;
 	void readSock(int sock);
 };
 

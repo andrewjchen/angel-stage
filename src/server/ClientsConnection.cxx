@@ -12,7 +12,7 @@
 #include <netinet/in.h>
 #include "Debug.hxx"
 
-ClientsConnection::ClientsConnection(uint16_t port) {
+ClientsConnection::ClientsConnection(uint16_t port, boost::function<void (uint64_t, int)> _onLoginCallback) {
 	struct sockaddr_in sa;
 	memset(&sa, 0, sizeof(struct sockaddr_in));
 	sa.sin_family = AF_INET;
@@ -25,6 +25,8 @@ ClientsConnection::ClientsConnection(uint16_t port) {
 	
 	if(bind(listenfd, (struct sockaddr *)&sa, sizeof(sa)) == -1)
 		throw "bind error";
+	
+	onLoginCallback = _onLoginCallback;
 	
 	valid = true;
 	running = false;
@@ -95,7 +97,7 @@ void ClientsConnection::listenthread() {
 				
 				uint64_t peer_ip = ((uint64_t)(sa.sin_addr.s_addr) << 16) | (sa.sin_port);
 				
-				sendOnLoginData(peer_ip, clientfd);
+				onLoginCallback(peer_ip, clientfd);
 				
 				clientfd_mutex.lock();
 					clientfds[peer_ip] = clientfd;
@@ -106,37 +108,6 @@ void ClientsConnection::listenthread() {
 	} catch (const char *e){
 		std::cout << e << std::endl;
 	}
-}
-
-void ClientsConnection::sendOnLoginData(uint64_t client, int fd)
-{
-	std::list<Packet *> ps;
-
-	PacketMap pm;
-	pm.size = 48;
-	pm.seed = 123;
-	//pm.writeSock(fd);
-	ps.push_back((Packet*)(&pm));
-	
-	UnitFeedbackEvent *ufe = new UnitFeedbackEvent();
-	memset(ufe,  0, sizeof(UnitFeedbackEvent));
-	ufe->header.header.event_type = EVENT_ENTITY_SPAWN;
-	ufe->header.header.total_byte_count = sizeof(UnitFeedbackEvent);
-	ufe->header.entity_id = 12345;
-	ufe->x = 2;
-	ufe->y = 2;
-	
-	ufe->theta = 45.0;
-	PacketEvent pe;
-	pe.setEvent((Event*)ufe);
-	delete ufe;
-	//pe.writeSock(fd);
-	ps.push_back((Packet*)(&pe));
-	
-	int size;
-	uint8_t *b = crunchIntoBuffer(ps, &size);
-	write(fd, b, size);
-	delete[] b;
 }
 
 uint8_t *ClientsConnection::crunchIntoBuffer(std::list<Packet *> ps, int *outsize)

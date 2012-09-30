@@ -53,7 +53,7 @@ void Client::run() {
 					break;
 				case PACKET_MAP:
 					// DEBUG("got map data!");
-					_renderer->addMap(new Map(((PacketMap*)p)->size, ((PacketMap*)p)->seed));
+					_renderer->addMap(Map::load(((PacketMap*)p)->getStuff()));
 					delete p;
 					break;
 			}

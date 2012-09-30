@@ -141,22 +141,45 @@ int PacketEvent::writeToBuf(uint8_t *buf)
 
 PacketMap::PacketMap() : Packet(PACKET_MAP)
 {
+	stuff = NULL;
+	size = 0;
+}
+
+PacketMap::~PacketMap()
+{
+	if(stuff)
+		delete[] stuff;
 }
 
 void PacketMap::readSock(int sock)
 {
 	read(sock, &size, 4);
+	stuff = new uint8_t[size];
+	read(sock, stuff, size);
 }
 
 int PacketMap::estimateSize()
 {
-	return headerSize + 4;
+	return headerSize + sizeof(size) + size;
 }
 
 int PacketMap::writeToBuf(uint8_t *buf)
 {
 	writeHeader(buf);
-	memcpy(buf + headerSize, &size, 4);
+	memcpy(buf + headerSize, &size, sizeof(size));
+	memcpy(buf + headerSize + sizeof(size), stuff, size);
 	
-	return headerSize + 4;
+	return headerSize + size;
+}
+
+uint8_t *PacketMap::getStuff()
+{
+	return stuff;
+}
+
+void PacketMap::setMap(Map *map)
+{
+	int s;
+	stuff = map->save(&s);
+	size = s;
 }

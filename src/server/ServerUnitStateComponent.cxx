@@ -51,12 +51,52 @@ void ServerUnitStateComponent::tick(double wallTime, double deltaT) {
 			_xVel = 0;
 			_yVel = 0;
 		} else {
-			_pos.setX(_pos.getX() + _xVel * deltaT);
-			_pos.setY(_pos.getY() + _yVel * deltaT);
+			//_pos.setX();
+			//_pos.setY(_pos.getY() + _yVel * deltaT);
+			double wantedNewX = _pos.getX() + _xVel * deltaT;
+			double wantedNewY = _pos.getY() + _yVel * deltaT;
+			
+			int tileX = wantedNewX / 16.0;
+			int tileY = wantedNewY / 16.0;
+			
+			//std::cout << "Moving to tiles " << tileX << ", " << tileY << "\n";
+			
+			if(canWalkInTile[(*_entity->get_gamestate()->get_server()->_map)[tileY * _entity->get_gamestate()->get_server()->_map->width() + tileX]])
+			{
+				_pos.setX(wantedNewX);
+				_pos.setY(wantedNewY);
+			}
+			else
+			{
+				/*double dir = atan2(_yVel, _xVel);
+				if(dir >= 0 && dir < M_PI / 2.0)
+				{
+					std::cout << "Moving at quadrant 1\n";
+					_pos.setX(_pos.getX() + 1);
+				}
+				if(dir >= M_PI / 2.0 && dir < M_PI)
+				{
+					std::cout << "Moving at quadrant 2\n";
+					_pos.setX(_pos.getX() - 1);
+				}
+				if(dir >= -M_PI / 2.0 && dir < 0)
+				{
+					std::cout << "Moving at quadrant 4\n";
+					_pos.setX(_pos.getX() + 1);
+				}
+				if(dir >= -M_PI && dir < -M_PI / 2.0)
+				{
+					std::cout << "Moving at quadrant 3\n";
+					_pos.setX(_pos.getX() - 1);
+				}
+				std::cout << "Moving at angle " << dir << "\n";*/
+				
+			}
 		}
 
 		//TODO this is just a stupid size changing thing
-		_size = 10.0 * sin(wallTime / 1000.0) + 10.0;
+		//_size = 10.0 * sin(wallTime / 1000.0) + 10.0;
+		_size = 1;
 
 		//constructing packet to send
 		UnitFeedbackEvent *ufe = new UnitFeedbackEvent();

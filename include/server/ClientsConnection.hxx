@@ -6,6 +6,7 @@
 #include <memory>
 #include <stdint.h>
 #include <boost/thread/thread.hpp>
+#include <boost/function.hpp>
 #include "SDL/SDL_net.h"
 #include "Packet.hxx"
 
@@ -22,7 +23,7 @@
 class ClientsConnection
 {
 public:
-	ClientsConnection(uint16_t port);
+	ClientsConnection(uint16_t port, boost::function<void (uint64_t, int)> _onLoginCallback);
 	~ClientsConnection();
 
 	void start(); 
@@ -34,6 +35,8 @@ public:
 	void sendPacket(std::list<Packet *> ps);
 	std::list<Packet*> getPackets(int n = 1);
 	void closeClient(uint64_t client);
+	
+	friend class Server;
 
 private:
 	bool valid;
@@ -42,9 +45,7 @@ private:
 	void listenthread();
 	void readthread();
 	
-	uint8_t *crunchIntoBuffer(std::list<Packet *> ps, int *outsize);
-	
-	void sendOnLoginData(uint64_t client, int fd);
+	static uint8_t *crunchIntoBuffer(std::list<Packet *> ps, int *outsize);
 	
 	boost::thread *listenThread;
 	boost::thread *readThread;
@@ -55,6 +56,8 @@ private:
 	std::map<uint64_t,int> clientfds;
 	std::map<int,uint64_t> fd_to_client;
 	boost::mutex clientfd_mutex;
+	
+	boost::function<void (uint64_t, int)> onLoginCallback;
 };
 
 #endif
