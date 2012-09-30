@@ -25,6 +25,7 @@ Client::~Client(){
 	delete _renderer;
 	delete _conn;
 	delete _gamestate;
+	delete _input;
 }
 
 void Client::run() {
@@ -35,15 +36,15 @@ void Client::run() {
 		timer.reset_delta();
 
 		//get packets from server
-		std::list<Packet *> packets = _conn->getPacket(100);
-		std::list<Packet*>::iterator i = packets.begin();
-		while(i != packets.end()) {
+		std::list<Packet *> *packets = _conn->getPacket(100);
+		std::list<Packet*>::iterator i = packets->begin();
+		while(i != packets->end()) {
 			//std::cout << "got a packet!\n";
 			Packet *p = *i;
 			switch(p->type) {
 				case PACKET_PING:
-					//DEBUG("got a ping reply!");
-					//DEBUG(((PacketPing*)p)->pingstuff);
+					DEBUG("got a ping reply!");
+					DEBUG(((PacketPing*)p)->pingstuff);
 					delete p;
 					break;
 				case PACKET_EVENT:
@@ -59,6 +60,7 @@ void Client::run() {
 			}
 			i++;
 		}
+		delete packets;
 		_input->tick(timer.wall(), timer.delta());
 		_renderer->render();
 		//stop running if a quit is issued by keyboard

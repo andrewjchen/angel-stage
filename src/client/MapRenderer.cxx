@@ -14,6 +14,8 @@ MapRenderer::~MapRenderer()
 		if(tiles[i])
 			al_destroy_bitmap(tiles[i]);
 	}
+	
+	if(map) delete map;
 }
 
 void MapRenderer::render(int xoff, int yoff)

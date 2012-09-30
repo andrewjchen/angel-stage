@@ -128,14 +128,14 @@ void NetworkConnecter::sendPacket(Packet *p) {
 	sendPacket(ps);
 }
 
-std::list<Packet*> NetworkConnecter::getPacket(int n) {
-	std::list<Packet*> retu;
+std::list<Packet*> *NetworkConnecter::getPacket(int n) {
+	std::list<Packet*> *retu = new std::list<Packet*>;
 
 	queue_mutex.lock();
 		for(int i = 0; i < n; i++)
 		{
 			if(rx_queue.size() == 0) break;
-			retu.push_back(rx_queue.front());
+			retu->push_back(rx_queue.front());
 			rx_queue.pop_front();
 		}
 	queue_mutex.unlock();

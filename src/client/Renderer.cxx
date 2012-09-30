@@ -53,6 +53,11 @@ void Renderer::removeFromUnitLayer(VisualComponent* visual_comp) {
 
 }
 
+Renderer::~Renderer()
+{
+	if(_map_renderer) delete _map_renderer;
+}
+
 void Renderer::addMap(Map * map) {
 	if (_map_renderer) {
 		DEBUG("Trying to add multiple maps to one renderer!");

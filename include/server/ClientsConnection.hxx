@@ -33,7 +33,7 @@ public:
 	void sendPacket(Packet *p);
 	void sendPacket(std::list<Packet *> ps, uint64_t client);
 	void sendPacket(std::list<Packet *> ps);
-	std::list<Packet*> getPackets(int n = 1);
+	std::list<Packet*> *getPackets(int n = 1);
 	void closeClient(uint64_t client);
 	
 	friend class Server;

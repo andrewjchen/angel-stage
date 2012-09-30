@@ -44,9 +44,9 @@ void Server::run() {
 	while (_running) {
 		timer.reset_delta();
 
-		std::list<Packet*> packets = _conn->getPackets(100);
-		std::list<Packet*>::iterator i = packets.begin();
-		while(i != packets.end()) {
+		std::list<Packet*> *packets = _conn->getPackets(100);
+		std::list<Packet*>::iterator i = packets->begin();
+		while(i != packets->end()) {
 
 			Packet *p = *i;
 
@@ -71,6 +71,7 @@ void Server::run() {
 			}
 			i++;
 		}
+		delete packets;
 		_gamestate->tick(timer.wall(), timer.delta());
 
 		boost::this_thread::sleep(boost::posix_time::milliseconds(10));

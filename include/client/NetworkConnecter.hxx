@@ -19,7 +19,7 @@ public:
 
 	void sendPacket(Packet* p);
 	void sendPacket(std::list<Packet*> ps);
-	std::list<Packet*> getPacket(int n = 1);
+	std::list<Packet*> *getPacket(int n = 1);
 
 private:
 	bool valid;

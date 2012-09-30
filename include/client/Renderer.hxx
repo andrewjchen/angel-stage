@@ -11,7 +11,7 @@
 class Renderer {
 public:
 	Renderer() : _map_renderer(NULL) {};
-	virtual ~Renderer() {};
+	virtual ~Renderer();
 	virtual void render();
 	virtual void setViewpoint(coordinate_t x, coordinate_t y);
 	virtual const Position & getViewpoint();
