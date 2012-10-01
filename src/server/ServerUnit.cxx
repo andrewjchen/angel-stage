@@ -1,4 +1,4 @@
-#include "Unit.hxx"
+#include "ServerUnit.hxx"
 
 //ctor: null
 #include <cstdlib>
@@ -17,7 +17,7 @@
 #include "Debug.hxx"
 
 
-Unit::Unit(
+ServerUnit::ServerUnit(
 	EntityID id, 
 	ServerGameState* gamestate): 
 		ServerEntity(id, gamestate),
@@ -28,27 +28,27 @@ Unit::Unit(
 
 }
 
-Unit::~Unit() {
+ServerUnit::~ServerUnit() {
 
 }
 
 /**************** EVENTS REACTIONS ************/
 
-void Unit::react(EntityEvent* event) {
-	DEBUG("Unit id=" << _id << " received event");
+void ServerUnit::react(EntityEvent* event) {
+	DEBUG("ServerUnit id=" << _id << " received event");
 	switch(event->header.event_type) {
 		case EVENT_UNIT_SPLIT: {
-			DEBUG("unit split event received");
-			Unit* newUnit = (Unit*) (_gamestate
+			DEBUG("ServerUnit split event received");
+			ServerUnit* newServerUnit = (ServerUnit*) (_gamestate
 				->get_entity(
 					_gamestate->spawn_unit()));
 
 			Position new_pos (_pos.getX() + 1, _pos.getY() + 1);
-			newUnit->set_position(new_pos);
+			newServerUnit->set_position(new_pos);
 		}
 
 		case EVENT_UNIT_MOVE: {
-			DEBUG("unit move event received");
+			DEBUG("ServerUnit move event received");
 			UnitMoveEvent* ume = (UnitMoveEvent*) event;
 			_goal.setX(ume->xGoal);
 			_goal.setY(ume->yGoal);
@@ -57,8 +57,8 @@ void Unit::react(EntityEvent* event) {
 			double xdir = (_goal.getX() - _pos.getX()) / dist;
 			double ydir = (_goal.getY() - _pos.getY()) / dist;
 
-			_xVel = xdir * UNIT_VELOCITY / 1000.0;
-			_yVel = ydir * UNIT_VELOCITY / 1000.0;
+			_xVel = xdir * UNIT_VELOCITY/ 1000.0;
+			_yVel = ydir * UNIT_VELOCITY/ 1000.0;
 
 			_orientation = atan2(_xVel, _yVel) 
 				+ 3.14159265358979323846;	
@@ -74,8 +74,8 @@ void Unit::react(EntityEvent* event) {
 }
 
 
-void Unit::tick(double wallTime, double deltaT) {
-	//DEBUG("unit ticking : wall=" << wallTime << ", deltaT=" << deltaT);
+void ServerUnit::tick(double wallTime, double deltaT) {
+	//DEBUG("ServerUnit ticking : wall=" << wallTime << ", deltaT=" << deltaT);
 
 	if (_goal.distance(_pos) < deltaT * UNIT_VELOCITY / 1000.0) {
 		_pos.setX(_goal.getX());
@@ -95,7 +95,7 @@ void Unit::tick(double wallTime, double deltaT) {
 	sync();
 }
 
-void Unit::sync() {
+void ServerUnit::sync() {
 	UnitFeedbackEvent *ufe = new UnitFeedbackEvent();
 	memset(ufe, 0, sizeof(UnitFeedbackEvent));
 	ufe->header.header.event_type = EVENT_UNIT_MOVE;
@@ -116,18 +116,18 @@ void Unit::sync() {
 
 /**************** COMPONENTS ***************/
 
-Position Unit::get_position() {
+Position ServerUnit::get_position() {
 	return _pos;
 }
 
-void Unit::set_position(Position pos) {
+void ServerUnit::set_position(Position pos) {
 	_pos = pos;
 }
 
-double Unit::get_size() {
+double ServerUnit::get_size() {
 	return _size;
 }
 
-void Unit::set_size(double size) {
+void ServerUnit::set_size(double size) {
 	_size = size;
 }

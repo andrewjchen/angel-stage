@@ -7,7 +7,7 @@
 #include "Timer.hxx"
 #include "Debug.hxx"
 
-#include "Unit.hxx"
+#include "ServerUnit.hxx"
 
 Server::Server() {
 	_conn = new ClientsConnection(20000, boost::bind(&Server::sendOnLoginData, this, _1, _2));
@@ -38,13 +38,13 @@ void Server::sendOnLoginData(uint64_t client, int fd)
 void Server::run() {
 	_running = true;
 
-	((Unit*)_gamestate->get_entity(_gamestate->spawn_unit()))
+	((ServerUnit*)_gamestate->get_entity(_gamestate->spawn_unit()))
 		->set_position(Position(400,400));
 
 	// _gamestate->get_entity(_gamestate->spawn_entity())
-	// 	->get_unit_state_component()->setPosition(Position(400, 300));
+	// 	->get_ServerUnit_state_component()->setPosition(Position(400, 300));
 	// _gamestate->get_entity(_gamestate->spawn_entity())
-	// 	->get_unit_state_component()->setPosition(Position(200, 200));
+	// 	->get_ServerUnit_state_component()->setPosition(Position(200, 200));
 	_conn->start();
 
 	Timer timer;

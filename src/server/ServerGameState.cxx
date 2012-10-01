@@ -5,7 +5,7 @@
 #include "Packet.hxx"
 #include "Server.hxx"
 
-#include "Unit.hxx"
+#include "ServerUnit.hxx"
 
 ServerGameState::ServerGameState(Server * server) {
 	_server = server;
@@ -23,7 +23,7 @@ ServerGameState::~ServerGameState() {
 EntityID ServerGameState::spawn_unit() {
 	EntityID id = _next_id;
 	_next_id++;
-	Unit* unit = new Unit(id, this);
+	ServerUnit* unit = new ServerUnit(id, this);
 	_entities[id] = unit;
 	return id;
 
@@ -71,7 +71,7 @@ void ServerGameState::react(Event * event) {
 		DEBUG("Received global event!");
 		switch (event->event_type) {
 			case EVENT_ENTITY_SPAWN: {
-				((Unit*)get_entity(spawn_unit()))->set_position(Position(400, 300));	
+				((ServerUnit*)get_entity(spawn_unit()))->set_position(Position(400, 300));	
 			}
 			case EVENT_TEST:{
 				printf("Received a test event!\n");

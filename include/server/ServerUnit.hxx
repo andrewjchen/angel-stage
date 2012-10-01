@@ -12,13 +12,13 @@ const double UNIT_VELOCITY = 100.0;
 /**
  * A Unit has a pose and size.
  */
-class Unit: public ServerEntity {
+class ServerUnit: public ServerEntity {
 
 public:
-	Unit(
+	ServerUnit(
 		EntityID id, 
 		ServerGameState* gamestate);
-	virtual ~Unit();
+	virtual ~ServerUnit();
 	virtual void react(EntityEvent * event);
 	virtual void tick(double wallTime, double deltaT);
 	
