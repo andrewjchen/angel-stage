@@ -3,10 +3,11 @@
 
 //superclass
 #include "ServerEntity.hxx"
-//components
-#include "Pose.hxx"
-#include "Size.hxx"
 
+//position
+#include "Position.hxx"
+
+const double UNIT_VELOCITY = 100.0;
 
 /**
  * A Unit has a pose and size.
@@ -19,6 +20,7 @@ public:
 		ServerGameState* gamestate);
 	virtual ~Unit();
 	virtual void react(EntityEvent * event);
+	virtual void tick(double wallTime, double deltaT);
 
 	Position get_position();
 	void set_position(Position pos);
@@ -33,6 +35,14 @@ private:
 
 	//attributes
 	double _size;
+
+	//motion: 
+	double _xVel;
+	double _yVel;
+	Position _goal;
+
+
+
 
 
 	//ServerUnitStateComponent* get_unit_state_component(){ return _unit_state_component; };

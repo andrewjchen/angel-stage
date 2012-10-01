@@ -20,15 +20,6 @@ ServerGameState::~ServerGameState() {
 	}
 }
 
-EntityID ServerGameState::spawn_entity() {
-	EntityID id = _next_id;
-	++_next_id;
-	ServerEntity * ent = new ServerEntity(id, this);
-	_entities[id] = ent;
-	ent->set_unit_state_component(new ServerUnitStateComponent(ent));
-	return id;
-}
-
 EntityID ServerGameState::spawn_unit() {
 	EntityID id = _next_id;
 	_next_id++;
@@ -78,7 +69,7 @@ void ServerGameState::react(Event * event) {
 	} else if (is_global_event(event)) {
 		/* TODO: Do things. */
 		if (event->event_type == EVENT_ENTITY_SPAWN) {
-			get_entity(spawn_entity())->get_unit_state_component()->setPosition(Position(400, 300));
+			((Unit*)get_entity(spawn_unit()))->set_position(Position(400, 300));
 		}
 		printf("Received global event!\n");
 		switch (event->event_type) {
@@ -90,19 +81,19 @@ void ServerGameState::react(Event * event) {
 }
 
 void ServerGameState::tick(double wallTime, double deltaTime){
-	std::vector<ServerComponent*>::iterator it;
+	std::vector<ServerEntity*>::iterator it;
 	for (it = clockReceivers.begin(); it < clockReceivers.end(); it++){
 		(*it)->tick(wallTime, deltaTime);
 	}
 }
 
-void ServerGameState::addClockListener(ServerComponent* toListen){
+void ServerGameState::addClockListener(ServerEntity* toListen){
 	clockReceivers.push_back(toListen);
 	DEBUG("Added clock listener");
 }
 
-void ServerGameState::removeClockListener(ServerComponent* toListen){
-	std::vector<ServerComponent*>::iterator it;
+void ServerGameState::removeClockListener(ServerEntity* toListen){
+	std::vector<ServerEntity*>::iterator it;
 
 	for (it = clockReceivers.begin(); it<clockReceivers.end(); it++){
 		if ((*it) == toListen){

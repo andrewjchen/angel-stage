@@ -11,7 +11,6 @@
 #include "ClientsConnection.hxx"
 #include "Packet.hxx"
 #include "ServerGameState.hxx"
-#include "ServerUnitStateComponent.hxx"
 #include "Debug.hxx"
 
 #include <math.h>

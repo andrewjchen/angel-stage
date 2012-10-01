@@ -8,30 +8,24 @@
 #include "Ids.hxx"
 #include "ServerComponent.hxx"
 
-#include "ServerUnitStateComponent.hxx"
-
 #include "Event.hxx"
 #include "EventTypes.hxx"
 
 class ServerGameState;
 
 class ServerEntity : public Entity {
-protected:
-	EntityID _id;
-	ServerGameState* _gamestate;
-	ServerUnitStateComponent* _unit_state_component;
-
 public:
-	ServerEntity(EntityID id, ServerGameState * gamestate) : Entity(id),
-															 _gamestate(gamestate) {};
+	ServerEntity(EntityID id, ServerGameState * gamestate);
 	virtual ~ServerEntity();
 	virtual void react(EntityEvent * event);
+	virtual void tick(double wallTime, double deltaT);
 
-	ServerGameState* get_gamestate() { return _gamestate; };
-	void set_gamestate(ServerGameState* state) { _gamestate = state; };
+	ServerGameState* get_gamestate();
+	//void set_gamestate(ServerGameState* state);
 
-	ServerUnitStateComponent* get_unit_state_component(){ return _unit_state_component; };
-	void set_unit_state_component(ServerUnitStateComponent* comp) {_unit_state_component = comp; };
+protected:
+	//EntityID _id;
+	ServerGameState* _gamestate;
 
 };
 

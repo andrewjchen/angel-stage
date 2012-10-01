@@ -5,7 +5,6 @@
 #include <vector>
 
 #include "ServerEntity.hxx"
-#include "ServerComponent.hxx"
 
 struct ServerEvent;
 class Server;
@@ -20,16 +19,15 @@ public:
 	virtual void react(Event * event);
 	virtual void tick(double time, double deltaTime);
 	virtual Server* get_server() { return _server; };
-	virtual EntityID spawn_entity();
 	virtual EntityID spawn_unit();
 
-	virtual void addClockListener(ServerComponent* toListen);
-	virtual void removeClockListener(ServerComponent* toListen);
+	virtual void addClockListener(ServerEntity* toListen);
+	virtual void removeClockListener(ServerEntity* toListen);
 
 protected:
 	EntityID _next_id;
 	std::map<EntityID, ServerEntity *> _entities;
-	std::vector<ServerComponent* > clockReceivers;
+	std::vector<ServerEntity* > clockReceivers;
 
 	Server* _server;
 };
