@@ -9,7 +9,6 @@ def configure(conf):
 
 from os.path import join
 def build(bld):
-    sdl_libs = ['SDL', 'SDL_image']
     allegro_libs = ['allegro', 'allegro_image', 'allegro_primitives']
     common_includes = ['.',
                        join(bld.top_dir, 'deps', 'usr', 'local', 'include'),
@@ -19,55 +18,44 @@ def build(bld):
     common_libpath = [in_repo_libpath]
     client_includes = common_includes + [join(bld.top_dir, 'include', 'client')]
     server_includes = common_includes + [join(bld.top_dir, 'include', 'server')]
-    common_lib = ['boost_system', 'boost_thread', 'boost_chrono', 'SDL_net', 'SDL' ]
+    common_lib = ['boost_system', 'boost_thread', 'boost_chrono']
     server_lib = common_lib
-    server_defines = ['SERVER_SIDE']
-    client_defines = ['CLIENT_SIDE']
     bld.stlib(
         source = bld.path.ant_glob('shared/*.cxx'),
-        includes = client_includes,
-        defines = client_defines,
-        target = 'angel-stage-shared-client-lib',
+        includes = common_includes,
+        lib = common_lib,
+        libpath = common_libpath,
+        target = 'angel-stage-shared-lib',
         )
     bld.stlib(
         source = bld.path.ant_glob('client/*.cxx'),
         includes = client_includes,
-        defines = client_defines,
-        use = 'angel-stage-shared-client-lib',
+        use = 'angel-stage-shared-lib',
         target = 'angel-stage-client-lib',
         )
     bld.program(
         source = 'client_main.cxx',
         target = 'client_main',
         includes = client_includes,
-        defines = client_defines,
         libpath = common_libpath,
         lib = common_lib + allegro_libs,
-        use = ['angel-stage-shared-client-lib', 'angel-stage-client-lib'],
+        use = ['angel-stage-shared-lib', 'angel-stage-client-lib'],
         linkflags='-Wl,-R ' + in_repo_libpath,
         )
     bld.program(
         source = 'client_test.cxx',
         target = 'client_test',
         includes = client_includes,
-        defines = client_defines,
         libpath = common_libpath,
         lib = common_lib + allegro_libs,
-        use = ['angel-stage-shared-client-lib', 'angel-stage-client-lib'],
+        use = ['angel-stage-shared-lib', 'angel-stage-client-lib'],
         linkflags='-Wl,-R ' + in_repo_libpath,
-        )
-    bld.stlib(
-        source = bld.path.ant_glob('shared/*.cxx'),
-        includes = server_includes,
-        defines = server_defines,
-        target = 'angel-stage-shared-server-lib',
         )
     bld.stlib(
         source = bld.path.ant_glob('server/*.cxx'),
         includes = server_includes,
-        use = 'angel-stage-shared-server-lib',
+        use = 'angel-stage-shared-lib',
         target = 'angel-stage-server-lib',
-        defines = server_defines,
         )
     bld.program(
         source = 'server_main.cxx',
@@ -75,7 +63,6 @@ def build(bld):
         includes = server_includes,
         lib = server_lib,
         libpath = common_libpath,
-        use = ['angel-stage-shared-server-lib', 'angel-stage-server-lib'],
-        defines = server_defines,
+        use = ['angel-stage-shared-lib', 'angel-stage-server-lib'],
         linkflags='-Wl,-R ' + in_repo_libpath,
         )

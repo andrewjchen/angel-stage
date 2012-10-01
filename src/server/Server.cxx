@@ -85,5 +85,4 @@ void Server::run() {
 	}
 	DEBUG("Cleaning up server...");
 	_conn->stop();
-	SDLNet_Quit();
 }
