@@ -68,10 +68,20 @@ void ServerGameState::react(Event * event) {
 		}
 	} else if (is_global_event(event)) {
 		/* TODO: Do things. */
-		DEBUG("Received global event!");
+		// DEBUG("Received global event!");
 		switch (event->event_type) {
 			case EVENT_ENTITY_SPAWN: {
-				((ServerUnit*)get_entity(spawn_unit()))->set_position(Position(400, 300));	
+				UnitSpawnEvent* u= (UnitSpawnEvent*)event;
+				ServerUnit* unit = ((ServerUnit*)get_entity(spawn_unit()));
+				unit->set_position(Position(u->x, u->y));
+				DEBUG(
+					"EVENT: x=" << u->x  <<
+					", y=" << u->y );
+				DEBUG(
+					"spawned unit: id=" << unit->get_id() << 
+					", x="<< unit->get_position().get_x() << 
+					", y="<< unit->get_position().get_y());
+
 			}
 			case EVENT_TEST:{
 				printf("Received a test event!\n");

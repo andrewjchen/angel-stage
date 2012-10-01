@@ -12,8 +12,8 @@
 int main(int argc, char **argv) {
 
 	Client client;
-	client.display_width = 1800;
-	client.display_height = 900;
+	client.display_width = 1024;
+	client.display_height = 768;
 	client.display = NULL;
 	client.keep_running = true;
 	client.input_manager = new InputManager(&client);

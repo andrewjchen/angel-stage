@@ -242,15 +242,28 @@ void InputManager::react() {
 							ume->header.entity_id = (*iter)->get_id();
 							ume->xGoal = game_pos.get_x();
 							ume->yGoal = game_pos.get_y();
-							PacketEvent *pe = new PacketEvent();
-							pe->setEvent((Event*)ume);
-							_client->network_connector->send_packet(pe);
-							delete pe;
-							delete ume;
+							send_packet((Event*)ume); delete ume;
 							++iter;
 						}
 					}
 					break;
+				}
+
+				case 3: {
+					UnitSpawnEvent u;
+					u.header.event_type = EVENT_ENTITY_SPAWN;
+					u.header.total_byte_count = sizeof(UnitSpawnEvent);
+					u.x = _current_event.mouse.x;
+					u.y = _current_event.mouse.y;
+					u.theta = 0;
+					u.size = 1.0;
+
+					DEBUG(
+						"spawning unit: x= " << u.x <<
+						", y=" << u.y );
+					 send_packet((Event*)&u);
+
+
 				}
 			}
 		}
@@ -266,4 +279,12 @@ void InputManager::select_from_rect() {
 	for(unsigned int i = 0; i < _selected_units->size(); i++){
 		DEBUG("_selected unit: id="<< _selected_units->at(i)->get_id());
 	}
+}
+
+
+void InputManager::send_packet(Event* e) {
+	PacketEvent*pe = new PacketEvent();
+	pe->setEvent(e);
+	_client->network_connector->send_packet(pe);
+	delete pe;
 }

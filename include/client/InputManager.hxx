@@ -21,6 +21,9 @@ public:
 protected:
 	virtual void react();
 	virtual void select_from_rect();
+
+	virtual void send_packet(Event* e);
+
 	ALLEGRO_EVENT_QUEUE * _event_queue;
 	ALLEGRO_EVENT _current_event;
 

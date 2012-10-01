@@ -71,7 +71,7 @@ void Server::run() {
 					delete p;
 					break;
 				case PACKET_EVENT:
-					DEBUG("got an event!");
+					// DEBUG("got an event!");
 					_gamestate->react(((PacketEvent*)p)->getEvent());
 					delete p;
 					break;

@@ -25,6 +25,16 @@ const EventTypeID EVENT_PLAYER_FEEDBACK   = 0x81010009;
 const EventTypeID EVENT_UNIT_CHASE        = 0x8101000A;
 const EventTypeID EVENT_ENTITY_MAXIMUM    = 0x81020000;
 
+//sent from client to server
+struct UnitSpawnEvent {
+	Event header;
+	double x;
+	double y;
+	double theta;
+	double size;
+
+};
+
 struct UnitDieEvent {
 	Event header;
 	EntityID entity_id;
