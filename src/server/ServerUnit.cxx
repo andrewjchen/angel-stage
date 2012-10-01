@@ -23,7 +23,8 @@ ServerUnit::ServerUnit(
 		ServerEntity(id, gamestate),
 		_pos(0,0),
 		_goal(0,0) {
-	_orientation = 0; _size = 1.0;
+	_orientation = 0; 
+	_size = 1.0;
 	_gamestate->addClockListener(this);
 
 }
@@ -35,10 +36,10 @@ ServerUnit::~ServerUnit() {
 /**************** EVENTS REACTIONS ************/
 
 void ServerUnit::react(EntityEvent* event) {
-	DEBUG("ServerUnit id=" << _id << " received event");
+	//DEBUG("ServerUnit id=" << _id << " received event");
 	switch(event->header.event_type) {
 		case EVENT_UNIT_SPLIT: {
-			DEBUG("ServerUnit split event received");
+			//DEBUG("ServerUnit split event received");
 			ServerUnit* newServerUnit = (ServerUnit*) (_gamestate
 				->get_entity(
 					_gamestate->spawn_unit()));
@@ -48,7 +49,7 @@ void ServerUnit::react(EntityEvent* event) {
 		}
 
 		case EVENT_UNIT_MOVE: {
-			DEBUG("ServerUnit move event received");
+			//DEBUG("ServerUnit move event received");
 			UnitMoveEvent* ume = (UnitMoveEvent*) event;
 			_goal.setX(ume->xGoal);
 			_goal.setY(ume->yGoal);
@@ -64,13 +65,7 @@ void ServerUnit::react(EntityEvent* event) {
 				+ 3.14159265358979323846;	
 
 		}
-
-
-
 	}
-
-
-	
 }
 
 
@@ -98,7 +93,7 @@ void ServerUnit::tick(double wallTime, double deltaT) {
 void ServerUnit::sync() {
 	UnitFeedbackEvent *ufe = new UnitFeedbackEvent();
 	memset(ufe, 0, sizeof(UnitFeedbackEvent));
-	ufe->header.header.event_type = EVENT_UNIT_MOVE;
+	ufe->header.header.event_type = EVENT_UNIT_FEEDBACK;
 	ufe->header.header.total_byte_count = sizeof(UnitFeedbackEvent);
 	ufe->header.entity_id = _id;
 	ufe->x = _pos.getX();

@@ -7,7 +7,7 @@
 class Renderable {
 
 public:
-	virtual void render(const Position& viewport, Client* client);
+	virtual void render(const Position& viewport, Client* client) {};
 };
 
 #endif 

@@ -15,7 +15,7 @@ public:
 	Entity(EntityID id);
 	virtual ~Entity();
 	EntityID get_id();
-	virtual void react(EntityEvent * event);
+	virtual void react(EntityEvent * event) = 0;
 };
 
 #endif /* _ENTITY_HXX_ */

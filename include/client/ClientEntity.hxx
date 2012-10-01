@@ -17,8 +17,8 @@ class ClientEntity: public Entity {
 public:
 	ClientEntity(EntityID id, ClientGameState* gamestate);
 	virtual ~ClientEntity();
-	virtual void react(EntityEvent * event);
-	virtual void tick(double wallTime, double deltaT);
+	virtual void react(EntityEvent * event) = 0;
+	virtual void tick(double wallTime, double deltaT) = 0;
 	//tick
 
 	ClientGameState* get_gamestate();

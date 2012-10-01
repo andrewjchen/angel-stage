@@ -10,14 +10,14 @@ ServerEntity::~ServerEntity() {
 
 }
 
-void ServerEntity::react(EntityEvent* event) {
+// void ServerEntity::react(EntityEvent* event) {
 	
-}
+// }
 
 
-void ServerEntity::tick(double wallTime, double deltaT) {
+// void ServerEntity::tick(double wallTime, double deltaT) {
 
-}
+// }
 
 ServerGameState* ServerEntity::get_gamestate() {
 	return _gamestate;

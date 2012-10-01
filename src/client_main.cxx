@@ -37,7 +37,7 @@ int main(int argc, char **argv) {
 					delete p;
 					break;
 				case PACKET_EVENT:
-					//DEBUG("got an event!");
+					// DEBUG("got an event!");
 					client.gamestate->react(((PacketEvent*)p)->getEvent());
 					delete p;
 					break;

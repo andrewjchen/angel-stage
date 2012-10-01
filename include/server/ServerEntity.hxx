@@ -17,8 +17,8 @@ class ServerEntity : public Entity {
 public:
 	ServerEntity(EntityID id, ServerGameState * gamestate);
 	virtual ~ServerEntity();
-	virtual void react(EntityEvent * event);
-	virtual void tick(double wallTime, double deltaT);
+	virtual void react(EntityEvent * event) = 0;
+	virtual void tick(double wallTime, double deltaT) = 0;
 
 	ServerGameState* get_gamestate();
 	//void set_gamestate(ServerGameState* state);

@@ -5,6 +5,7 @@
 #include "Debug.hxx"
 #include <math.h>
 #include "Client.hxx"
+#include "ClientUnit.hxx"
 
 ClientGameState::~ClientGameState() {
 	std::map<EntityID, ClientEntity *>::iterator iter = _entities.begin();
@@ -16,8 +17,9 @@ ClientGameState::~ClientGameState() {
 
 ClientEntity * ClientGameState::get_entity(EntityID id) {
 	if ( _entities.count(id) == 0) { //if entity doens't exist
+		DEBUG("Creating clientunit: id="<< id);
 		//intialize new gamestate
-		ClientEntity* ce = new ClientEntity(id,this);
+		ClientUnit* ce = new ClientUnit(id, this);
 
 		//components
 		// UnitVisualComponent *uvc = new UnitVisualComponent(ce);
@@ -25,6 +27,7 @@ ClientEntity * ClientGameState::get_entity(EntityID id) {
 		// ce->set_visual_component(uvc);
 		// ce->set_unit_state_component(usc);
 		// _client->renderer->addToUnitLayer(uvc);
+		_client->renderer->addToUnitLayer((Renderable*) ce);
 
 		set_entity(id, ce);
 	}
@@ -62,11 +65,10 @@ void ClientGameState::set_entity(EntityID id, ClientEntity* entity) {
 
 void ClientGameState::react(Event * event) {
 	if (is_entity_event(event)) {
+		// DEBUG("entity event received on gamestate" << _entities.size());
 		EntityID id = ((EntityEvent *) event)->entity_id;
 		ClientEntity * e = get_entity(id);
-		if (e) {
-			e->react((EntityEvent *) event);
-		}
+		e->react((EntityEvent *) event);
 	} else if (is_global_event(event)) {
 		DEBUG("Received global event!");
 		switch (event->event_type) {
@@ -140,11 +142,11 @@ std::vector<ClientEntity *> * ClientGameState::get_entities_in_rect(const Positi
 	Position top_left(left, top);
 	Position bottom_right(right, bottom);
 	std::map<EntityID, ClientEntity *>::iterator iter = _entities.begin();
-	// while (iter != _entities.end()) {
-	// 	if (iter->second->get_unit_state_component()->getPosition().in_rect(top_left, bottom_right)) {
-	// 		out->push_back(iter->second);
-	// 	}
-	// 	++iter;
-	// }
+	while (iter != _entities.end()) {
+		if (((ClientUnit*) iter->second)->get_position().in_rect(top_left, bottom_right)) {
+			out->push_back(iter->second);
+		}
+		++iter;
+	}
 	return out;
 }
