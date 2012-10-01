@@ -17,9 +17,6 @@ public:
 	InputManager(Client* client);
 	virtual ~InputManager();
 	virtual void tick(double wall, double delta);
-	uint32_t _display_width;
-	uint32_t _display_height;
-	ALLEGRO_DISPLAY * _display;
 
 protected:
 	virtual void react();

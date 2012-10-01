@@ -1,4 +1,5 @@
 #ifndef Client_HXX
+#include "allegro5/allegro.h"
 #define Client_HXX
 
 class NetworkConnecter;
@@ -12,6 +13,9 @@ struct Client {
 	ClientGameState* gamestate;
 	Renderer* renderer;
 	InputManager* input_manager;
+	uint32_t display_width;
+	uint32_t display_height;
+	ALLEGRO_DISPLAY * display;
 };
 
 typedef struct Client Client;

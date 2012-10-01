@@ -6,15 +6,15 @@
 
 #define TILE_WIDTH    16
 #define TILE_HEIGHT   16
-#define SCREEN_WIDTH  800
-#define SCREEN_HEIGHT 600
+
+struct Client;
 
 class MapRenderer
 {
 public:
 	MapRenderer(Map *_map);
 	~MapRenderer();
-	void render(int xoff = 0, int yoff = 0);
+	void render(int xoff, int yoff, Client * client);
 
 private:
 	Map *map;

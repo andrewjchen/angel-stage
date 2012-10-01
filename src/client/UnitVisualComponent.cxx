@@ -23,8 +23,8 @@ void UnitVisualComponent::render(const Position & viewpoint, Client * client) {
 	double screenX = screen_pos.getX();
 	double screenY = screen_pos.getY();
 	double scale = 16.0 / 512.0 * _entity->get_unit_state_component()->getSize();
-	if (screenX - _half_bitmap_width < client->input_manager->_display_width &&
-		screenY - _half_bitmap_height < client->input_manager->_display_height &&
+	if (screenX - _half_bitmap_width < client->display_width &&
+		screenY - _half_bitmap_height < client->display_height &&
 		screenX + _half_bitmap_width > 0 &&
 		screenY + _half_bitmap_width > 0 &&
 		_bitmap) {

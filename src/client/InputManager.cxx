@@ -10,8 +10,6 @@
 #include "Client.hxx"
 
 InputManager::InputManager(Client* client) {
-	_display_width = 800;
-	_display_height = 600;
 	ALLEGRO_EVENT_SOURCE * keyboard_source;
 	ALLEGRO_EVENT_SOURCE * mouse_source;
 	if (   !al_init()
@@ -22,12 +20,12 @@ InputManager::InputManager(Client* client) {
 		|| !(keyboard_source = al_get_keyboard_event_source())
 		|| !(mouse_source = al_get_mouse_event_source())
 		|| !(_event_queue = al_create_event_queue())
-		|| !(_display = al_create_display(_display_width, _display_height))
+		|| !(client->display = al_create_display(client->display_width, client->display_height))
 		)
 	{
 		printf("Cannot initalize Allegro.\n");
 	};
-	al_set_target_backbuffer(_display);
+	al_set_target_backbuffer(client->display);
 	al_register_event_source(_event_queue, keyboard_source);
 	al_register_event_source(_event_queue, mouse_source);
 	_client = client;
@@ -41,7 +39,7 @@ InputManager::~InputManager() {
 	al_uninstall_keyboard();
 	al_uninstall_mouse();
 	al_shutdown_primitives_addon();
-	al_destroy_display(_display);
+	al_destroy_display(_client->display);
 }
 
 void InputManager::tick(double wall, double delta) {

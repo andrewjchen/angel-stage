@@ -8,7 +8,7 @@
 void Renderer::render() {
 	al_clear_to_color(al_map_rgb(0,0,0));
 	if (_map_renderer) {
-		_map_renderer->render(_viewpoint.getX(), _viewpoint.getY());
+		_map_renderer->render(_viewpoint.getX(), _viewpoint.getY(), _client);
 	}
 	std::vector<VisualComponent *>::iterator iter;
 	for (iter = _unit_layer.begin(); iter < _unit_layer.end(); iter++) {

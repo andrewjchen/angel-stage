@@ -12,11 +12,14 @@
 int main(int argc, char **argv) {
 
 	Client client;
+	client.display_width = 1800;
+	client.display_height = 900;
+	client.display = NULL;
 	client.keep_running = true;
+	client.input_manager = new InputManager(&client);
 	client.renderer = new Renderer(&client);
 	client.gamestate = new ClientGameState(&client);
 	client.network_connector = new NetworkConnecter("127.0.0.1", 20000);
-	client.input_manager = new InputManager(&client);
 	client.network_connector->start();
 
 	Timer timer;
