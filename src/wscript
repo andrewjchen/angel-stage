@@ -20,7 +20,6 @@ def build(bld):
     client_includes = common_includes + [join(bld.top_dir, 'include', 'client')]
     server_includes = common_includes + [join(bld.top_dir, 'include', 'server')]
     common_lib = ['boost_system', 'boost_thread', 'boost_chrono', 'SDL_net', 'SDL' ]
-    #common_lib = ['boost_system', 'boost_thread', 'boost_timer', #'boost_chrono', 'SDL_net']
     server_lib = common_lib
     server_defines = ['SERVER_SIDE']
     client_defines = ['CLIENT_SIDE']

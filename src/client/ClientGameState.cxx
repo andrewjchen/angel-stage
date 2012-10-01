@@ -27,7 +27,7 @@ ClientEntity * ClientGameState::get_entity(EntityID id) {
 		ClientUnitStateComponent *usc = new ClientUnitStateComponent(ce);
 		ce->set_visual_component(uvc);
 		ce->set_unit_state_component(usc);
-		globalRenderer->addToUnitLayer(uvc);
+		_client->renderer->addToUnitLayer(uvc);
 
 		set_entity(id, ce);
 	}
@@ -49,7 +49,7 @@ void ClientGameState::delete_entity(EntityID id) {
 
 
 	VisualComponent* vis = get_entity(id)->get_visual_component();
-	_client->get_renderer()->removeFromUnitLayer(vis);
+	_client->renderer->removeFromUnitLayer(vis);
 
 	DEBUG("NUM ENTITIES=" << _entities.size());
 	_entities.erase(id);

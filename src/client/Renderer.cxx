@@ -12,7 +12,7 @@ void Renderer::render() {
 	}
 	std::vector<VisualComponent *>::iterator iter;
 	for (iter = _unit_layer.begin(); iter < _unit_layer.end(); iter++) {
-		(*iter)->render(_viewpoint);
+		(*iter)->render(_viewpoint, _client);
 	}
 	if (_select_rect_start != _select_rect_end) {
 		Position screen1 = screenFromGame(_viewpoint, _select_rect_start);
@@ -53,11 +53,6 @@ void Renderer::removeFromUnitLayer(VisualComponent* visual_comp) {
 
 }
 
-Renderer::~Renderer()
-{
-	if(_map_renderer) delete _map_renderer;
-}
-
 void Renderer::addMap(Map * map) {
 	if (_map_renderer) {
 		DEBUG("Trying to add multiple maps to one renderer!");
@@ -72,4 +67,10 @@ void Renderer::setSelectionRectStart(Position start) {
 }
 void Renderer::setSelectionRectEnd(Position end) {
 	_select_rect_end = end;
+}
+
+Renderer::~Renderer() {
+	if (_map_renderer) {
+		delete _map_renderer;
+	}
 }

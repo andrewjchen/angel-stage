@@ -3,84 +3,61 @@
 */
 
 #include "Client.hxx"
-// #include <iostream>
-// #include <boost/thread/thread.hpp>
-// #include <stdlib.h>
-
-// #include "NetworkConnecter.hxx"
-// #include "Packet.hxx"
-// #include "MapRenderer.hxx"
-// #include "ClientGameState.hxx"
-// #include "Event.hxx"
-// #include "EventTypes.hxx"
-// #include "Map.hxx"
-// #include "RenderSetup.hxx"
-// #include "ClientGlobalsImport.hxx"
-// #include "Renderer.hxx"
-// #include "InputManager.hxx"
+#include "Debug.hxx"
+#include "Renderer.hxx"
+#include "InputManager.hxx"
+#include "Timer.hxx"
 
 
-int main(int argc, char **argv)
-{
+int main(int argc, char **argv) {
 
 	Client client;
-	client.run();
-	// if (!setup_rendering()) {
-	// 	return 1;
-	// }
+	client.keep_running = true;
+	client.renderer = new Renderer(&client);
+	client.gamestate = new ClientGameState(&client);
+	client.network_connector = new NetworkConnecter("127.0.0.1", 20000);
+	client.input_manager = new InputManager(&client);
+	client.network_connector->start();
 
-	// Map *map = NULL;
-	// Renderer *renderer = new Renderer();
-	// ClientGameState *gs = new ClientGameState(renderer);
+	Timer timer;
+	while(client.keep_running) {
+		timer.reset_delta();
+		std::list<Packet *> * packets = client.network_connector->getPacket(100);
+		std::list<Packet*>::iterator i = packets->begin();
+		while(i != packets->end()) {
+			//std::cout << "got a packet!\n";
+			Packet *p = *i;
+			switch(p->type) {
+				case PACKET_PING:
+					//DEBUG("got a ping reply!");
+					//DEBUG(((PacketPing*)p)->pingstuff);
+					delete p;
+					break;
+				case PACKET_EVENT:
+					//DEBUG("got an event!");
+					client.gamestate->react(((PacketEvent*)p)->getEvent());
+					delete p;
+					break;
+				case PACKET_MAP:
+					// DEBUG("got map data!");
+					client.renderer->addMap(Map::load(((PacketMap*)p)->getStuff()));
+					delete p;
+					break;
+				default:
+					DEBUG("BAD DEFAULT!!!");
+			}
+			i++;
+		}
+		client.input_manager->tick(timer.wall(), timer.delta());
+		client.renderer->render();
+	}
+	PacketDisconnect p;
+	client.network_connector->sendPacket((Packet*)&p);
+	DEBUG("trying to disconnect");
+	client.network_connector->disconnect();
 
-	// std::cout << "Starting client!\n";
-
-	// SDLNet_Init();
-
-	// NetworkConnecter * nc = new NetworkConnecter("localhost", 20000);
-	// nc->connect();
-
-	// InputManager * input = new InputManager(renderer, nc);
-	// while(input->keep_running()) {
-	// 	input->tick();
-	// 	Packet *p;
-	// 	while((p = nc->getPacket()) != NULL){
-	// 		//std::cout << "got a packet!\n";
-	// 		switch(p->type) {
-	// 			case PACKET_PING:
-	// 				std::cout << "got a ping reply!\n";
-	// 				std::cout << ((PacketPing*)p)->pingstuff << "\n";
-	// 				delete p;
-	// 				break;
-	// 			case PACKET_EVENT:
-	// 				std::cout << "got an event!\n";
-	// 				gs->react(((PacketEvent*)p)->getEvent());
-	// 				delete p;
-	// 				break;
-	// 			case PACKET_MAP:
-	// 				std::cout << "got map data!\n";
-	// 				map = new Map(((PacketMap*)p)->size);
-	// 				// render = new MapRenderer(map);
-	// 				renderer->addMap(map);
-	// 				delete p;
-	// 				break;
-	// 		}
-	// 	}
-	// }
-
-	// 	renderer->render();
-	// }
-	// Packet * p = new PacketDisconnect(PACKET_DISCONNECT);
-	// nc->sendPacket(p);
-	// std::cout << "trying to disconnect\n";
-	// nc->disconnect();
-
-	// delete nc;
-	// SDLNet_Quit();
-	// al_destroy_display(display);
-	// if(map)
-	// 	delete map;
-	// delete renderer;
-	// delete gs;
-
+	delete client.renderer;
+	delete client.network_connector;
+	delete client.gamestate;
+	delete client.input_manager;
 }

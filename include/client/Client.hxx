@@ -1,36 +1,19 @@
 #ifndef Client_HXX
 #define Client_HXX
 
-#include "ClientGameState.hxx"
-#include "NetworkConnecter.hxx"
-#include "Renderer.hxx"
-#include "InputManager.hxx"
+class NetworkConnecter;
+class ClientGameState;
+class Renderer;
+class InputManager;
 
-class Client {
-
-public:
-	Client();
-	~Client();
-
-
-	void run();
-	void set_running(bool running) { _running = running; };
-
- 	NetworkConnecter* get_networkconnecter() { return _conn; };
-	ClientGameState* get_clientgamestate() { return _gamestate; };
-	Renderer* get_renderer() { return _renderer; };
-
-private:
-
-	// ClientsConnection* _conn;
-	NetworkConnecter* _conn;
-	ClientGameState* _gamestate;
-	Renderer* _renderer;
-	InputManager* _input;
-
-	bool _running;
-
-
+struct Client {
+	bool keep_running;
+	NetworkConnecter* network_connector;
+	ClientGameState* gamestate;
+	Renderer* renderer;
+	InputManager* input_manager;
 };
+
+typedef struct Client Client;
 
 #endif /* Client_HXX */

@@ -97,6 +97,7 @@ def configure(conf):
 from waflib.Scripting import run_command
 building_tests = False
 def build(bld):
+    bld.vars = dict()
     if not bld.variant:
         print('Building all variants.')
         run_command('build_debug')

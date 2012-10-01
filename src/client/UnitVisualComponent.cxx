@@ -1,6 +1,6 @@
 #include "UnitVisualComponent.hxx"
 #include "ClientEntity.hxx"
-#include "RenderSetup.hxx"
+#include "Client.hxx"
 #include "Debug.hxx"
 #include "Position.hxx"
 #include <math.h>
@@ -18,13 +18,13 @@ UnitVisualComponent::UnitVisualComponent(ClientEntity * entity) : VisualComponen
 void UnitVisualComponent::tick(double wallTime, double deltaT) {
 }
 
-void UnitVisualComponent::render(const Position & viewpoint) {
+void UnitVisualComponent::render(const Position & viewpoint, Client * client) {
 	Position screen_pos = screenFromGame(viewpoint, _entity->get_unit_state_component()->getPosition());
 	double screenX = screen_pos.getX();
 	double screenY = screen_pos.getY();
 	double scale = 16.0 / 512.0 * _entity->get_unit_state_component()->getSize();
-	if (screenX - _half_bitmap_width < display_width &&
-		screenY - _half_bitmap_height < display_height &&
+	if (screenX - _half_bitmap_width < client->input_manager->_display_width &&
+		screenY - _half_bitmap_height < client->input_manager->_display_height &&
 		screenX + _half_bitmap_width > 0 &&
 		screenY + _half_bitmap_width > 0 &&
 		_bitmap) {

@@ -8,15 +8,14 @@
 #include "ClientComponent.hxx"
 #include "Renderer.hxx"
 
-struct ClientEvent;
-class Client;
+class ClientEvent;
+struct Client;
 
 class ClientGameState {
 public:
-	ClientGameState(Client* client, Renderer *render)
+	ClientGameState(Client* client)
 	{
 		_client = client;
-		globalRenderer = render;
 	};
 	virtual ~ClientGameState(void);
 	virtual ClientEntity * get_entity(EntityID id);
