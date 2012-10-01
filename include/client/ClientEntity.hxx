@@ -6,10 +6,6 @@
 
 #include "Entity.hxx"
 #include "Ids.hxx"
-#include "ClientComponent.hxx"
-
-#include "VisualComponent.hxx"
-#include "ClientUnitStateComponent.hxx"
 
 #include "Event.hxx"
 #include "EventTypes.hxx"
@@ -17,27 +13,18 @@
 class ClientGameState;
 
 class ClientEntity: public Entity {
-protected:
-	ClientGameState* gamestate;
-
-	VisualComponent* _visual_component;
-	ClientUnitStateComponent* _unit_state_component;
-
 
 public:
-	ClientEntity(EntityID id) : Entity(id) {};
-	~ClientEntity();
+	ClientEntity(EntityID id, ClientGameState* gamestate);
+	virtual ~ClientEntity();
 	virtual void react(EntityEvent * event);
+	virtual void tick(double wallTime, double deltaT);
+	//tick
 
-	ClientGameState* get_gamestate() { return gamestate;};
-	void set_gamestate(ClientGameState* gs) { gamestate = gs;};
+	ClientGameState* get_gamestate();
 
-
-	VisualComponent* get_visual_component(){ return _visual_component; };
-	void set_visual_component(VisualComponent* comp) {_visual_component = comp; };
-
-	ClientUnitStateComponent* get_unit_state_component(){ return _unit_state_component; };
-	void set_unit_state_component(ClientUnitStateComponent* comp) { _unit_state_component = comp; };
+protected:
+	ClientGameState* _gamestate;
 
 };
 

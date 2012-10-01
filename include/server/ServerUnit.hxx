@@ -27,6 +27,8 @@ public:
 	Position get_position();
 	void set_position(Position pos);
 
+	double get_orientation();
+
 	double get_size();
 	void set_size(double size);
 

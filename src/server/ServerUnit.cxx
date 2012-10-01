@@ -124,6 +124,10 @@ void ServerUnit::set_position(Position pos) {
 	_pos = pos;
 }
 
+double ServerUnit::get_orientation() {
+	return _orientation;
+}
+
 double ServerUnit::get_size() {
 	return _size;
 }

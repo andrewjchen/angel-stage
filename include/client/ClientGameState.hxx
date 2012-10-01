@@ -5,7 +5,6 @@
 #include <vector>
 
 #include "ClientEntity.hxx"
-#include "ClientComponent.hxx"
 #include "Renderer.hxx"
 
 class ClientEvent;
@@ -24,8 +23,8 @@ public:
 	virtual void react(Event * event);
 	virtual void tick(double time, double deltaTime);
 
-	virtual void addClockListener(ClientComponent* toListen);
-	virtual void removeClockListener(ClientComponent* toListen);
+	virtual void addClockListener(ClientEntity* toListen);
+	virtual void removeClockListener(ClientEntity* toListen);
 	virtual std::vector<ClientEntity *> * get_entities_in_rect(const Position & p1, const Position & p2);
 
 	Renderer *globalRenderer;
@@ -33,7 +32,7 @@ public:
 
 private:
 	std::map<EntityID, ClientEntity *> _entities;
-	std::vector<ClientComponent* > clockReceivers;
+	std::vector<ClientEntity* > clockReceivers;
 
 	Client* _client;
 };

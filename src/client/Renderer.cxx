@@ -10,7 +10,7 @@ void Renderer::render() {
 	if (_map_renderer) {
 		_map_renderer->render(_viewpoint.getX(), _viewpoint.getY(), _client);
 	}
-	std::vector<VisualComponent *>::iterator iter;
+	std::vector<Renderable *>::iterator iter;
 	for (iter = _unit_layer.begin(); iter < _unit_layer.end(); iter++) {
 		(*iter)->render(_viewpoint, _client);
 	}
@@ -36,14 +36,14 @@ const Position & Renderer::getViewpoint() {
 	return _viewpoint;
 }
 
-void Renderer::addToUnitLayer(VisualComponent * visual_comp) {
+void Renderer::addToUnitLayer(Renderable * visual_comp) {
 	DEBUG("adding visual component to Unit layer.");
 	_unit_layer.push_back(visual_comp);
 }
 
-void Renderer::removeFromUnitLayer(VisualComponent* visual_comp) {
+void Renderer::removeFromUnitLayer(Renderable* visual_comp) {
 	DEBUG("removing visual component from Unit layer.");
-	std::vector<VisualComponent*>::iterator it;
+	std::vector<Renderable*>::iterator it;
 	for(it = _unit_layer.begin(); it != _unit_layer.end(); it++){
 		if(*it == visual_comp) {
 			_unit_layer.erase(it);

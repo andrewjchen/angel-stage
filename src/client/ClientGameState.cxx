@@ -1,8 +1,6 @@
 #include <iostream>
 #include <cstdio>
 #include "ClientGameState.hxx"
-#include "UnitVisualComponent.hxx"
-#include "ClientUnitStateComponent.hxx"
 #include "Event.hxx"
 #include "Debug.hxx"
 #include <math.h>
@@ -19,15 +17,14 @@ ClientGameState::~ClientGameState() {
 ClientEntity * ClientGameState::get_entity(EntityID id) {
 	if ( _entities.count(id) == 0) { //if entity doens't exist
 		//intialize new gamestate
-		ClientEntity* ce = new ClientEntity(id);
-		ce->set_gamestate(this);
+		ClientEntity* ce = new ClientEntity(id,this);
 
 		//components
-		UnitVisualComponent *uvc = new UnitVisualComponent(ce);
-		ClientUnitStateComponent *usc = new ClientUnitStateComponent(ce);
-		ce->set_visual_component(uvc);
-		ce->set_unit_state_component(usc);
-		_client->renderer->addToUnitLayer(uvc);
+		// UnitVisualComponent *uvc = new UnitVisualComponent(ce);
+		// ClientUnitStateComponent *usc = new ClientUnitStateComponent(ce);
+		// ce->set_visual_component(uvc);
+		// ce->set_unit_state_component(usc);
+		// _client->renderer->addToUnitLayer(uvc);
 
 		set_entity(id, ce);
 	}
@@ -48,8 +45,8 @@ void ClientGameState::delete_entity(EntityID id) {
 	// }
 
 
-	VisualComponent* vis = get_entity(id)->get_visual_component();
-	_client->renderer->removeFromUnitLayer(vis);
+	// VisualComponent* vis = get_entity(id)->get_visual_component();
+	// _client->renderer->removeFromUnitLayer(vis);
 
 	DEBUG("NUM ENTITIES=" << _entities.size());
 	_entities.erase(id);
@@ -105,22 +102,22 @@ void ClientGameState::react(Event * event) {
 }
 
 void ClientGameState::tick(double wallTime, double deltaTime){
-	std::vector<ClientComponent*>::iterator it;
+	std::vector<ClientEntity*>::iterator it;
 	for(it = clockReceivers.begin(); it<clockReceivers.end(); it++){
 		(*it)->tick(wallTime, deltaTime);
 	}
 }
 
-void ClientGameState::addClockListener(ClientComponent* toListen){
+void ClientGameState::addClockListener(ClientEntity* toListen){
 	clockReceivers.push_back(toListen);
 	DEBUG("Added clock listener");
 }
 
-void ClientGameState::removeClockListener(ClientComponent* toListen){
+void ClientGameState::removeClockListener(ClientEntity* toListen){
 	//TODO test
 //	clockReceivers.erase(
 //		s td::remove(clockReceivers.begin(), clockReceivers.end(), toListen), clockReceivers.end() );
-	std::vector<ClientComponent*>::iterator it;
+	std::vector<ClientEntity*>::iterator it;
 
 	for(it = clockReceivers.begin(); it<clockReceivers.end(); it++){
 		if( (*it) == toListen){
@@ -143,11 +140,11 @@ std::vector<ClientEntity *> * ClientGameState::get_entities_in_rect(const Positi
 	Position top_left(left, top);
 	Position bottom_right(right, bottom);
 	std::map<EntityID, ClientEntity *>::iterator iter = _entities.begin();
-	while (iter != _entities.end()) {
-		if (iter->second->get_unit_state_component()->getPosition().in_rect(top_left, bottom_right)) {
-			out->push_back(iter->second);
-		}
-		++iter;
-	}
+	// while (iter != _entities.end()) {
+	// 	if (iter->second->get_unit_state_component()->getPosition().in_rect(top_left, bottom_right)) {
+	// 		out->push_back(iter->second);
+	// 	}
+	// 	++iter;
+	// }
 	return out;
 }
