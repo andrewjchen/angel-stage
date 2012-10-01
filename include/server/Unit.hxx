@@ -21,6 +21,8 @@ public:
 	virtual ~Unit();
 	virtual void react(EntityEvent * event);
 	virtual void tick(double wallTime, double deltaT);
+	
+	void sync();
 
 	Position get_position();
 	void set_position(Position pos);

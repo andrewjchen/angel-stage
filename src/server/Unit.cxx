@@ -2,6 +2,10 @@
 
 //ctor: null
 #include <cstdlib>
+//SYNC:
+#include <string.h>//memset
+#include "Packet.hxx"//sending packet
+#include "Server.hxx"//getting the nic
 //react: events
 #include "EventTypes.hxx"
 //react: gamestate
@@ -20,6 +24,7 @@ Unit::Unit(
 		_pos(0,0),
 		_goal(0,0) {
 	_orientation = 0; _size = 1.0;
+	_gamestate->addClockListener(this);
 
 }
 
@@ -39,9 +44,7 @@ void Unit::react(EntityEvent* event) {
 					_gamestate->spawn_unit()));
 
 			Position new_pos (_pos.getX() + 1, _pos.getY() + 1);
-			
 			newUnit->set_position(new_pos);
-
 		}
 
 		case EVENT_UNIT_MOVE: {
@@ -72,6 +75,7 @@ void Unit::react(EntityEvent* event) {
 
 
 void Unit::tick(double wallTime, double deltaT) {
+	//DEBUG("unit ticking : wall=" << wallTime << ", deltaT=" << deltaT);
 
 	if (_goal.distance(_pos) < deltaT * UNIT_VELOCITY / 1000.0) {
 		_pos.setX(_goal.getX());
@@ -88,8 +92,26 @@ void Unit::tick(double wallTime, double deltaT) {
 			
 	}	
 
-
+	sync();
 }
+
+void Unit::sync() {
+	UnitFeedbackEvent *ufe = new UnitFeedbackEvent();
+	memset(ufe, 0, sizeof(UnitFeedbackEvent));
+	ufe->header.header.event_type = EVENT_UNIT_MOVE;
+	ufe->header.header.total_byte_count = sizeof(UnitFeedbackEvent);
+	ufe->header.entity_id = _id;
+	ufe->x = _pos.getX();
+	ufe->y = _pos.getY();
+	ufe->theta = _orientation;
+	ufe->size = _size;
+	PacketEvent pe;
+	pe.setEvent((Event*)ufe);//does a memcopy
+	delete ufe;
+	_gamestate->get_server()->get_clientsconnection()->sendPacket((Packet*)(&pe));
+};
+
+
 
 
 /**************** COMPONENTS ***************/

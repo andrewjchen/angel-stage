@@ -7,6 +7,8 @@
 #include "Timer.hxx"
 #include "Debug.hxx"
 
+#include "Unit.hxx"
+
 Server::Server() {
 	_conn = new ClientsConnection(20000, boost::bind(&Server::sendOnLoginData, this, _1, _2));
 	_gamestate = new ServerGameState(this);
@@ -35,6 +37,9 @@ void Server::sendOnLoginData(uint64_t client, int fd)
 
 void Server::run() {
 	_running = true;
+
+	((Unit*)_gamestate->get_entity(_gamestate->spawn_unit()))
+		->set_position(Position(400,400));
 
 	// _gamestate->get_entity(_gamestate->spawn_entity())
 	// 	->get_unit_state_component()->setPosition(Position(400, 300));
