@@ -26,8 +26,8 @@ ClientEntity * ClientGameState::get_entity(EntityID id) {
 		// ClientUnitStateComponent *usc = new ClientUnitStateComponent(ce);
 		// ce->set_visual_component(uvc);
 		// ce->set_unit_state_component(usc);
-		// _client->renderer->addToUnitLayer(uvc);
-		_client->renderer->addToUnitLayer((Renderable*) ce);
+		// _client->renderer->add_to_unit_layer(uvc);
+		_client->renderer->add_to_unit_layer((Renderable*) ce);
 
 		set_entity(id, ce);
 	}
@@ -49,7 +49,7 @@ void ClientGameState::delete_entity(EntityID id) {
 
 
 	// VisualComponent* vis = get_entity(id)->get_visual_component();
-	// _client->renderer->removeFromUnitLayer(vis);
+	// _client->renderer->remove_from_unit_layer(vis);
 
 	DEBUG("NUM ENTITIES=" << _entities.size());
 	_entities.erase(id);
@@ -81,7 +81,7 @@ void ClientGameState::react(Event * event) {
 				// ClientUnitStateComponent *usc = new ClientUnitStateComponent(ce);
 				// ce->set_visual_component(uvc);
 				// ce->set_unit_state_component(usc);
-				// globalRenderer->addToUnitLayer(ce->get_visual_component());
+				// globalRenderer->add_to_unit_layer(ce->get_visual_component());
 				// // ClientEntity* ce = get_entity(ufe->header.entity_id);
 				// // ce->react((EntityEvent*)ufe);
 				// set_entity(ufe->header.entity_id, ce);
@@ -110,12 +110,12 @@ void ClientGameState::tick(double wallTime, double deltaTime){
 	}
 }
 
-void ClientGameState::addClockListener(ClientEntity* toListen){
+void ClientGameState::add_clock_listener(ClientEntity* toListen){
 	clockReceivers.push_back(toListen);
 	DEBUG("Added clock listener");
 }
 
-void ClientGameState::removeClockListener(ClientEntity* toListen){
+void ClientGameState::remove_clock_listener(ClientEntity* toListen){
 	//TODO test
 //	clockReceivers.erase(
 //		s td::remove(clockReceivers.begin(), clockReceivers.end(), toListen), clockReceivers.end() );
@@ -131,12 +131,12 @@ void ClientGameState::removeClockListener(ClientEntity* toListen){
 std::vector<ClientEntity *> * ClientGameState::get_entities_in_rect(const Position & p1,
 												const Position & p2) {
 	std::vector<ClientEntity *> * out = new std::vector<ClientEntity *>;
-	double x1 = p1.getX();
-	double x2 = p2.getX();
+	double x1 = p1.get_x();
+	double x2 = p2.get_x();
 	double left  = x1 < x2 ? x1 : x2;
 	double right = x1 < x2 ? x2 : x1;
-	double y1 = p1.getY();
-	double y2 = p2.getY();
+	double y1 = p1.get_y();
+	double y2 = p2.get_y();
 	double bottom  = y1 < y2 ? y1 : y2;
 	double top = y1 < y2 ? y2 : y1;
 	Position top_left(left, top);

@@ -25,7 +25,7 @@ ServerUnit::ServerUnit(
 		_goal(0,0) {
 	_orientation = 0; 
 	_size = 1.0;
-	_gamestate->addClockListener(this);
+	_gamestate->add_clock_listener(this);
 
 }
 
@@ -44,19 +44,19 @@ void ServerUnit::react(EntityEvent* event) {
 				->get_entity(
 					_gamestate->spawn_unit()));
 
-			Position new_pos (_pos.getX() + 1, _pos.getY() + 1);
+			Position new_pos (_pos.get_x() + 1, _pos.get_y() + 1);
 			newServerUnit->set_position(new_pos);
 		}
 
 		case EVENT_UNIT_MOVE: {
 			//DEBUG("ServerUnit move event received");
 			UnitMoveEvent* ume = (UnitMoveEvent*) event;
-			_goal.setX(ume->xGoal);
-			_goal.setY(ume->yGoal);
+			_goal.set_x(ume->xGoal);
+			_goal.set_y(ume->yGoal);
 
 			double dist = _goal.distance(_pos);
-			double xdir = (_goal.getX() - _pos.getX()) / dist;
-			double ydir = (_goal.getY() - _pos.getY()) / dist;
+			double xdir = (_goal.get_x() - _pos.get_x()) / dist;
+			double ydir = (_goal.get_y() - _pos.get_y()) / dist;
 
 			_xVel = xdir * UNIT_VELOCITY/ 1000.0;
 			_yVel = ydir * UNIT_VELOCITY/ 1000.0;
@@ -73,17 +73,17 @@ void ServerUnit::tick(double wallTime, double deltaT) {
 	//DEBUG("ServerUnit ticking : wall=" << wallTime << ", deltaT=" << deltaT);
 
 	if (_goal.distance(_pos) < deltaT * UNIT_VELOCITY / 1000.0) {
-		_pos.setX(_goal.getX());
-		_pos.setY(_goal.getY());
+		_pos.set_x(_goal.get_x());
+		_pos.set_y(_goal.get_y());
 
 		_xVel = 0;
 		_yVel = 0;
 	} else {
-		double wantedNewX = _pos.getX() + _xVel * deltaT;
-		double wantedNewY = _pos.getY() + _yVel * deltaT;
+		double wantedNewX = _pos.get_x() + _xVel * deltaT;
+		double wantedNewY = _pos.get_y() + _yVel * deltaT;
 		
-		_pos.setX(wantedNewX);
-		_pos.setY(wantedNewY);
+		_pos.set_x(wantedNewX);
+		_pos.set_y(wantedNewY);
 			
 	}	
 
@@ -96,14 +96,14 @@ void ServerUnit::sync() {
 	ufe->header.header.event_type = EVENT_UNIT_FEEDBACK;
 	ufe->header.header.total_byte_count = sizeof(UnitFeedbackEvent);
 	ufe->header.entity_id = _id;
-	ufe->x = _pos.getX();
-	ufe->y = _pos.getY();
+	ufe->x = _pos.get_x();
+	ufe->y = _pos.get_y();
 	ufe->theta = _orientation;
 	ufe->size = _size;
 	PacketEvent pe;
 	pe.setEvent((Event*)ufe);//does a memcopy
 	delete ufe;
-	_gamestate->get_server()->get_clientsconnection()->sendPacket((Packet*)(&pe));
+	_gamestate->get_server()->get_clientsconnection()->send_packet((Packet*)(&pe));
 };
 
 

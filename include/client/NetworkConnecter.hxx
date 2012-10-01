@@ -17,9 +17,9 @@ public:
 	void disconnect();
 	bool isConnected();
 
-	void sendPacket(Packet* p);
-	void sendPacket(std::list<Packet*> ps);
-	std::list<Packet*> *getPacket(int n = 1);
+	void send_packet(Packet* p);
+	void send_packet(std::list<Packet*> ps);
+	std::list<Packet*> *get_packet(int n = 1);
 
 private:
 	bool valid;

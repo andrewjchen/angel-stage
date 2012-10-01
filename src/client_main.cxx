@@ -25,7 +25,7 @@ int main(int argc, char **argv) {
 	Timer timer;
 	while(client.keep_running) {
 		timer.reset_delta();
-		std::list<Packet *> * packets = client.network_connector->getPacket(100);
+		std::list<Packet *> * packets = client.network_connector->get_packet(100);
 		std::list<Packet*>::iterator i = packets->begin();
 		while(i != packets->end()) {
 			//std::cout << "got a packet!\n";
@@ -43,7 +43,7 @@ int main(int argc, char **argv) {
 					break;
 				case PACKET_MAP:
 					// DEBUG("got map data!");
-					client.renderer->addMap(Map::load(((PacketMap*)p)->getStuff()));
+					client.renderer->add_map(Map::load(((PacketMap*)p)->getStuff()));
 					delete p;
 					break;
 				default:
@@ -55,7 +55,7 @@ int main(int argc, char **argv) {
 		client.renderer->render();
 	}
 	PacketDisconnect p;
-	client.network_connector->sendPacket((Packet*)&p);
+	client.network_connector->send_packet((Packet*)&p);
 	DEBUG("trying to disconnect");
 	client.network_connector->disconnect();
 

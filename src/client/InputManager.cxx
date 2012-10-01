@@ -45,18 +45,18 @@ InputManager::~InputManager() {
 void InputManager::tick(double wall, double delta) {
 	al_get_keyboard_state(&_keyboard);
 	al_get_mouse_state(&_mouse);
-	Position pos = _client->renderer->getViewpoint();
+	Position pos = _client->renderer->get_viewpoint();
 	if (al_key_down(&_keyboard, ALLEGRO_KEY_DOWN)) {
-		_client->renderer->setViewpoint(pos.getX(), pos.getY() + delta / 4.0);
+		_client->renderer->set_viewpoint(pos.get_x(), pos.get_y() + delta / 4.0);
 	}
 	if (al_key_down(&_keyboard, ALLEGRO_KEY_UP)) {
-		_client->renderer->setViewpoint(pos.getX(), pos.getY() - delta / 4.0);
+		_client->renderer->set_viewpoint(pos.get_x(), pos.get_y() - delta / 4.0);
 	}
 	if (al_key_down(&_keyboard, ALLEGRO_KEY_LEFT)) {
-		_client->renderer->setViewpoint(pos.getX() - delta / 4.0, pos.getY());
+		_client->renderer->set_viewpoint(pos.get_x() - delta / 4.0, pos.get_y());
 	}
 	if (al_key_down(&_keyboard, ALLEGRO_KEY_RIGHT)) {
-		_client->renderer->setViewpoint(pos.getX() + delta / 4.0, pos.getY());
+		_client->renderer->set_viewpoint(pos.get_x() + delta / 4.0, pos.get_y());
 	}
 	if (al_key_down(&_keyboard, ALLEGRO_KEY_S)) {
 		DEBUG("S");
@@ -72,7 +72,7 @@ void InputManager::tick(double wall, double delta) {
 		PacketEvent *pe = new PacketEvent();
 		pe->setEvent((Event*)ume);
 
-		_client->network_connector->sendPacket(pe);
+		_client->network_connector->send_packet(pe);
 	}
 	while (al_get_next_event(_event_queue, &_current_event)) {
 		react();
@@ -80,7 +80,7 @@ void InputManager::tick(double wall, double delta) {
 }
 
 void InputManager::react() {
-	Position pos = _client->renderer->getViewpoint();
+	Position pos = _client->renderer->get_viewpoint();
 	switch (_current_event.type) {
 		case ALLEGRO_EVENT_KEY_DOWN: {
 			switch(_current_event.keyboard.keycode) {
@@ -91,7 +91,7 @@ void InputManager::react() {
 					e.total_byte_count = sizeof(Event);
 					PacketEvent p;
 					p.setEvent(&e);
-					_client->network_connector->sendPacket((Packet*)&p);
+					_client->network_connector->send_packet((Packet*)&p);
 					break;
 				}
 				case ALLEGRO_KEY_U: {
@@ -105,13 +105,13 @@ void InputManager::react() {
 					PacketEvent p;
 					p.setEvent(e);
 					delete e;
-					_client->network_connector->sendPacket((Packet*)&p);
+					_client->network_connector->send_packet((Packet*)&p);
 					break;
 				}
 				case (ALLEGRO_KEY_A): {
 					PacketPing p;
 					p.pingstuff = 0x12345678;
-					_client->network_connector->sendPacket((Packet*)&p);
+					_client->network_connector->send_packet((Packet*)&p);
 					break;
 				}
 
@@ -125,7 +125,7 @@ void InputManager::react() {
 						ume->partner = _selected_units->at(1)->get_id();
 						PacketEvent *pe = new PacketEvent();
 						pe->setEvent((Event*)ume);
-						_client->network_connector->sendPacket(pe);
+						_client->network_connector->send_packet(pe);
 						delete pe;
 						delete ume;
 					}
@@ -135,46 +135,46 @@ void InputManager::react() {
 					{
 						DEBUG("MOUSE_BUTTON_UP!");
 						Position screen_pos(_current_event.mouse.x, _current_event.mouse.y);
-						_mouse_corner_end = gameFromScreen(_client->renderer->getViewpoint(), screen_pos);
-						DEBUG("Start corner: " << _mouse_corner_start.getX() <<
-							  ", " <<_mouse_corner_start.getY());
-						DEBUG("End corner: " << _mouse_corner_end.getX() <<
-							  ", " << _mouse_corner_end.getY());
+						_mouse_corner_end = gameFromScreen(_client->renderer->get_viewpoint(), screen_pos);
+						DEBUG("Start corner: " << _mouse_corner_start.get_x() <<
+							  ", " <<_mouse_corner_start.get_y());
+						DEBUG("End corner: " << _mouse_corner_end.get_x() <<
+							  ", " << _mouse_corner_end.get_y());
 						UnitMoveEvent* ume = new UnitMoveEvent();
 						ume->header.header.event_type = EVENT_UNIT_MOVE;
 						ume->header.header.total_byte_count = sizeof(UnitMoveEvent);
 						ume->header.entity_id = 1;
 
-						ume->xGoal = _mouse_corner_end.getX();
-						ume->yGoal = _mouse_corner_end.getY();
+						ume->xGoal = _mouse_corner_end.get_x();
+						ume->yGoal = _mouse_corner_end.get_y();
 
 						PacketEvent *pe = new PacketEvent();
 						pe->setEvent((Event*)ume);
 
-						_client->network_connector->sendPacket(pe);
+						_client->network_connector->send_packet(pe);
 						break;
 					}
 				case ALLEGRO_KEY_W:
 					{
 						DEBUG("MOUSE_BUTTON_UP!");
 						Position screen_pos(_current_event.mouse.x, _current_event.mouse.y);
-						_mouse_corner_end = gameFromScreen(_client->renderer->getViewpoint(), screen_pos);
-						DEBUG("Start corner: " << _mouse_corner_start.getX() <<
-							  ", " <<_mouse_corner_start.getY());
-						DEBUG("End corner: " << _mouse_corner_end.getX() <<
-							  ", " << _mouse_corner_end.getY());
+						_mouse_corner_end = gameFromScreen(_client->renderer->get_viewpoint(), screen_pos);
+						DEBUG("Start corner: " << _mouse_corner_start.get_x() <<
+							  ", " <<_mouse_corner_start.get_y());
+						DEBUG("End corner: " << _mouse_corner_end.get_x() <<
+							  ", " << _mouse_corner_end.get_y());
 						UnitMoveEvent* ume = new UnitMoveEvent();
 						ume->header.header.event_type = EVENT_UNIT_MOVE;
 						ume->header.header.total_byte_count = sizeof(UnitMoveEvent);
 						ume->header.entity_id = 2;
 
-						ume->xGoal = _mouse_corner_end.getX();
-						ume->yGoal = _mouse_corner_end.getY();
+						ume->xGoal = _mouse_corner_end.get_x();
+						ume->yGoal = _mouse_corner_end.get_y();
 
 						PacketEvent *pe = new PacketEvent();
 						pe->setEvent((Event*)ume);
 
-						_client->network_connector->sendPacket(pe);
+						_client->network_connector->send_packet(pe);
 						break;
 					}
 				case ALLEGRO_KEY_H:
@@ -192,7 +192,7 @@ void InputManager::react() {
 								PacketEvent p;
 								p.setEvent((Event*)e);
 								delete e;
-								_client->network_connector->sendPacket((Packet*)&p);
+								_client->network_connector->send_packet((Packet*)&p);
 								++iter;
 							}
 						}
@@ -205,8 +205,8 @@ void InputManager::react() {
 			switch (_current_event.mouse.button) {
 				case 1: {
 					Position screen_pos(_current_event.mouse.x, _current_event.mouse.y);
-					_client->renderer->setSelectionRectStart(gameFromScreen(_client->renderer->getViewpoint(), screen_pos));
-					_mouse_corner_start = gameFromScreen(_client->renderer->getViewpoint(), screen_pos);
+					_client->renderer->set_selection_rect_start(gameFromScreen(_client->renderer->get_viewpoint(), screen_pos));
+					_mouse_corner_start = gameFromScreen(_client->renderer->get_viewpoint(), screen_pos);
 					break;
 				}
 			}
@@ -215,8 +215,8 @@ void InputManager::react() {
 		case ALLEGRO_EVENT_MOUSE_AXES: {
 			if (al_mouse_button_down(&_mouse, 1)) {
 				Position screen_pos(_current_event.mouse.x, _current_event.mouse.y);
-				_client->renderer->setSelectionRectEnd(gameFromScreen(_client->renderer->getViewpoint(), screen_pos));
-				_mouse_corner_end = gameFromScreen(_client->renderer->getViewpoint(), screen_pos);
+				_client->renderer->set_selection_rect_end(gameFromScreen(_client->renderer->get_viewpoint(), screen_pos));
+				_mouse_corner_end = gameFromScreen(_client->renderer->get_viewpoint(), screen_pos);
 			}
 			break;
 		}
@@ -224,15 +224,15 @@ void InputManager::react() {
 			switch (_current_event.mouse.button) {
 				case 1: {
 					Position screen_pos(_current_event.mouse.x, _current_event.mouse.y);
-					_client->renderer->setSelectionRectEnd(gameFromScreen(_client->renderer->getViewpoint(), screen_pos));
-					_client->renderer->setSelectionRectStart(gameFromScreen(_client->renderer->getViewpoint(), screen_pos));
-					_mouse_corner_end = gameFromScreen(_client->renderer->getViewpoint(), screen_pos);
+					_client->renderer->set_selection_rect_end(gameFromScreen(_client->renderer->get_viewpoint(), screen_pos));
+					_client->renderer->set_selection_rect_start(gameFromScreen(_client->renderer->get_viewpoint(), screen_pos));
+					_mouse_corner_end = gameFromScreen(_client->renderer->get_viewpoint(), screen_pos);
 					select_from_rect();
 					break;
 				}
 				case 2: {
 					Position screen_pos(_current_event.mouse.x, _current_event.mouse.y);
-					Position game_pos = gameFromScreen(_client->renderer->getViewpoint(), screen_pos);
+					Position game_pos = gameFromScreen(_client->renderer->get_viewpoint(), screen_pos);
 					if (_selected_units) {
 						std::vector<ClientEntity *>::iterator iter = _selected_units->begin();
 						while (iter != _selected_units->end()) {
@@ -240,11 +240,11 @@ void InputManager::react() {
 							ume->header.header.event_type = EVENT_UNIT_MOVE;
 							ume->header.header.total_byte_count = sizeof(UnitMoveEvent);
 							ume->header.entity_id = (*iter)->get_id();
-							ume->xGoal = game_pos.getX();
-							ume->yGoal = game_pos.getY();
+							ume->xGoal = game_pos.get_x();
+							ume->yGoal = game_pos.get_y();
 							PacketEvent *pe = new PacketEvent();
 							pe->setEvent((Event*)ume);
-							_client->network_connector->sendPacket(pe);
+							_client->network_connector->send_packet(pe);
 							delete pe;
 							delete ume;
 							++iter;

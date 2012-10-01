@@ -29,11 +29,11 @@ public:
 	void start(); 
 	void stop();
 
-	void sendPacket(Packet *p, uint64_t client);
-	void sendPacket(Packet *p);
-	void sendPacket(std::list<Packet *> ps, uint64_t client);
-	void sendPacket(std::list<Packet *> ps);
-	std::list<Packet*> *getPackets(int n = 1);
+	void send_packet(Packet *p, uint64_t client);
+	void send_packet(Packet *p);
+	void send_packet(std::list<Packet *> ps, uint64_t client);
+	void send_packet(std::list<Packet *> ps);
+	std::list<Packet*> *get_packets(int n = 1);
 	void closeClient(uint64_t client);
 	
 	friend class Server;

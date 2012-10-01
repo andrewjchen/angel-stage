@@ -23,8 +23,8 @@ public:
 	virtual void react(Event * event);
 	virtual void tick(double time, double deltaTime);
 
-	virtual void addClockListener(ClientEntity* toListen);
-	virtual void removeClockListener(ClientEntity* toListen);
+	virtual void add_clock_listener(ClientEntity* toListen);
+	virtual void remove_clock_listener(ClientEntity* toListen);
 	virtual std::vector<ClientEntity *> * get_entities_in_rect(const Position & p1, const Position & p2);
 
 	Renderer *globalRenderer;

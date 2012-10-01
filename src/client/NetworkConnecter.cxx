@@ -115,20 +115,20 @@ uint8_t *NetworkConnecter::crunchIntoBuffer(std::list<Packet *> ps, int *outsize
 	return buf;
 }
 
-void NetworkConnecter::sendPacket(std::list<Packet*> ps) {
+void NetworkConnecter::send_packet(std::list<Packet*> ps) {
 	int size;
 	uint8_t *b = crunchIntoBuffer(ps, &size);
 	write(sockfd, b, size);
 	delete[] b;
 }
 
-void NetworkConnecter::sendPacket(Packet *p) {
+void NetworkConnecter::send_packet(Packet *p) {
 	std::list<Packet *> ps;
 	ps.push_back(p);
-	sendPacket(ps);
+	send_packet(ps);
 }
 
-std::list<Packet*> *NetworkConnecter::getPacket(int n) {
+std::list<Packet*> *NetworkConnecter::get_packet(int n) {
 	std::list<Packet*> *retu = new std::list<Packet*>;
 
 	queue_mutex.lock();

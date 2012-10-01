@@ -19,7 +19,6 @@ public:
 	virtual ~ClientEntity();
 	virtual void react(EntityEvent * event) = 0;
 	virtual void tick(double wallTime, double deltaT) = 0;
-	//tick
 
 	ClientGameState* get_gamestate();
 

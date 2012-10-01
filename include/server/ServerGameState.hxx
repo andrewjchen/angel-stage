@@ -21,8 +21,8 @@ public:
 	virtual Server* get_server() { return _server; };
 	virtual EntityID spawn_unit();
 
-	virtual void addClockListener(ServerEntity* toListen);
-	virtual void removeClockListener(ServerEntity* toListen);
+	virtual void add_clock_listener(ServerEntity* toListen);
+	virtual void remove_clock_listener(ServerEntity* toListen);
 
 protected:
 	EntityID _next_id;

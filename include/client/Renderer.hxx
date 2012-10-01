@@ -18,13 +18,13 @@ public:
 		{};
 	virtual ~Renderer();
 	virtual void render();
-	virtual void setViewpoint(coordinate_t x, coordinate_t y);
-	virtual const Position & getViewpoint();
-	virtual void addToUnitLayer(Renderable * visual_comp);
-	virtual void removeFromUnitLayer(Renderable* visual_comp);
-	virtual void addMap(Map * map);
-	virtual void setSelectionRectStart(Position start);
-	virtual void setSelectionRectEnd(Position end);
+	virtual void set_viewpoint(coordinate_t x, coordinate_t y);
+	virtual const Position & get_viewpoint();
+	virtual void add_to_unit_layer(Renderable * visual_comp);
+	virtual void remove_from_unit_layer(Renderable* visual_comp);
+	virtual void add_map(Map * map);
+	virtual void set_selection_rect_start(Position start);
+	virtual void set_selection_rect_end(Position end);
 
 private:
 	Position _viewpoint;

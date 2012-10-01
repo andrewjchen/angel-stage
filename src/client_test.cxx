@@ -25,7 +25,7 @@ int main(int argc, char *argv[]) {
     	timer.reset_delta();
 
     	/********* PACKET READ  ************/
-		std::list<Packet *>* packets = conn.getPacket(100);
+		std::list<Packet *>* packets = conn.get_packet(100);
 		std::list<Packet*>::iterator i = packets->begin();
 		while(i != packets->end()) {
 			//std::cout << "got a packet!\n";
@@ -64,7 +64,7 @@ int main(int argc, char *argv[]) {
 				}
 				case PACKET_MAP: {
 					 //DEBUG("got map data!");
-					//_renderer->addMap(Map::load(((PacketMap*)p)->getStuff()));
+					//_renderer->add_map(Map::load(((PacketMap*)p)->getStuff()));
 					delete p;
 					break;
 				}

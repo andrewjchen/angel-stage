@@ -186,7 +186,7 @@ void ClientsConnection::closeClient(uint64_t client)
 	close(fd);
 }
 
-void ClientsConnection::sendPacket(std::list<Packet *> ps, uint64_t client) {
+void ClientsConnection::send_packet(std::list<Packet *> ps, uint64_t client) {
 	clientfd_mutex.lock();
 		int fd = clientfds[client];
 	clientfd_mutex.unlock();
@@ -196,13 +196,13 @@ void ClientsConnection::sendPacket(std::list<Packet *> ps, uint64_t client) {
 	delete[] b;
 }
 
-void ClientsConnection::sendPacket(Packet *p, uint64_t client) {
+void ClientsConnection::send_packet(Packet *p, uint64_t client) {
 	std::list<Packet *> ps;
 	ps.push_back(p);
-	sendPacket(ps, client);
+	send_packet(ps, client);
 }
 
-void ClientsConnection::sendPacket(std::list<Packet *> ps) {
+void ClientsConnection::send_packet(std::list<Packet *> ps) {
 	clientfd_mutex.lock();
 		int size = clientfds.size();
 		int *fds = new int[size];
@@ -219,13 +219,13 @@ void ClientsConnection::sendPacket(std::list<Packet *> ps) {
 	delete[] b;
 }
 
-void ClientsConnection::sendPacket(Packet *p) {
+void ClientsConnection::send_packet(Packet *p) {
 	std::list<Packet *> ps;
 	ps.push_back(p);
-	sendPacket(ps);
+	send_packet(ps);
 }
 
-std::list<Packet*> *ClientsConnection::getPackets(int n) {
+std::list<Packet*> *ClientsConnection::get_packets(int n) {
 	std::list<Packet*> *retu = new std::list<Packet*>;
 	queue_mutex.lock();
 		for(int i = 0; i < n; i++)

@@ -55,7 +55,7 @@ void ServerGameState::delete_entity(EntityID id) {
 
 	PacketEvent* pe = new PacketEvent();
 	pe->setEvent((Event*)&ude);
-	_server->get_clientsconnection()->sendPacket(pe);
+	_server->get_clientsconnection()->send_packet(pe);
 	delete pe;
 }
 
@@ -88,12 +88,12 @@ void ServerGameState::tick(double wallTime, double deltaTime){
 	}
 }
 
-void ServerGameState::addClockListener(ServerEntity* toListen){
+void ServerGameState::add_clock_listener(ServerEntity* toListen){
 	clockReceivers.push_back(toListen);
 	DEBUG("Added clock listener");
 }
 
-void ServerGameState::removeClockListener(ServerEntity* toListen){
+void ServerGameState::remove_clock_listener(ServerEntity* toListen){
 	std::vector<ServerEntity*>::iterator it;
 
 	for (it = clockReceivers.begin(); it<clockReceivers.end(); it++){

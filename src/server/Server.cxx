@@ -51,7 +51,7 @@ void Server::run() {
 	while (_running) {
 		timer.reset_delta();
 
-		std::list<Packet*> *packets = _conn->getPackets(100);
+		std::list<Packet*> *packets = _conn->get_packets(100);
 		std::list<Packet*>::iterator i = packets->begin();
 		while(i != packets->end()) {
 
@@ -60,7 +60,7 @@ void Server::run() {
 			switch(p->type) {
 				case PACKET_PING:
 					DEBUG("got a ping request!");
-					_conn->sendPacket(p, p->from);//logic
+					_conn->send_packet(p, p->from);//logic
 					delete p;
 					break;
 				case PACKET_DISCONNECT:

@@ -31,17 +31,17 @@ void ClientUnit::react(EntityEvent* event) {
 	switch (event->header.event_type) {
 		case EVENT_UNIT_FEEDBACK: {
 			UnitFeedbackEvent *ufe = (UnitFeedbackEvent*)(event);
-			_pos.setX(ufe->x);
-			_pos.setY(ufe->y);
+			_pos.set_x(ufe->x);
+			_pos.set_y(ufe->y);
 			_orientation = ufe->theta;
 			_size = ufe->size;
-			//DEBUG("POSITION: x=" << _pos.getX() <<", y="<< _pos.getY());
+			//DEBUG("POSITION: x=" << _pos.get_x() <<", y="<< _pos.get_y());
 			break;
 		}
 		case (EVENT_UNIT_MOVE):{
 			// UnitFeedbackEvent *ufe = (UnitFeedbackEvent*)(event);
-			// _pos.setX(ufe->x);
-			// _pos.setY(ufe->y);
+			// _pos.set_x(ufe->x);
+			// _pos.set_y(ufe->y);
 			// _orientation = ufe->theta;
 			// _size = ufe->size;
 			break;
@@ -81,8 +81,8 @@ void ClientUnit::render(const Position& viewpoint, Client* client){
 
 
 	Position screen_pos = screenFromGame(viewpoint, _pos); 
-	double screenX = screen_pos.getX();
-	double screenY = screen_pos.getY();
+	double screenX = screen_pos.get_x();
+	double screenY = screen_pos.get_y();
 	double scale = 16.0 / 512.0 * _size; 
 	if (screenX - _half_bitmap_width < client->display_width &&
 		screenY - _half_bitmap_height < client->display_height &&
