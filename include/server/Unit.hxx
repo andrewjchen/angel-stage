@@ -20,15 +20,19 @@ public:
 	virtual ~Unit();
 	virtual void react(EntityEvent * event);
 
-	Pose* get_pose();
-	void set_pose(Pose* pose);
+	Position get_position();
+	void set_position(Position pos);
 
-	Size* get_size();
-	void set_size(Size* size);
+	double get_size();
+	void set_size(double size);
 
 private:
-	Pose* _pose;
-	Size* _size;
+	//pose
+	Position _pos;
+	double _orientation;
+
+	//attributes
+	double _size;
 
 
 	//ServerUnitStateComponent* get_unit_state_component(){ return _unit_state_component; };

@@ -34,8 +34,6 @@ EntityID ServerGameState::spawn_unit() {
 	_next_id++;
 	Unit* unit = new Unit(id, this);
 	_entities[id] = unit;
-	unit->set_pose(new Pose(unit));
-	unit->set_size(new Size(unit));
 	return id;
 
 }

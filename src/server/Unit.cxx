@@ -14,16 +14,14 @@
 Unit::Unit(
 	EntityID id, 
 	ServerGameState* gamestate): 
-		ServerEntity(id, gamestate) {
-	_pose = NULL;
-	_size = NULL;
-
+		ServerEntity(id, gamestate),
+		_pos(0,0) {
+	_orientation = 0;
+	_size = 1.0;
 
 }
 
 Unit::~Unit() {
-	delete _pose;
-	delete _size;
 
 }
 
@@ -38,10 +36,9 @@ void Unit::react(EntityEvent* event) {
 				->get_entity(
 					_gamestate->spawn_unit()));
 
-			Position my_pos = _pose->get_position();
-			Position new_pos (my_pos.getX() + 1, my_pos.getY() + 1);
+			Position new_pos (_pos.getX() + 1, _pos.getY() + 1);
 			
-			newUnit->get_pose()->set_position(new_pos);
+			newUnit->set_position(new_pos);
 
 		}
 
@@ -60,26 +57,18 @@ void Unit::react(EntityEvent* event) {
 
 /**************** COMPONENTS ***************/
 
-Pose* Unit::get_pose() {
-	//TODO exception if null?
-	return _pose;
+Position Unit::get_position() {
+	return _pos;
 }
 
-void Unit::set_pose(Pose* pose) {
-	if(_pose) {
-		delete _pose;
-	}
-	_pose = pose;
+void Unit::set_position(Position pos) {
+	_pos = pos;
 }
 
-Size* Unit::get_size() {
-	//TODO exception if null?
+double Unit::get_size() {
 	return _size;
 }
 
-void Unit::set_size(Size* size) {
-	if(_size) {
-		delete _size;
-	}
+void Unit::set_size(double size) {
 	_size = size;
 }
