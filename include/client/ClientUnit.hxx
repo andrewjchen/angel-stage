@@ -6,41 +6,41 @@
 #include "Position.hxx"//pose
 #include "Client.hxx"//render
 
-class ClientUnit : public ClientEntity, public Renderable{
+class ClientUnit : public ClientEntity, public Renderable {
 
 public:
-	ClientUnit(EntityID , ClientGameState* gamestate);
-	virtual ~ClientUnit();
-	void react(EntityEvent * event);
-	virtual void tick(double wallTime, double deltaT);
+    ClientUnit(EntityID , ClientGameState *gamestate);
+    virtual ~ClientUnit();
+    void react(EntityEvent *event);
+    virtual void tick(double wallTime, double deltaT);
 
-	//STATE
-	Position get_position();
-	void set_position(Position pos);
-	double get_orientation();
-	double get_size();
-	void set_size(double size);
+    //STATE
+    Position get_position();
+    void set_position(Position pos);
+    double get_orientation();
+    double get_size();
+    void set_size(double size);
 
-	//RENDERING
-	virtual void render(const Position& viewpoint, Client* client);
+    //RENDERING
+    virtual void render(const Position &viewpoint, Client *client);
 
 protected:
 
 private:
 
-	/************ STATE ******/
+    /************ STATE ******/
 
-	//pose
-	Position _pos;
-	double _orientation;
+    //pose
+    Position _pos;
+    double _orientation;
 
-	//attributes
-	double _size;
+    //attributes
+    double _size;
 
-	/********* RENDER ********/
-	int32_t _half_bitmap_width;
-	int32_t _half_bitmap_height;
-	ALLEGRO_BITMAP * _bitmap;
+    /********* RENDER ********/
+    int32_t _half_bitmap_width;
+    int32_t _half_bitmap_height;
+    ALLEGRO_BITMAP *_bitmap;
 
 
 };

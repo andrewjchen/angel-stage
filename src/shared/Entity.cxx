@@ -10,10 +10,11 @@ Entity::~Entity() {
 }
 
 EntityID Entity::get_id() {
-	return _id;
+    return _id;
 }
 
 // void Entity::react(EntityEvent* event){
 // 	DEBUG("entity getting event");
-	
+
 // }
+

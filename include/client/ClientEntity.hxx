@@ -15,15 +15,15 @@ class ClientGameState;
 class ClientEntity: public Entity {
 
 public:
-	ClientEntity(EntityID id, ClientGameState* gamestate);
-	virtual ~ClientEntity();
-	virtual void react(EntityEvent * event) = 0;
-	virtual void tick(double wallTime, double deltaT) = 0;
+    ClientEntity(EntityID id, ClientGameState *gamestate);
+    virtual ~ClientEntity();
+    virtual void react(EntityEvent *event) = 0;
+    virtual void tick(double wallTime, double deltaT) = 0;
 
-	ClientGameState* get_gamestate();
+    ClientGameState *get_gamestate();
 
 protected:
-	ClientGameState* _gamestate;
+    ClientGameState *_gamestate;
 
 };
 

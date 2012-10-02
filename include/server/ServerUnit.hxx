@@ -15,42 +15,42 @@ const double UNIT_VELOCITY = 100.0;
 class ServerUnit: public ServerEntity {
 
 public:
-	ServerUnit(
-		EntityID id, 
-		ServerGameState* gamestate);
-	virtual ~ServerUnit();
-	virtual void react(EntityEvent * event);
-	virtual void tick(double wallTime, double deltaT);
-	
-	void sync();
+    ServerUnit(
+        EntityID id,
+        ServerGameState *gamestate);
+    virtual ~ServerUnit();
+    virtual void react(EntityEvent *event);
+    virtual void tick(double wallTime, double deltaT);
 
-	Position get_position();
-	void set_position(Position pos);
+    void sync();
 
-	double get_orientation();
+    Position get_position();
+    void set_position(Position pos);
 
-	double get_size();
-	void set_size(double size);
+    double get_orientation();
+
+    double get_size();
+    void set_size(double size);
 
 private:
-	//pose
-	Position _pos;
-	double _orientation;
+    //pose
+    Position _pos;
+    double _orientation;
 
-	//attributes
-	double _size;
+    //attributes
+    double _size;
 
-	//motion: 
-	double _xVel;
-	double _yVel;
-	Position _goal;
-
-
+    //motion:
+    double _xVel;
+    double _yVel;
+    Position _goal;
 
 
 
-	//ServerUnitStateComponent* get_unit_state_component(){ return _unit_state_component; };
-	//void set_unit_state_component(ServerUnitStateComponent* comp) {_unit_state_component = comp; };
+
+
+    //ServerUnitStateComponent* get_unit_state_component(){ return _unit_state_component; };
+    //void set_unit_state_component(ServerUnitStateComponent* comp) {_unit_state_component = comp; };
 
 };
 

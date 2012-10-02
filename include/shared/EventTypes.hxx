@@ -26,41 +26,41 @@ const EventTypeID EVENT_UNIT_CHASE        = 0x8101000A;
 const EventTypeID EVENT_ENTITY_MAXIMUM    = 0x81020000;
 
 struct UnitDieEvent {
-	Event header;
-	EntityID entity_id;
+    Event header;
+    EntityID entity_id;
 };
 
 struct UnitFeedbackEvent {
-	EntityEvent header;
-	double x;
-	double y;
-	double theta;
+    EntityEvent header;
+    double x;
+    double y;
+    double theta;
 
-	double size;
+    double size;
 };
 
 struct UnitSplitEvent {
-	EntityEvent header;
-	//attributes to split, how much to split
+    EntityEvent header;
+    //attributes to split, how much to split
 
 };
 
 struct UnitMoveEvent {
-	EntityEvent header;
+    EntityEvent header;
 
-	double xGoal;
-	double yGoal;
+    double xGoal;
+    double yGoal;
 
 };
 
 struct UnitChaseEvent {
-	EntityEvent header;
-	EntityID target;
+    EntityEvent header;
+    EntityID target;
 };
 
-struct UnitMergeEvent{
-	EntityEvent header;
-	EntityID partner;
+struct UnitMergeEvent {
+    EntityEvent header;
+    EntityID partner;
 
 };
 

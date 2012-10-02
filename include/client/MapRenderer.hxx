@@ -9,17 +9,16 @@
 
 struct Client;
 
-class MapRenderer
-{
+class MapRenderer {
 public:
-	MapRenderer(Map *_map);
-	~MapRenderer();
-	void render(int xoff, int yoff, Client * client);
+    MapRenderer(Map *_map);
+    ~MapRenderer();
+    void render(int xoff, int yoff, Client *client);
 
 private:
-	Map *map;
-	ALLEGRO_BITMAP *tiles[TILE_TYPE_MAX];
-	void load_tiles();
+    Map *map;
+    ALLEGRO_BITMAP *tiles[TILE_TYPE_MAX];
+    void load_tiles();
 };
 
 #endif
