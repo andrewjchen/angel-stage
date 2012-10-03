@@ -120,7 +120,11 @@ bool ServerGameState::is_occupied(ServerUnit* source, Position pos) {
        ServerUnit *unit = (ServerUnit *) i->second;
        Position unitPos =  unit->get_position();
 
-       if(source != unit && pos.distance(unitPos) < unit->get_size()*15.0 ) {
+       if(source != unit && 
+            pos.distance(unitPos) 
+            - unit->get_size() * 5.0
+            - source->get_size() * 5.0
+                    < 0.0) {
             return true;
        }
 
