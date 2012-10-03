@@ -15,17 +15,17 @@ class ServerGameState;
 
 class ServerEntity : public Entity {
 public:
-	ServerEntity(EntityID id, ServerGameState * gamestate);
-	virtual ~ServerEntity();
-	virtual void react(EntityEvent * event) = 0;
-	virtual void tick(double wallTime, double deltaT) = 0;
+    ServerEntity(EntityID id, ServerGameState *gamestate);
+    virtual ~ServerEntity();
+    virtual void react(EntityEvent *event) = 0;
+    virtual void tick(double wallTime, double deltaT) = 0;
 
-	ServerGameState* get_gamestate();
-	//void set_gamestate(ServerGameState* state);
+    ServerGameState *get_gamestate();
+    //void set_gamestate(ServerGameState* state);
 
 protected:
-	//EntityID _id;
-	ServerGameState* _gamestate;
+    //EntityID _id;
+    ServerGameState *_gamestate;
 
 };
 

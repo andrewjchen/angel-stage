@@ -7,56 +7,56 @@
 
 #include "ServerUnit.hxx"
 
-ServerGameState::ServerGameState(Server * server) {
-	_server = server;
-	_next_id = 0;
+ServerGameState::ServerGameState(Server *server) {
+    _server = server;
+    _next_id = 0;
 }
 
 ServerGameState::~ServerGameState() {
-	std::map<EntityID, ServerEntity *>::iterator i = _entities.begin();
-	while (i != _entities.end()) {
-		delete i->second;
-		++i;
-	}
+    std::map<EntityID, ServerEntity *>::iterator i = _entities.begin();
+    while (i != _entities.end()) {
+        delete i->second;
+        ++i;
+    }
 }
 
 EntityID ServerGameState::spawn_unit() {
-	EntityID id = _next_id;
-	_next_id++;
-	ServerUnit* unit = new ServerUnit(id, this);
-	_entities[id] = unit;
-	return id;
+    EntityID id = _next_id;
+    _next_id++;
+    ServerUnit *unit = new ServerUnit(id, this);
+    _entities[id] = unit;
+    return id;
 
 }
 
-ServerEntity * ServerGameState::get_entity(EntityID id) {
-	if (_entities.count(id)) {
-		return _entities[id];
-	} else {
-		return NULL;
-	}
+ServerEntity *ServerGameState::get_entity(EntityID id) {
+    if (_entities.count(id)) {
+        return _entities[id];
+    } else {
+        return NULL;
+    }
 }
 
-void ServerGameState::set_entity(EntityID id, ServerEntity * entity) {
-	_entities[id] = entity;
+void ServerGameState::set_entity(EntityID id, ServerEntity *entity) {
+    _entities[id] = entity;
 }
 
 void ServerGameState::delete_entity(EntityID id) {
-	DEBUG("NUM ENTITIES=" << _entities.size());
-	delete _entities[id];
-	_entities.erase(id);
-	DEBUG("NUM ENTITIES=" << _entities.size());
+    DEBUG("NUM ENTITIES=" << _entities.size());
+    delete _entities[id];
+    _entities.erase(id);
+    DEBUG("NUM ENTITIES=" << _entities.size());
 
-	//notify client
-	UnitDieEvent ude;
-	ude.header.event_type = EVENT_ENTITY_DIE;
-	ude.header.total_byte_count = sizeof(UnitDieEvent);
-	ude.entity_id = id;
+    //notify client
+    UnitDieEvent ude;
+    ude.header.event_type = EVENT_ENTITY_DIE;
+    ude.header.total_byte_count = sizeof(UnitDieEvent);
+    ude.entity_id = id;
 
-	PacketEvent* pe = new PacketEvent();
-	pe->setEvent((Event*)&ude);
-	_server->get_clientsconnection()->send_packet(pe);
-	delete pe;
+    PacketEvent *pe = new PacketEvent();
+    pe->setEvent((Event *)&ude);
+    _server->get_clientsconnection()->send_packet(pe);
+    delete pe;
 }
 
 void ServerGameState::react(Event * event) {
@@ -91,24 +91,24 @@ void ServerGameState::react(Event * event) {
 	}
 }
 
-void ServerGameState::tick(double wallTime, double deltaTime){
-	std::vector<ServerEntity*>::iterator it;
-	for (it = clockReceivers.begin(); it < clockReceivers.end(); it++){
-		(*it)->tick(wallTime, deltaTime);
-	}
+void ServerGameState::tick(double wallTime, double deltaTime) {
+    std::vector<ServerEntity *>::iterator it;
+    for (it = clockReceivers.begin(); it < clockReceivers.end(); it++) {
+        (*it)->tick(wallTime, deltaTime);
+    }
 }
 
-void ServerGameState::add_clock_listener(ServerEntity* toListen){
-	clockReceivers.push_back(toListen);
-	DEBUG("Added clock listener");
+void ServerGameState::add_clock_listener(ServerEntity *toListen) {
+    clockReceivers.push_back(toListen);
+    DEBUG("Added clock listener");
 }
 
-void ServerGameState::remove_clock_listener(ServerEntity* toListen){
-	std::vector<ServerEntity*>::iterator it;
+void ServerGameState::remove_clock_listener(ServerEntity *toListen) {
+    std::vector<ServerEntity *>::iterator it;
 
-	for (it = clockReceivers.begin(); it<clockReceivers.end(); it++){
-		if ((*it) == toListen){
-			clockReceivers.erase(it);
-		}
-	}
+    for (it = clockReceivers.begin(); it<clockReceivers.end(); it++) {
+        if ((*it) == toListen) {
+            clockReceivers.erase(it);
+        }
+    }
 }

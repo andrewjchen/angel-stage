@@ -7,32 +7,31 @@
 #include <boost/thread/thread.hpp>
 #include "Packet.hxx"
 
-class NetworkConnecter
-{
+class NetworkConnecter {
 public:
-	NetworkConnecter(const char * server, uint16_t port);
-	virtual ~NetworkConnecter();
-	
-	void start();
-	void disconnect();
-	bool isConnected();
+    NetworkConnecter(const char *server, uint16_t port);
+    virtual ~NetworkConnecter();
 
-	void send_packet(Packet* p);
-	void send_packet(std::list<Packet*> ps);
-	std::list<Packet*> *get_packet(int n = 1);
+    void start();
+    void disconnect();
+    bool isConnected();
+
+    void send_packet(Packet *p);
+    void send_packet(std::list<Packet *> ps);
+    std::list<Packet *> *get_packet(int n = 1);
 
 private:
-	bool valid;
-	bool running;
-	
-	uint8_t *crunchIntoBuffer(std::list<Packet *> ps, int *outsize);
-	
-	int sockfd;
-	
-	void readthread();
-	boost::thread *readThread;
-	boost::mutex queue_mutex;
-	std::deque<Packet *> rx_queue;
+    bool valid;
+    bool running;
+
+    uint8_t *crunchIntoBuffer(std::list<Packet *> ps, int *outsize);
+
+    int sockfd;
+
+    void readthread();
+    boost::thread *readThread;
+    boost::mutex queue_mutex;
+    std::deque<Packet *> rx_queue;
 };
 
 #endif

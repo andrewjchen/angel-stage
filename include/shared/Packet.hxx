@@ -11,85 +11,80 @@ const uint8_t PACKET_MAP            = 0x4D;
 
 /////////////////////////////////////////////// CORE ////////////////////////////////////////////////////////////////////////////
 
-class Packet
-{
+class Packet {
 public:
-	Packet(uint8_t _type);
-	static Packet *readByType(int _sock);
-	virtual int estimateSize() = 0;
-	virtual int writeToBuf(uint8_t *buf) = 0;
+    Packet(uint8_t _type);
+    static Packet *readByType(int _sock);
+    virtual int estimateSize() = 0;
+    virtual int writeToBuf(uint8_t *buf) = 0;
 
-	uint8_t type;
-	virtual ~Packet() {};
-	uint64_t from;
+    uint8_t type;
+    virtual ~Packet() {};
+    uint64_t from;
 
 protected:
-	virtual void readSock(int sock) = 0;
-	const static int headerSize = 1;
-	void writeHeader(uint8_t *buf);
+    virtual void readSock(int sock) = 0;
+    const static int headerSize = 1;
+    void writeHeader(uint8_t *buf);
 };
 
 /////////////////////////////////////////////// PACKET_PING ////////////////////////////////////////////////////////////////////////////
 
-class PacketPing: public Packet
-{
+class PacketPing: public Packet {
 public:
-	PacketPing();
-	int estimateSize();
-	int writeToBuf(uint8_t *buf);
+    PacketPing();
+    int estimateSize();
+    int writeToBuf(uint8_t *buf);
 
-	uint32_t pingstuff;
+    uint32_t pingstuff;
 
 protected:
-	void readSock(int sock);
+    void readSock(int sock);
 };
 
 /////////////////////////////////////////////// PACKET_DISCONNECT ////////////////////////////////////////////////////////////////////////////
 
-class PacketDisconnect: public Packet
-{
+class PacketDisconnect: public Packet {
 public:
-	PacketDisconnect();
-	int estimateSize();
-	int writeToBuf(uint8_t *buf);
+    PacketDisconnect();
+    int estimateSize();
+    int writeToBuf(uint8_t *buf);
 
 protected:
-	void readSock(int sock);
+    void readSock(int sock);
 };
 
 /////////////////////////////////////////////// PACKET_EVENT ////////////////////////////////////////////////////////////////////////////
 
-class PacketEvent: public Packet
-{
+class PacketEvent: public Packet {
 public:
-	PacketEvent();
-	~PacketEvent();
-	int estimateSize();
-	int writeToBuf(uint8_t *buf);
-	void setEvent(Event *_event);
-	Event *getEvent();
+    PacketEvent();
+    ~PacketEvent();
+    int estimateSize();
+    int writeToBuf(uint8_t *buf);
+    void setEvent(Event *_event);
+    Event *getEvent();
 
 protected:
-	uint8_t *event;
-	void readSock(int sock);
+    uint8_t *event;
+    void readSock(int sock);
 };
 
 /////////////////////////////////////////////// PACKET_MAP ////////////////////////////////////////////////////////////////////////////
 
-class PacketMap: public Packet
-{
+class PacketMap: public Packet {
 public:
-	PacketMap();
-	~PacketMap();
-	int estimateSize();
-	int writeToBuf(uint8_t *buf);
-	void setMap(Map *map);
-	uint8_t *getStuff();
+    PacketMap();
+    ~PacketMap();
+    int estimateSize();
+    int writeToBuf(uint8_t *buf);
+    void setMap(Map *map);
+    uint8_t *getStuff();
 
 protected:
-	int size;
-	uint8_t *stuff;
-	void readSock(int sock);
+    int size;
+    uint8_t *stuff;
+    void readSock(int sock);
 };
 
 #endif

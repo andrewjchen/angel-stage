@@ -14,9 +14,9 @@ class ClientEntity;
 
 class InputManager {
 public:
-	InputManager(Client* client);
-	virtual ~InputManager();
-	virtual void tick(double wall, double delta);
+    InputManager(Client *client);
+    virtual ~InputManager();
+    virtual void tick(double wall, double delta);
 
 protected:
 	virtual void react();
@@ -27,12 +27,12 @@ protected:
 	ALLEGRO_EVENT_QUEUE * _event_queue;
 	ALLEGRO_EVENT _current_event;
 
-	Client * _client;
-	Position _mouse_corner_start;
-	Position _mouse_corner_end;
-	ALLEGRO_KEYBOARD_STATE _keyboard;
-	ALLEGRO_MOUSE_STATE _mouse;
-	std::vector<ClientEntity *> * _selected_units;
+    Client *_client;
+    Position _mouse_corner_start;
+    Position _mouse_corner_end;
+    ALLEGRO_KEYBOARD_STATE _keyboard;
+    ALLEGRO_MOUSE_STATE _mouse;
+    std::vector<ClientEntity *> * _selected_units;
 };
 
 #endif /* INPUTMANAGER_HXX */

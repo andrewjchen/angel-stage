@@ -1,8 +1,8 @@
 #include "ServerEntity.hxx"
 
-ServerEntity::ServerEntity(EntityID id, ServerGameState* gamestate):
-	Entity(id),
-	_gamestate(gamestate) {
+ServerEntity::ServerEntity(EntityID id, ServerGameState *gamestate):
+    Entity(id),
+    _gamestate(gamestate) {
 
 }
 
@@ -11,7 +11,7 @@ ServerEntity::~ServerEntity() {
 }
 
 // void ServerEntity::react(EntityEvent* event) {
-	
+
 // }
 
 
@@ -19,6 +19,6 @@ ServerEntity::~ServerEntity() {
 
 // }
 
-ServerGameState* ServerEntity::get_gamestate() {
-	return _gamestate;
+ServerGameState *ServerEntity::get_gamestate() {
+    return _gamestate;
 }

@@ -1,0 +1,1 @@
+astyle --options=astyle.conf -Q -r "*.cxx" "*.hxx"

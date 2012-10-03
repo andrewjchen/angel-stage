@@ -12,29 +12,28 @@ struct Client;
 
 class ClientGameState {
 public:
-	ClientGameState(Client* client)
-	{
-		_client = client;
-	};
-	virtual ~ClientGameState(void);
-	virtual ClientEntity * get_entity(EntityID id);
-	virtual void set_entity(EntityID id, ClientEntity * entity);
-	virtual void delete_entity(EntityID id);
-	virtual void react(Event * event);
-	virtual void tick(double time, double deltaTime);
+    ClientGameState(Client *client) {
+        _client = client;
+    };
+    virtual ~ClientGameState(void);
+    virtual ClientEntity *get_entity(EntityID id);
+    virtual void set_entity(EntityID id, ClientEntity *entity);
+    virtual void delete_entity(EntityID id);
+    virtual void react(Event *event);
+    virtual void tick(double time, double deltaTime);
 
-	virtual void add_clock_listener(ClientEntity* toListen);
-	virtual void remove_clock_listener(ClientEntity* toListen);
-	virtual std::vector<ClientEntity *> * get_entities_in_rect(const Position & p1, const Position & p2);
+    virtual void add_clock_listener(ClientEntity *toListen);
+    virtual void remove_clock_listener(ClientEntity *toListen);
+    virtual std::vector<ClientEntity *> * get_entities_in_rect(const Position &p1, const Position &p2);
 
-	Renderer *globalRenderer;
+    Renderer *globalRenderer;
 
 
 private:
-	std::map<EntityID, ClientEntity *> _entities;
-	std::vector<ClientEntity* > clockReceivers;
+    std::map<EntityID, ClientEntity *> _entities;
+    std::vector<ClientEntity * > clockReceivers;
 
-	Client* _client;
+    Client *_client;
 };
 
 #endif /* _GAMESTATE_HXX_ */

@@ -16,16 +16,16 @@
 #include <math.h>
 #include "Server.hxx"
 
-Server* server;
+Server *server;
 
 void sigint_handler(int sig) {
-	server->set_running(false);
+    server->set_running(false);
 }
 
 int main(int argc, char **argv) {
-	signal(SIGINT, sigint_handler);
-	DEBUG("Starting server!");
-	server = new Server();
-	server->run();
-	delete server;
+    signal(SIGINT, sigint_handler);
+    DEBUG("Starting server!");
+    server = new Server();
+    server->run();
+    delete server;
 }
