@@ -91,7 +91,7 @@ void ClientUnit::render(const Position &viewpoint, Client *client) {
 
         al_draw_tinted_scaled_rotated_bitmap(
             _bitmap,
-            al_map_rgba(0xFF, 0xFF, 0xFF, 0xD0),
+            al_map_rgba_f(1,1,1,0.1),
             _half_bitmap_width,
             _half_bitmap_height,
             screenX,

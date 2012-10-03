@@ -30,45 +30,46 @@ int main(int argc, char *argv[]) {
         while(i != packets->end()) {
             //std::cout << "got a packet!\n";
             Packet *p = *i;
-            switch(p->type) {
-                case PACKET_PING: {
-                    //DEBUG("got a ping reply!");
-                    //DEBUG(((PacketPing*)p)->pingstuff);
-                    delete p;
-                    break;
-                }
-                case PACKET_EVENT: {
-                    //DEBUG("got an event!");
-                    //_gamestate->react(((PacketEvent*)p)->getEvent());
-                    Event *event = ((PacketEvent *) p)->getEvent();
-                    if(is_entity_event(event)) {
-                        // EntityEvent* eevent = ((EntityEvent*)event);
-                        // EntityID id = ((EntityEvent*) event)->entity_id;
+            delete p;
+            // switch(p->type) {
+            //     case PACKET_PING: {
+            //         //DEBUG("got a ping reply!");
+            //         //DEBUG(((PacketPing*)p)->pingstuff);
+            //         delete p;
+            //         break;
+            //     }
+            //     case PACKET_EVENT: {
+            //         //DEBUG("got an event!");
+            //         //_gamestate->react(((PacketEvent*)p)->getEvent());
+            //         Event *event = ((PacketEvent *) p)->getEvent();
+            //         if(is_entity_event(event)) {
+            //             // EntityEvent* eevent = ((EntityEvent*)event);
+            //             // EntityID id = ((EntityEvent*) event)->entity_id;
 
-                        //DEBUG("Entity id=" << id);
+            //             //DEBUG("Entity id=" << id);
 
-                    } else if (is_global_event(event)) {
+            //         } else if (is_global_event(event)) {
 
-                        switch (event->event_type) {
-                            case EVENT_ENTITY_SPAWN:
-                                DEBUG("spawn event");
-                                break;
-                            case EVENT_ENTITY_DIE:
-                                DEBUG("die event");
-                                break;
-                        }
+            //             switch (event->event_type) {
+            //                 case EVENT_ENTITY_SPAWN:
+            //                     DEBUG("spawn event");
+            //                     break;
+            //                 case EVENT_ENTITY_DIE:
+            //                     DEBUG("die event");
+            //                     break;
+            //             }
 
-                    }
-                    delete p;
-                    break;
-                }
-                case PACKET_MAP: {
-                    //DEBUG("got map data!");
-                    //_renderer->add_map(Map::load(((PacketMap*)p)->getStuff()));
-                    delete p;
-                    break;
-                }
-            }
+            //         }
+            //         delete p;
+            //         break;
+            //     }
+            //     case PACKET_MAP: {
+            //         //DEBUG("got map data!");
+            //         //_renderer->add_map(Map::load(((PacketMap*)p)->getStuff()));
+            //         delete p;
+            //         break;
+            //     }
+            // }
             i++;
         }
 

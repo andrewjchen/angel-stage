@@ -4,7 +4,10 @@
 #include <map>
 #include <vector>
 
+#include "ServerUnit.hxx"
 #include "ServerEntity.hxx"
+#include "Position.hxx"
+
 
 struct ServerEvent;
 class Server;
@@ -25,6 +28,8 @@ public:
 
     virtual void add_clock_listener(ServerEntity *toListen);
     virtual void remove_clock_listener(ServerEntity *toListen);
+
+    virtual bool is_occupied(ServerUnit* source, Position pos);
 
 protected:
     EntityID _next_id;

@@ -17,7 +17,7 @@
  * When one is found, it constructs a PacketTransporter and launches
  * the PacketTransporter read/write threads
  *
- * Accessing packetTransporters requires that the packetTransport
+ * Accessing packetTransporters requires that the packetTranspor t
  * mutex be locked.
  */
 class ClientsConnection {

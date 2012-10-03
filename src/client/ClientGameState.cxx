@@ -51,6 +51,7 @@ void ClientGameState::delete_entity(EntityID id) {
     // VisualComponent* vis = get_entity(id)->get_visual_component();
     // _client->renderer->remove_from_unit_layer(vis);
 
+    delete get_entity(id);
     DEBUG("NUM ENTITIES=" << _entities.size());
     _entities.erase(id);
     DEBUG("NUM ENTITIES=" << _entities.size());

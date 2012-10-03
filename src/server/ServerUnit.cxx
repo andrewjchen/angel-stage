@@ -97,8 +97,12 @@ void ServerUnit::tick(double wallTime, double deltaT) {
         double wantedNewX = _pos.get_x() + _xVel * deltaT;
         double wantedNewY = _pos.get_y() + _yVel * deltaT;
 
-        _pos.set_x(wantedNewX);
-        _pos.set_y(wantedNewY);
+        if(!_gamestate->is_occupied(this,Position(wantedNewX, wantedNewY))) {
+            _pos.set_x(wantedNewX);
+            _pos.set_y(wantedNewY);
+
+        }
+
 
     }
 
