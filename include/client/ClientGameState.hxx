@@ -1,4 +1,4 @@
-#ifndef _Client_GAMESTATE_HXX_
+s#ifndef _Client_GAMESTATE_HXX_
 #define _Client_GAMESTATE_HXX_
 
 #include <map>
@@ -19,6 +19,7 @@ public:
     virtual ClientEntity *get_entity(EntityID id);
     virtual void set_entity(EntityID id, ClientEntity *entity);
     virtual void delete_entity(EntityID id);
+    virtual bool entity_exists(EntityID);
     virtual void react(Event *event);
     virtual void tick(double time, double deltaTime);
 

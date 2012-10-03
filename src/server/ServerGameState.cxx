@@ -43,6 +43,7 @@ void ServerGameState::set_entity(EntityID id, ServerEntity *entity) {
 
 void ServerGameState::delete_entity(EntityID id) {
     DEBUG("NUM ENTITIES=" << _entities.size());
+    remove_clock_listener(get_entity(id));
     delete _entities[id];
     _entities.erase(id);
     DEBUG("NUM ENTITIES=" << _entities.size());

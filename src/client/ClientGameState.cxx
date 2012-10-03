@@ -49,15 +49,19 @@ void ClientGameState::delete_entity(EntityID id) {
 
 
     // VisualComponent* vis = get_entity(id)->get_visual_component();
-    // _client->renderer->remove_from_unit_layer(vis);
-
+     _client
+        ->renderer
+        ->remove_from_unit_layer( 
+            (ClientUnit *) get_entity(id));
+    remove_clock_listener(get_entity(id));
     delete get_entity(id);
     DEBUG("NUM ENTITIES=" << _entities.size());
     _entities.erase(id);
     DEBUG("NUM ENTITIES=" << _entities.size());
+}
 
-
-
+bool ClientGameState::entity_exists(EntityID) {
+    return _entities.count(id) == 1;
 }
 
 void ClientGameState::set_entity(EntityID id, ClientEntity *entity) {
@@ -91,6 +95,8 @@ void ClientGameState::react(Event *event) {
                 break;
             }
             case EVENT_ENTITY_DIE: {
+                UnitDieEvent *ude = (UnitDieEvent * ) event;
+                delete_entity(ude->entity_id);
 
 
 

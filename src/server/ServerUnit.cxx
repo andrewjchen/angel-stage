@@ -74,9 +74,11 @@ void ServerUnit::react(EntityEvent *event) {
 
             EntityID partner = ume->partner;
 
+
             _size+=
                 ((ServerUnit *)_gamestate->get_entity(partner))
                 ->get_size();
+            _gamestate->delete_entity(partner);
             break;
         }
     }

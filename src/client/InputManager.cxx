@@ -76,6 +76,14 @@ void InputManager::tick(double wall, double delta) {
     while (al_get_next_event(_event_queue, &_current_event)) {
         react();
     }
+
+
+    // if (_selected_units) {
+    //     for(unsigned int i = 0; i<_selected_units->size(); i++){
+    //         if(_client->gamestate->entity_exists()
+    //     }
+    // }
+
 }
 
 void InputManager::react() {
