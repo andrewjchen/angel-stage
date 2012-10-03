@@ -11,16 +11,16 @@
 
 int main(int argc, char **argv) {
 
-	Client client;
-	client.display_width = 1024;
-	client.display_height = 768;
-	client.display = NULL;
-	client.keep_running = true;
-	client.input_manager = new InputManager(&client);
-	client.renderer = new Renderer(&client);
-	client.gamestate = new ClientGameState(&client);
-	client.network_connector = new NetworkConnecter("127.0.0.1", 20000);
-	client.network_connector->start();
+    Client client;
+    client.display_width = 1024;
+    client.display_height = 768;
+    client.display = NULL;
+    client.keep_running = true;
+    client.input_manager = new InputManager(&client);
+    client.renderer = new Renderer(&client);
+    client.gamestate = new ClientGameState(&client);
+    client.network_connector = new NetworkConnecter("127.0.0.1", 20000);
+    client.network_connector->start();
 
     Timer timer;
     while(client.keep_running) {

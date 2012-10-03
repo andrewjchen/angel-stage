@@ -19,13 +19,13 @@ public:
     virtual void tick(double wall, double delta);
 
 protected:
-	virtual void react();
-	virtual void select_from_rect();
+    virtual void react();
+    virtual void select_from_rect();
 
-	virtual void send_packet(Event* e);
+    virtual void send_packet(Event *e);
 
-	ALLEGRO_EVENT_QUEUE * _event_queue;
-	ALLEGRO_EVENT _current_event;
+    ALLEGRO_EVENT_QUEUE *_event_queue;
+    ALLEGRO_EVENT _current_event;
 
     Client *_client;
     Position _mouse_corner_start;

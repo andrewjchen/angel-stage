@@ -59,36 +59,36 @@ void ServerGameState::delete_entity(EntityID id) {
     delete pe;
 }
 
-void ServerGameState::react(Event * event) {
-	if (is_entity_event(event)) {
-		EntityID id = ((EntityEvent *) event)->entity_id;
-		ServerEntity * e = get_entity(id);
-		if (e) {
-			e->react((EntityEvent *) event);
-		}
-	} else if (is_global_event(event)) {
-		/* TODO: Do things. */
-		// DEBUG("Received global event!");
-		switch (event->event_type) {
-			case EVENT_ENTITY_SPAWN: {
-				UnitSpawnEvent* u= (UnitSpawnEvent*)event;
-				ServerUnit* unit = ((ServerUnit*)get_entity(spawn_unit()));
-				unit->set_position(Position(u->x, u->y));
-				DEBUG(
-					"EVENT: x=" << u->x  <<
-					", y=" << u->y );
-				DEBUG(
-					"spawned unit: id=" << unit->get_id() << 
-					", x="<< unit->get_position().get_x() << 
-					", y="<< unit->get_position().get_y());
+void ServerGameState::react(Event *event) {
+    if (is_entity_event(event)) {
+        EntityID id = ((EntityEvent *) event)->entity_id;
+        ServerEntity *e = get_entity(id);
+        if (e) {
+            e->react((EntityEvent *) event);
+        }
+    } else if (is_global_event(event)) {
+        /* TODO: Do things. */
+        // DEBUG("Received global event!");
+        switch (event->event_type) {
+            case EVENT_ENTITY_SPAWN: {
+                UnitSpawnEvent *u= (UnitSpawnEvent *)event;
+                ServerUnit *unit = ((ServerUnit *)get_entity(spawn_unit()));
+                unit->set_position(Position(u->x, u->y));
+                DEBUG(
+                    "EVENT: x=" << u->x  <<
+                    ", y=" << u->y );
+                DEBUG(
+                    "spawned unit: id=" << unit->get_id() <<
+                    ", x="<< unit->get_position().get_x() <<
+                    ", y="<< unit->get_position().get_y());
 
-			}
-			case EVENT_TEST:{
-				printf("Received a test event!\n");
-				break;
-			}
-		}
-	}
+            }
+            case EVENT_TEST: {
+                printf("Received a test event!\n");
+                break;
+            }
+        }
+    }
 }
 
 void ServerGameState::tick(double wallTime, double deltaTime) {

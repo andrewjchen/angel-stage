@@ -35,51 +35,51 @@ ServerUnit::~ServerUnit() {
 
 /**************** EVENTS REACTIONS ************/
 
-void ServerUnit::react(EntityEvent* event) {
-	//DEBUG("ServerUnit id=" << _id << " received event");
-	switch(event->header.event_type) {
-		case EVENT_UNIT_SPLIT: {
-			//DEBUG("ServerUnit split event received");
-			ServerUnit* newServerUnit = (ServerUnit*) (_gamestate
-				->get_entity(
-					_gamestate->spawn_unit()));
+void ServerUnit::react(EntityEvent *event) {
+    //DEBUG("ServerUnit id=" << _id << " received event");
+    switch(event->header.event_type) {
+        case EVENT_UNIT_SPLIT: {
+            //DEBUG("ServerUnit split event received");
+            ServerUnit *newServerUnit = (ServerUnit *) (_gamestate
+                                        ->get_entity(
+                                            _gamestate->spawn_unit()));
 
-			Position new_pos (_pos.get_x() + 1, _pos.get_y() + 1);
-			newServerUnit->set_position(new_pos);
-			break;
-		}
+            Position new_pos (_pos.get_x() + 1, _pos.get_y() + 1);
+            newServerUnit->set_position(new_pos);
+            break;
+        }
 
-		case EVENT_UNIT_MOVE: {
-			//DEBUG("ServerUnit move event received");
-			UnitMoveEvent* ume = (UnitMoveEvent*) event;
-			_goal.set_x(ume->xGoal);
-			_goal.set_y(ume->yGoal);
+        case EVENT_UNIT_MOVE: {
+            //DEBUG("ServerUnit move event received");
+            UnitMoveEvent *ume = (UnitMoveEvent *) event;
+            _goal.set_x(ume->xGoal);
+            _goal.set_y(ume->yGoal);
 
-			double dist = _goal.distance(_pos);
-			double xdir = (_goal.get_x() - _pos.get_x()) / dist;
-			double ydir = (_goal.get_y() - _pos.get_y()) / dist;
+            double dist = _goal.distance(_pos);
+            double xdir = (_goal.get_x() - _pos.get_x()) / dist;
+            double ydir = (_goal.get_y() - _pos.get_y()) / dist;
 
-			_xVel = xdir * UNIT_VELOCITY/ 1000.0;
-			_yVel = ydir * UNIT_VELOCITY/ 1000.0;
+            _xVel = xdir * UNIT_VELOCITY/ 1000.0;
+            _yVel = ydir * UNIT_VELOCITY/ 1000.0;
 
-			_orientation = atan2(_xVel, _yVel) 
-				+ 3.14159265358979323846;	
+            _orientation = atan2(_xVel, _yVel)
+                           + 3.14159265358979323846;
 
-			break;
+            break;
 
-		}
+        }
 
-		case EVENT_UNIT_MERGE: {
-			UnitMergeEvent* ume = (UnitMergeEvent*) event;
+        case EVENT_UNIT_MERGE: {
+            UnitMergeEvent *ume = (UnitMergeEvent *) event;
 
-			EntityID partner = ume->partner;
+            EntityID partner = ume->partner;
 
-			_size+= 
-				((ServerUnit*)_gamestate->get_entity(partner))
-				->get_size();
-			break;
-		}
-	}
+            _size+=
+                ((ServerUnit *)_gamestate->get_entity(partner))
+                ->get_size();
+            break;
+        }
+    }
 
 }
 

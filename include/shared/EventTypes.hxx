@@ -27,11 +27,11 @@ const EventTypeID EVENT_ENTITY_MAXIMUM    = 0x81020000;
 
 //sent from client to server
 struct UnitSpawnEvent {
-	Event header;
-	double x;
-	double y;
-	double theta;
-	double size;
+    Event header;
+    double x;
+    double y;
+    double theta;
+    double size;
 
 };
 
