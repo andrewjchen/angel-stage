@@ -46,6 +46,7 @@ void ServerUnit::react(EntityEvent* event) {
 
 			Position new_pos (_pos.get_x() + 1, _pos.get_y() + 1);
 			newServerUnit->set_position(new_pos);
+			break;
 		}
 
 		case EVENT_UNIT_MOVE: {
@@ -64,6 +65,19 @@ void ServerUnit::react(EntityEvent* event) {
 			_orientation = atan2(_xVel, _yVel) 
 				+ 3.14159265358979323846;	
 
+			break;
+
+		}
+
+		case EVENT_UNIT_MERGE: {
+			UnitMergeEvent* ume = (UnitMergeEvent*) event;
+
+			EntityID partner = ume->partner;
+
+			_size+= 
+				((ServerUnit*)_gamestate->get_entity(partner))
+				->get_size();
+			break;
 		}
 	}
 }
