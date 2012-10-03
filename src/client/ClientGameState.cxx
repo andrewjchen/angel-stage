@@ -60,7 +60,7 @@ void ClientGameState::delete_entity(EntityID id) {
     DEBUG("NUM ENTITIES=" << _entities.size());
 }
 
-bool ClientGameState::entity_exists(EntityID) {
+bool ClientGameState::entity_exists(EntityID id) {
     return _entities.count(id) == 1;
 }
 
@@ -135,9 +135,9 @@ void ClientGameState::remove_clock_listener(ClientEntity *toListen) {
     }
 }
 
-std::vector<ClientEntity *> * ClientGameState::get_entities_in_rect(const Position &p1,
+std::vector<EntityID> * ClientGameState::get_entities_in_rect(const Position &p1,
         const Position &p2) {
-    std::vector<ClientEntity *> * out = new std::vector<ClientEntity *>;
+    std::vector<EntityID> * out = new std::vector<EntityID>;
     double x1 = p1.get_x();
     double x2 = p2.get_x();
     double left  = x1 < x2 ? x1 : x2;
@@ -150,8 +150,11 @@ std::vector<ClientEntity *> * ClientGameState::get_entities_in_rect(const Positi
     Position bottom_right(right, bottom);
     std::map<EntityID, ClientEntity *>::iterator iter = _entities.begin();
     while (iter != _entities.end()) {
-        if (((ClientUnit *) iter->second)->get_position().in_rect(top_left, bottom_right)) {
-            out->push_back(iter->second);
+        if ( 
+            ((ClientUnit *)get_entity(iter->first))
+            ->get_position()
+                .in_rect(top_left, bottom_right)) {
+            out->push_back(iter->first);
         }
         ++iter;
     }

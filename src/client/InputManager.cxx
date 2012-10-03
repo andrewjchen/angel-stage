@@ -128,8 +128,8 @@ void InputManager::react() {
                         UnitMergeEvent *ume = new UnitMergeEvent();
                         ume->header.header.event_type = EVENT_UNIT_MERGE;
                         ume->header.header.total_byte_count= sizeof(UnitMergeEvent);
-                        ume->header.entity_id = _selected_units->at(0)->get_id();
-                        ume->partner = _selected_units->at(1)->get_id();
+                        ume->header.entity_id = _selected_units->at(0);
+                        ume->partner = _selected_units->at(1);
                         PacketEvent *pe = new PacketEvent();
                         pe->setEvent((Event *)ume);
                         _client->network_connector->send_packet(pe);
@@ -185,13 +185,13 @@ void InputManager::react() {
                 case ALLEGRO_KEY_H: {
                     if(_selected_units && _selected_units->size() > 1) {
                         //merge unit 0 to unit 1
-                        std::vector<ClientEntity *>::iterator iter = _selected_units->begin();
-                        EntityID to_chase = (*iter)->get_id();
+                        std::vector<EntityID>::iterator iter = _selected_units->begin();
+                        EntityID to_chase = (*iter);
                         while (iter != _selected_units->end()) {
                             UnitChaseEvent *e = new UnitChaseEvent();
                             e->header.header.event_type = EVENT_UNIT_CHASE;
                             e->header.header.total_byte_count = sizeof(UnitChaseEvent);
-                            e->header.entity_id = (*iter)->get_id();
+                            e->header.entity_id = *iter;
                             e->target = to_chase;
                             PacketEvent p;
                             p.setEvent((Event *)e);
@@ -238,12 +238,12 @@ void InputManager::react() {
                     Position screen_pos(_current_event.mouse.x, _current_event.mouse.y);
                     Position game_pos = gameFromScreen(_client->renderer->get_viewpoint(), screen_pos);
                     if (_selected_units) {
-                        std::vector<ClientEntity *>::iterator iter = _selected_units->begin();
+                        std::vector<EntityID>::iterator iter = _selected_units->begin();
                         while (iter != _selected_units->end()) {
                             UnitMoveEvent *ume = new UnitMoveEvent();
                             ume->header.header.event_type = EVENT_UNIT_MOVE;
                             ume->header.header.total_byte_count = sizeof(UnitMoveEvent);
-                            ume->header.entity_id = (*iter)->get_id();
+                            ume->header.entity_id = *iter;
                             ume->xGoal = game_pos.get_x();
                             ume->yGoal = game_pos.get_y();
                             send_packet((Event *)ume);
@@ -282,7 +282,7 @@ void InputManager::select_from_rect() {
     _selected_units = _client->gamestate->get_entities_in_rect(_mouse_corner_start, _mouse_corner_end);
     DEBUG(_selected_units->size() << " units selected.");
     for(unsigned int i = 0; i < _selected_units->size(); i++) {
-        DEBUG("_selected unit: id="<< _selected_units->at(i)->get_id());
+        DEBUG("_selected unit: id="<< _selected_units->at(i));
     }
 }
 

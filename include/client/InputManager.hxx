@@ -32,7 +32,7 @@ protected:
     Position _mouse_corner_end;
     ALLEGRO_KEYBOARD_STATE _keyboard;
     ALLEGRO_MOUSE_STATE _mouse;
-    std::vector<ClientEntity *> * _selected_units;
+    std::vector<EntityID> * _selected_units;
 };
 
 #endif /* INPUTMANAGER_HXX */

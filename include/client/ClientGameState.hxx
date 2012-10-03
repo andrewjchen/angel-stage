@@ -1,4 +1,4 @@
-s#ifndef _Client_GAMESTATE_HXX_
+#ifndef _Client_GAMESTATE_HXX_
 #define _Client_GAMESTATE_HXX_
 
 #include <map>
@@ -25,7 +25,7 @@ public:
 
     virtual void add_clock_listener(ClientEntity *toListen);
     virtual void remove_clock_listener(ClientEntity *toListen);
-    virtual std::vector<ClientEntity *> * get_entities_in_rect(const Position &p1, const Position &p2);
+    virtual std::vector<EntityID> * get_entities_in_rect(const Position &p1, const Position &p2);
 
     Renderer *globalRenderer;
 
