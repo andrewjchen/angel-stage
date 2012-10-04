@@ -97,8 +97,8 @@ void ServerUnit::tick(double wallTime, double deltaT) {
         _xVel = 0;
         _yVel = 0;
     } else {
-        double wantedNewX = _pos.get_x() + _xVel * deltaT;
-        double wantedNewY = _pos.get_y() + _yVel * deltaT;
+        double wantedNewX = _pos.get_x() + _xVel / _size * deltaT;
+        double wantedNewY = _pos.get_y() + _yVel / _size * deltaT;
         //dont enter territory that is occupied
         if(!_gamestate->is_occupied(this,Position(wantedNewX, wantedNewY))) {
             _pos.set_x(wantedNewX);
