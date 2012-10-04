@@ -139,3 +139,14 @@ bool ServerGameState::is_occupied(ServerUnit *source, Position pos) {
 
     return false;
 }
+
+
+bool ServerGameState::two_units_touching(ServerUnit *unit1, ServerUnit *unit2) {
+    Position pos1 = unit1->get_position();
+    Position pos2 = unit2->get_position();
+
+    return pos1.distance(pos2) <=
+           (unit1->get_size() * 6.0
+            + unit2->get_size() * 6.0);
+
+}

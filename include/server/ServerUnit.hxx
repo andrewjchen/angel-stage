@@ -9,6 +9,9 @@
 
 const double UNIT_VELOCITY = 100.0;
 
+const int UNIT_STATE_DEFAULT = 0;
+const int UNIT_STATE_MERGING = 1;
+
 /**
  * A Unit has a pose and size.
  */
@@ -21,6 +24,8 @@ public:
     virtual ~ServerUnit();
     virtual void react(EntityEvent *event);
     virtual void tick(double wallTime, double deltaT);
+
+    void set_goal(Position goal);
 
     void sync();
 
@@ -44,6 +49,12 @@ private:
     double _xVel;
     double _yVel;
     Position _goal;
+
+    int _state;
+
+    //merge
+    EntityID _merge_partner;
+
 
 
 

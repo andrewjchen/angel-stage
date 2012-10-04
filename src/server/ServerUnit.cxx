@@ -27,7 +27,9 @@ ServerUnit::ServerUnit(
     _size = 1.0;
     _xVel = 0;
     _yVel = 0;
+    _state = UNIT_STATE_DEFAULT;
     _gamestate->add_clock_listener(this);
+    _merge_partner = -1;
 
 }
 
@@ -54,18 +56,10 @@ void ServerUnit::react(EntityEvent *event) {
         case EVENT_UNIT_MOVE: {
             //DEBUG("ServerUnit move event received");
             UnitMoveEvent *ume = (UnitMoveEvent *) event;
-            _goal.set_x(ume->xGoal);
-            _goal.set_y(ume->yGoal);
+            set_goal(Position(
+                         ume->xGoal,
+                         ume->yGoal));
 
-            double dist = _goal.distance(_pos);
-            double xdir = (_goal.get_x() - _pos.get_x()) / dist;
-            double ydir = (_goal.get_y() - _pos.get_y()) / dist;
-
-            _xVel = xdir * UNIT_VELOCITY/ 1000.0;
-            _yVel = ydir * UNIT_VELOCITY/ 1000.0;
-
-            _orientation = atan2(_xVel, _yVel)
-                           + 3.14159265358979323846;
 
             break;
 
@@ -74,13 +68,17 @@ void ServerUnit::react(EntityEvent *event) {
         case EVENT_UNIT_MERGE: {
             UnitMergeEvent *ume = (UnitMergeEvent *) event;
 
-            EntityID partner = ume->partner;
+            _merge_partner = ume->partner;
+            ServerUnit *partner = (ServerUnit * )_gamestate->get_entity(_merge_partner);
 
+            Position mid(
+                (partner->get_position().get_x() + _pos.get_x())/2,
+                (partner->get_position().get_y() + _pos.get_y())/2);
+            partner->set_goal(mid);
+            set_goal(mid);
 
-            _size+=
-                ((ServerUnit *)_gamestate->get_entity(partner))
-                ->get_size();
-            _gamestate->delete_entity(partner);
+            _state = UNIT_STATE_MERGING;
+
             break;
         }
     }
@@ -91,6 +89,7 @@ void ServerUnit::react(EntityEvent *event) {
 void ServerUnit::tick(double wallTime, double deltaT) {
     //DEBUG("ServerUnit ticking : wall=" << wallTime << ", deltaT=" << deltaT);
 
+    ///////////////// MOTION ///////////////////
     if (_goal.distance(_pos) < deltaT * UNIT_VELOCITY / 1000.0) {
         _pos.set_x(_goal.get_x());
         _pos.set_y(_goal.get_y());
@@ -100,15 +99,30 @@ void ServerUnit::tick(double wallTime, double deltaT) {
     } else {
         double wantedNewX = _pos.get_x() + _xVel * deltaT;
         double wantedNewY = _pos.get_y() + _yVel * deltaT;
-
+        //dont enter territory that is occupied
         if(!_gamestate->is_occupied(this,Position(wantedNewX, wantedNewY))) {
             _pos.set_x(wantedNewX);
             _pos.set_y(wantedNewY);
-
         }
-
-
     }
+
+    ////////////////// MERGE /////////////////
+    switch(_state) {
+        case UNIT_STATE_MERGING: {
+            if(_gamestate->get_entity(_merge_partner) != NULL) {
+                ServerUnit *partner = (ServerUnit * ) _gamestate->get_entity(_merge_partner);
+                if(_gamestate->two_units_touching(this, partner)) {
+                    _size+= partner->get_size();
+                    _gamestate->delete_entity(_merge_partner);
+                    _state = UNIT_STATE_DEFAULT;
+                }
+
+            } else {
+                _state = UNIT_STATE_DEFAULT;
+            }
+        }
+    }
+
 
     sync();
 }
@@ -130,7 +144,20 @@ void ServerUnit::sync() {
 };
 
 
+void ServerUnit::set_goal(Position goal) {
+    _goal.set_x(goal.get_x());
+    _goal.set_y(goal.get_y());
 
+    double dist = _goal.distance(_pos);
+    double xdir = (_goal.get_x() - _pos.get_x()) / dist;
+    double ydir = (_goal.get_y() - _pos.get_y()) / dist;
+
+    _xVel = xdir * UNIT_VELOCITY/ 1000.0;
+    _yVel = ydir * UNIT_VELOCITY/ 1000.0;
+
+    _orientation = atan2(_xVel, _yVel)
+                   + 3.14159265358979323846;
+}
 
 /**************** COMPONENTS ***************/
 

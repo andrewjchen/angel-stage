@@ -30,6 +30,7 @@ public:
     virtual void remove_clock_listener(ServerEntity *toListen);
 
     virtual bool is_occupied(ServerUnit *source, Position pos);
+    virtual bool two_units_touching(ServerUnit *unit1, ServerUnit *unit2);
 
 protected:
     EntityID _next_id;
