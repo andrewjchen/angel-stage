@@ -57,22 +57,6 @@ void InputManager::tick(double wall, double delta) {
     if (al_key_down(&_keyboard, ALLEGRO_KEY_RIGHT)) {
         _client->renderer->set_viewpoint(pos.get_x() + delta / 4.0, pos.get_y());
     }
-    if (al_key_down(&_keyboard, ALLEGRO_KEY_S)) {
-        DEBUG("S");
-
-        UnitMoveEvent *ume = new UnitMoveEvent();
-        ume->header.header.event_type = EVENT_UNIT_MOVE;
-        ume->header.header.total_byte_count = sizeof(UnitMoveEvent);
-        ume->header.entity_id = 1;
-
-        ume->xGoal = 500;
-        ume->yGoal = 500;
-
-        PacketEvent *pe = new PacketEvent();
-        pe->setEvent((Event *)ume);
-
-        _client->network_connector->send_packet(pe);
-    }
     while (al_get_next_event(_event_queue, &_current_event)) {
         react();
     }
@@ -143,6 +127,27 @@ void InputManager::react() {
                         delete pe;
                         delete ume;
                     }
+                    break;
+                }
+
+                case (ALLEGRO_KEY_S): { //SPLIT
+                    if(_selected_units && _selected_units->size() > 0) {
+                        std::vector<EntityID>::iterator iter = _selected_units->begin();
+                        while (iter != _selected_units->end()) {
+                            DEBUG("SPLIT!");
+                            UnitSplitEvent *e = new UnitSplitEvent();
+                            e->header.header.event_type = EVENT_UNIT_SPLIT;
+                            e->header.header.total_byte_count = sizeof(UnitSplitEvent);
+                            e->header.entity_id = *iter;
+                            PacketEvent p;
+                            p.setEvent((Event *)e);
+                            delete e;
+                            _client->network_connector->send_packet((Packet *)&p);
+                            ++iter;
+                        }
+                    }
+
+
                     break;
                 }
                 case ALLEGRO_KEY_Q: {
@@ -261,6 +266,7 @@ void InputManager::react() {
                     break;
                 }
 
+                //TODO don't spawn on existing units
                 case 3: {
                     UnitSpawnEvent u;
                     u.header.event_type = EVENT_ENTITY_SPAWN;

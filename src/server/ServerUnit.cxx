@@ -43,17 +43,22 @@ void ServerUnit::react(EntityEvent *event) {
     //DEBUG("ServerUnit id=" << _id << " received event");
     switch(event->header.event_type) {
         case EVENT_UNIT_SPLIT: {
-            //DEBUG("ServerUnit split event received");
+            DEBUG("ServerUnit split event received");
             ServerUnit *newServerUnit = (ServerUnit *) (_gamestate
                                         ->get_entity(
                                             _gamestate->spawn_unit()));
+            newServerUnit->set_size(_size/2.0);
+            _size /=2.0;
 
-            Position new_pos (_pos.get_x() + 1, _pos.get_y() + 1);
+            //TODO intelligently split units-- don't split on top of
+            //existing units
+            Position new_pos (_pos.get_x() + 20, _pos.get_y() + 20);
             newServerUnit->set_position(new_pos);
             break;
         }
 
         case EVENT_UNIT_MOVE: {
+
             //DEBUG("ServerUnit move event received");
             UnitMoveEvent *ume = (UnitMoveEvent *) event;
             set_goal(Position(
@@ -66,11 +71,13 @@ void ServerUnit::react(EntityEvent *event) {
         }
 
         case EVENT_UNIT_MERGE: {
+            DEBUG("Merge event received!");
             UnitMergeEvent *ume = (UnitMergeEvent *) event;
 
             _merge_partner = ume->partner;
             ServerUnit *partner = (ServerUnit * )_gamestate->get_entity(_merge_partner);
 
+            //TODO midpoint not necesserily the best join point
             Position mid(
                 (partner->get_position().get_x() + _pos.get_x())/2,
                 (partner->get_position().get_y() + _pos.get_y())/2);
@@ -81,13 +88,13 @@ void ServerUnit::react(EntityEvent *event) {
 
             break;
         }
+
     }
 
 }
 
 
 void ServerUnit::tick(double wallTime, double deltaT) {
-    //DEBUG("ServerUnit ticking : wall=" << wallTime << ", deltaT=" << deltaT);
 
     ///////////////// MOTION ///////////////////
     if (_goal.distance(_pos) < deltaT * UNIT_VELOCITY / 1000.0) {
