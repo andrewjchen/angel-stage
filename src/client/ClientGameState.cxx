@@ -49,10 +49,10 @@ void ClientGameState::delete_entity(EntityID id) {
 
 
     // VisualComponent* vis = get_entity(id)->get_visual_component();
-     _client
-        ->renderer
-        ->remove_from_unit_layer( 
-            (ClientUnit *) get_entity(id));
+    _client
+    ->renderer
+    ->remove_from_unit_layer(
+        (ClientUnit *) get_entity(id));
     remove_clock_listener(get_entity(id));
     delete get_entity(id);
     DEBUG("NUM ENTITIES=" << _entities.size());
@@ -150,10 +150,10 @@ std::vector<EntityID> * ClientGameState::get_entities_in_rect(const Position &p1
     Position bottom_right(right, bottom);
     std::map<EntityID, ClientEntity *>::iterator iter = _entities.begin();
     while (iter != _entities.end()) {
-        if ( 
+        if (
             ((ClientUnit *)get_entity(iter->first))
             ->get_position()
-                .in_rect(top_left, bottom_right)) {
+            .in_rect(top_left, bottom_right)) {
             out->push_back(iter->first);
         }
         ++iter;

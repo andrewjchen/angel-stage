@@ -29,7 +29,7 @@ public:
     virtual void add_clock_listener(ServerEntity *toListen);
     virtual void remove_clock_listener(ServerEntity *toListen);
 
-    virtual bool is_occupied(ServerUnit* source, Position pos);
+    virtual bool is_occupied(ServerUnit *source, Position pos);
 
 protected:
     EntityID _next_id;

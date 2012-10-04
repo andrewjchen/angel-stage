@@ -79,12 +79,12 @@ void InputManager::tick(double wall, double delta) {
 
 
     if (_selected_units) {
-        for(unsigned int i = 0; i<_selected_units->size(); i++){
+        for(unsigned int i = 0; i<_selected_units->size(); i++) {
             if(
                 !_client
-                    ->gamestate
-                    ->entity_exists(
-                        _selected_units->at(i))){
+                ->gamestate
+                ->entity_exists(
+                    _selected_units->at(i))) {
                 _selected_units->erase(
                     _selected_units->begin() + i);
             }

@@ -22,7 +22,7 @@ ServerUnit::ServerUnit(
     ServerGameState *gamestate):
     ServerEntity(id, gamestate),
     _pos(0,0),
-    _goal(0,0){
+    _goal(0,0) {
     _orientation = 0;
     _size = 1.0;
     _xVel = 0;

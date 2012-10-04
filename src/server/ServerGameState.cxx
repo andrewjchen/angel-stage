@@ -114,20 +114,20 @@ void ServerGameState::remove_clock_listener(ServerEntity *toListen) {
     }
 }
 
-bool ServerGameState::is_occupied(ServerUnit* source, Position pos) {
+bool ServerGameState::is_occupied(ServerUnit *source, Position pos) {
 
     std::map<EntityID, ServerEntity *>::iterator i = _entities.begin();
     while (i != _entities.end()) {
-       ServerUnit *unit = (ServerUnit *) i->second;
-       Position unitPos =  unit->get_position();
+        ServerUnit *unit = (ServerUnit *) i->second;
+        Position unitPos =  unit->get_position();
 
-       if(source != unit && 
-            pos.distance(unitPos) 
-            - unit->get_size() * 5.0
-            - source->get_size() * 5.0
-                    < 0.0) {
+        if(source != unit &&
+                pos.distance(unitPos)
+                - unit->get_size() * 5.0
+                - source->get_size() * 5.0
+                < 0.0) {
             return true;
-       }
+        }
 
 
 
